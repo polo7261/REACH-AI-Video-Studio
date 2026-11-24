@@ -8,6 +8,7 @@ from pathlib import Path
 
 import requests
 
+ROOT = Path(__file__).resolve().parents[1]  # 專案根目錄（macOS／Linux 皆可）
 BASE = "http://127.0.0.1:35350"
 PID = "0355f16150"
 H = {"Content-Type": "application/json", "X-Requested-With": "fetch"}
@@ -53,10 +54,10 @@ def main() -> int:
             return 1
 
     # 拼接（無旁白、環境音）
-    out = Path("/Users/sky/REACH-AI-Vidio-Studio/exports")
+    out = ROOT / "exports"
     work = Path("/tmp/chain")
     work.mkdir(parents=True, exist_ok=True)
-    media = Path("/Users/sky/REACH-AI-Vidio-Studio/data/media") / PID
+    media = ROOT / "data" / "media" / PID
     plan = requests.get(f"{BASE}/api/projects/{PID}", timeout=30).json()["plan"]
     clips = [s["video"] for s in plan["shots"] if s.get("video")]
     print("clips:", clips, flush=True)

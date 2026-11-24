@@ -10,7 +10,7 @@ from pathlib import Path
 
 import requests
 
-ROOT = Path("/Users/sky/REACH-AI-Vidio-Studio")
+ROOT = Path(__file__).resolve().parents[1]  # 專案根目錄（macOS／Linux 皆可）
 ENV = ROOT / ".env"
 WORK = Path("/tmp/film2")
 WORK.mkdir(parents=True, exist_ok=True)

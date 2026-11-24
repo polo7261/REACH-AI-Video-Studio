@@ -1,6 +1,8 @@
 #!/bin/bash
 # 打包安裝檔（不含任何 API Key）：.venv / .env / data / exports 一律不入包。
-# 用法：scripts/build_installer.sh [版本]   → dist/REACH-AI-Vidio-Studio-<版本>-<日期>.zip
+# 用法：scripts/build_installer.sh [版本]
+#   → dist/REACH-AI-Vidio-Studio-<版本>-<日期>.zip     （macOS）
+#   → dist/REACH-AI-Vidio-Studio-<版本>-<日期>.tar.gz  （Ubuntu／Debian，內容相同）
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -8,7 +10,9 @@ cd "$ROOT"
 VERSION="${1:-v0.3}"
 NAME="REACH-AI-Vidio-Studio"
 OUT_DIR="$ROOT/dist"
-ZIP="$OUT_DIR/${NAME}-${VERSION}-$(date +%Y%m%d).zip"
+STAMP="${NAME}-${VERSION}-$(date +%Y%m%d)"
+ZIP="$OUT_DIR/${STAMP}.zip"
+TGZ="$OUT_DIR/${STAMP}.tar.gz"
 
 # 白名單：只收原始碼與文件
 FILES=(app.py requirements.txt README.md INSTALL.md .env.example .gitignore
@@ -59,8 +63,13 @@ fi
 [ "$LEAK" -eq 0 ] || { echo "✗ 中止打包"; exit 1; }
 
 mkdir -p "$OUT_DIR"
-rm -f "$ZIP"
+rm -f "$ZIP" "$TGZ"
 (cd "$TMP" && zip -qrX "$ZIP" "$NAME")
-shasum -a 256 "$ZIP" > "$ZIP.sha256"
+# tar.gz 給 Linux：不帶 macOS 擴充屬性／._ 檔，擁有者設 root（一般使用者解壓會歸自己）
+(cd "$TMP" && COPYFILE_DISABLE=1 tar --no-xattrs --no-mac-metadata \
+   --uid 0 --gid 0 --uname root --gname root -czf "$TGZ" "$NAME")
+(cd "$OUT_DIR" && shasum -a 256 "$(basename "$ZIP")" > "$(basename "$ZIP").sha256" \
+                && shasum -a 256 "$(basename "$TGZ")" > "$(basename "$TGZ").sha256")
 echo "✓ 金鑰檢查通過"
-echo "✓ $ZIP（$(du -h "$ZIP" | cut -f1)，$(unzip -Z1 "$ZIP" | grep -vc '/$') 個檔案）"
+echo "✓ $ZIP（$(du -h "$ZIP" | cut -f1)，$(unzip -Z1 "$ZIP" | grep -vc '/$') 個檔案）— macOS"
+echo "✓ $TGZ（$(du -h "$TGZ" | cut -f1)，$(tar -tzf "$TGZ" | grep -vc '/$') 個檔案）— Ubuntu／Debian"

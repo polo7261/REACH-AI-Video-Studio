@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import re
+import shutil
 import subprocess
 import threading
 import time
@@ -407,7 +408,7 @@ def api_shot_image(pid: str, sid: str):
             prev_video = prev.get("video")
             if prev_video:
                 vpath = media_dir(pid) / prev_video
-                if vpath.is_file():
+                if vpath.is_file() and shutil.which("ffmpeg"):  # 沒裝 ffmpeg 就略過接續首幀
                     chain_path = media_dir(pid) / f"chain-{sid}.jpg"
                     subprocess.run(
                         ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-sseof", "-0.15",
