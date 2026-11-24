@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REACH AI · API 與網址</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <div class="brand">REACH AI<small>VIDIO STUDIO</small></div>
+    <nav>
+      <a href="/">▣ 影片工作室</a>
+      <a href="/api-page" class="active">⚙ API 與網址</a>
+      <a href="/docs/">▤ 技術文件</a>
+    </nav>
+    <div style="margin-top:auto" class="muted mono">金鑰僅存在本機 .env</div>
+  </aside>
+
+  <main>
+    <h1>API 與網址</h1>
+    <div class="sub">
+      三家 Provider 的端點、模型與實測狀態（2026-11-21 探測）。金鑰一律遮蔽顯示，不會出現在此頁或日誌。
+    </div>
+
+    <div id="providers" class="grid three"></div>
+
+    <h2>原始設定（遮蔽後）</h2>
+    <pre class="doc mono" id="raw">載入中…</pre>
+  </main>
+</div>
+<script src="/static/api.js"></script>
+</body>
+</html>

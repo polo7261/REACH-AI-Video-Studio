@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REACH AI · 技術文件</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <div class="brand">REACH AI<small>VIDIO STUDIO</small></div>
+    <nav>
+      <a href="/">▣ 影片工作室</a>
+      <a href="/api-page">⚙ API 與網址</a>
+      <a href="/docs/" class="active">▤ 技術文件</a>
+    </nav>
+    <div style="margin-top:auto" class="muted mono">docs/*.md</div>
+  </aside>
+
+  <main>
+    <h1>技術文件</h1>
+    <div class="sub">檔案位於 <span class="mono">docs/</span>；此頁直接讀取。</div>
+    <div class="grid two">
+      <section class="card">
+        <h3>文件目錄</h3>
+        <div id="doclist" class="plist">
+          {% for slug in slugs %}<div class="pitem" data-slug="{{ slug }}"><b>{{ slug }}</b></div>{% endfor %}
+        </div>
+      </section>
+      <section class="card">
+        <h3 id="doc-title">選擇左側文件</h3>
+        <div class="md" id="doc-body"><div class="muted">尚未載入。</div></div>
+      </section>
+    </div>
+  </main>
+</div>
+<script src="/static/docs.js"></script>
+</body>
+</html>
