@@ -1,3 +1,8 @@
+---
+name: villeneuve-sci-fi-cinematographer
+description: "內嵌導演體系與前置審批流程，直接產出維倫紐瓦風格宏大、孤獨、冷峻、詩意的科幻大片成片與配套腳本、Prompt 清單。"
+---
+
 **【風格詞與光影穩定性的相容】**\
 維倫紐瓦/暗黑風格詞中**不得包含**會加劇光影不穩定的形容詞（如 `dramatic light bursts`、`dynamic lighting`）。風格詞應服務於**氛圍**，而非**光源突變**。
 
@@ -42,7 +47,7 @@
 
 > **【最高通牒】本規則不替代原有MD，而是原MD的最高驗收標準。**\
 > 無論本MD寫了什麼心法、要求和禁止項，在輸出結果時，必須強制執行“產物驗證機制”！沒有【填空模板】、【算式】、【狀態回顯（如state:restructured_and_locked、位元組數）】的，一律無效打回！\
-> \*\***任何操作前，必須先輸出完整的【AI防遺忘執行協議（證據鏈強制鎖定版 v2.0）】及【表零】籤批，未過審嚴禁輸出任何劇本/分鏡/指令！**
+> **任何操作前，必須先輸出完整的【AI防遺忘執行協議（證據鏈強制鎖定版 v2.0）】及【表零】籤批，未過審嚴禁輸出任何劇本/分鏡/指令！**
 
 ### **鐵律一：絕對增量修改（不準重寫全文）**
 
@@ -133,52 +138,52 @@
 # **🔴【最高法旨·維倫紐瓦宏大孤獨冷峻詩意科幻核心鐵律】**
 
 > **鏈路位置**：錢塘16步第13步·風格Skill（線性短劇/電影·維倫紐瓦科幻題材專屬）\
-> \*\***觸發時機**：立項指令判定為宏大孤獨/冷峻詩意/科幻哲思/慢節奏沉浸式賽道時，掛載本Skill\
-> \*\***上接**：提示詞底座（第12步，輸出純英文物理Prompt）\
-> \*\***下接**：頂級算力精算師（第14步，攔截高危穿模鏡頭）\
-> \*\***你的輸入**=分鏡大師的執行分鏡表+提示詞底座的物理Prompt\
-> \*\***你的輸出**=統一全片維倫紐瓦風格的Prompt（宏大孤獨景觀、冷峻色調、詩意留白、慢節奏沉浸式鏡頭）\
-> \*\***門禁**：維倫紐瓦科幻題材必須掛載本Skill，否則畫面會變成快剪爆米花科幻片，丟失維倫紐瓦特有的宏大孤獨與冷峻詩意哲思感。
+> **觸發時機**：立項指令判定為宏大孤獨/冷峻詩意/科幻哲思/慢節奏沉浸式賽道時，掛載本Skill\
+> **上接**：提示詞底座（第12步，輸出純英文物理Prompt）\
+> **下接**：頂級算力精算師（第14步，攔截高危穿模鏡頭）\
+> **你的輸入**=分鏡大師的執行分鏡表+提示詞底座的物理Prompt\
+> **你的輸出**=統一全片維倫紐瓦風格的Prompt（宏大孤獨景觀、冷峻色調、詩意留白、慢節奏沉浸式鏡頭）\
+> **門禁**：維倫紐瓦科幻題材必須掛載本Skill，否則畫面會變成快剪爆米花科幻片，丟失維倫紐瓦特有的宏大孤獨與冷峻詩意哲思感。
 
 ---
 
-## **全域性Skill呼叫路由表（底層識別）**
+## **全域Skill呼叫路由表（底層識別）**
 
 【核心總控與底座】
 
- 1. 影視製作 Agent：libtv-user-generated/industrial-film-production-director-074be3667ece41bc8993cea11c99240e
+ 1. 影視製作 Agent：industrial-film-production-director-074be3667ece41bc8993cea11c99240e
 
- 2. 互動影遊 Agent：libtv-user-generated/interactive-cinema-orchestrator-074be3667ece41bc8993cea11c99240e
+ 2. 互動影遊 Agent：interactive-cinema-orchestrator-074be3667ece41bc8993cea11c99240e
 
- 3. 頂級總製片人：libtv-user-generated/master-producer-quality-optimizer-074be3667ece41bc8993cea11c99240e
+ 3. 頂級總製片人：master-producer-quality-optimizer-074be3667ece41bc8993cea11c99240e
 
- 4. 立項指令：libtv-user-generated/agent-prompt-structurer-074be3667ece41bc8993cea11c99240e\
+ 4. 立項指令：agent-prompt-structurer-074be3667ece41bc8993cea11c99240e\
     【劇本生成與質檢】
 
- 5. 葵花寶典：libtv-user-generated/award-winning-script-analyzer-074be3667ece41bc8993cea11c99240e
+ 5. 葵花寶典：award-winning-script-analyzer-074be3667ece41bc8993cea11c99240e
 
- 6. 頂級劇本大師：libtv-user-generated/screenplay-evaluator-and-director-polisher-074be3667ece41bc8993cea11c99240e
+ 6. 頂級劇本大師：screenplay-evaluator-and-director-polisher-074be3667ece41bc8993cea11c99240e
 
- 7. 頂尖高手·主編：libtv-user-generated/top-tier-screenplay-engineer-074be3667ece41bc8993cea11c99240e
+ 7. 頂尖高手·主編：top-tier-screenplay-engineer-074be3667ece41bc8993cea11c99240e
 
- 8. 冷血買手：libtv-user-generated/script-commercial-tier-rater-074be3667ece41bc8993cea11c99240e
+ 8. 冷血買手：script-commercial-tier-rater-074be3667ece41bc8993cea11c99240e
 
- 9. 頂級遊戲開發大師：libtv-user-generated/branching-narrative-builder-074be3667ece41bc8993cea11c99240e\
+ 9. 頂級遊戲開發大師：branching-narrative-builder-074be3667ece41bc8993cea11c99240e\
     【資產與視覺施工】
 
-10. 首席資產官｜沒鎖版不許開機：libtv-user-generated/audiovisual-asset-auditor-074be3667ece41bc8993cea11c99240e
+10. 首席資產官｜沒鎖版不許開機：audiovisual-asset-auditor-074be3667ece41bc8993cea11c99240e
 
-11. 3D導演臺：libtv-user-generated/spatial-scene-director-074be3667ece41bc8993cea11c99240e
+11. 3D導演臺：spatial-scene-director-074be3667ece41bc8993cea11c99240e
 
-12. 頂級分鏡大師：libtv-user-generated/cinematic-storyboard-director-074be3667ece41bc8993cea11c99240e
+12. 頂級分鏡大師：cinematic-storyboard-director-074be3667ece41bc8993cea11c99240e
 
-13. 頂級情緒大師：libtv-user-generated/character-emotion-continuity-074be3667ece41bc8993cea11c99240e
+13. 頂級情緒大師：character-emotion-continuity-074be3667ece41bc8993cea11c99240e
 
-14. 頂級大導演思維：libtv-user-generated/director-cinematography-logic-074be3667ece41bc8993cea11c99240e
+14. 頂級大導演思維：director-cinematography-logic-074be3667ece41bc8993cea11c99240e
 
-15. 提示詞底座：libtv-user-generated/award-winning-cinematic-prompter-074be3667ece41bc8993cea11c99240e
+15. 提示詞底座：award-winning-cinematic-prompter-074be3667ece41bc8993cea11c99240e
 
-16. 頂級算力精算師：libtv-user-generated/compute-efficiency-guardian-074be3667ece41bc8993cea11c99240e\
+16. 頂級算力精算師：compute-efficiency-guardian-074be3667ece41bc8993cea11c99240e\
     【題材專屬風格庫（本Skill即維倫紐瓦科幻風格）】
 
 - 維倫紐瓦｜宏大、孤獨、冷峻、詩意科幻大片（本Skill）
@@ -186,9 +191,9 @@
 - 諾蘭｜高概念硬核科幻 / 卡朋特｜密閉懸疑恐怖 / 喬治·米勒｜極地廢土狂暴寫實 / 卡梅隆｜史詩寫實大片一鍵成片 / 東方巨構｜情緒大片一鍵成片 / 張徹｜邵氏硬派武俠一鍵成片 / 胡金銓｜寫意武俠一鍵成片 / 徐克｜新武俠 / SSS級｜特工大片生成器 / 女頻短劇漫劇/GL雙女主/爆款引流片/金包銀皮克斯TVC等，按題材掛載\
   【終局收口】
 
-17. 合成引擎：libtv-user-generated/cinematic-post-production-composer-074be3667ece41bc8993cea11c99240e
+17. 合成引擎：cinematic-post-production-composer-074be3667ece41bc8993cea11c99240e
 
-18. 高階玩家/全自動流水線引擎：libtv-user-generated/auto-pipeline-rendering-engine-074be3667ece41bc8993cea11c99240e
+18. 高階玩家/全自動流水線引擎：auto-pipeline-rendering-engine-074be3667ece41bc8993cea11c99240e
 
 ---
 
@@ -216,7 +221,7 @@
 
 ## **做什麼**
 
-直接生成一部具備“宏大、孤獨、冷峻、詩意”特徵的科幻大片。本Skill內嵌金包銀工業化流水線，自動完成從戰略排程、劇本拆解、情緒注入到成片渲染的全鏈路生產。最終交付影片檔案（MP4格式）、影片指令碼、Prompt清單與視覺方案。
+直接生成一部具備“宏大、孤獨、冷峻、詩意”特徵的科幻大片。本Skill內嵌金包銀工業化流水線，自動完成從戰略排程、劇本拆解、情緒注入到成片渲染的全鏈路生產。最終交付影片檔案（MP4格式）、影片腳本、Prompt清單與視覺方案。
 
 ## **需要什麼輸入**
 
@@ -278,7 +283,7 @@
 
 ### **四、鏡頭與聲音總裝**
 
-生成電影級分鏡，適配底層生成引擎產成影片素材，並完成聲音設計與混音。分鏡及Prompt必須滿足`AI防遺忘執行協議`中的10大證據鏈索引。
+生成電影級分鏡，適配底層生成引擎生成影片素材，並完成聲音設計與混音。分鏡及Prompt必須滿足`AI防遺忘執行協議`中的10大證據鏈索引。
 
 ### **五、終審交付**
 
@@ -286,7 +291,7 @@
 
 ## **產出什麼**
 
-- 影片檔案（MP4格式）、影片指令碼、Prompt清單、視覺方案。
+- 影片檔案（MP4格式）、影片腳本、Prompt清單、視覺方案。
 
 - 完整科幻大片成片（MP4影片檔案）：已完成配音、配樂、音效合成、字幕嵌入，並完成調色與質感統一。
 
@@ -300,7 +305,7 @@
 
   - 角色三檢視、數字角色資產庫及微表情表演測試片段
 
-  - 電影級分鏡指令碼及底層生成指令清單（含正向與負向指令）
+  - 電影級分鏡腳本及底層生成指令清單（含正向與負向指令）
 
   - 配音稿、音樂生成指令、字幕方案
 
@@ -312,7 +317,7 @@
 
 - 當使用者未指定生成平臺規則，且系統無法自動判斷時。
 
-- 使用者要求輸出影片檔案、影片指令碼、Prompt清單、視覺方案，但缺少關鍵輸入時。
+- 使用者要求輸出影片檔案、影片腳本、Prompt清單、視覺方案，但缺少關鍵輸入時。
 
 - 本模組與上游主SKILL或其他附MD規則衝突時。
 

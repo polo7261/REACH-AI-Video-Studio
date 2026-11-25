@@ -4,8 +4,9 @@
  "templateUuid": "b34633826a814c68a3786fb05cd5dc2b",
  "version": "1.0.0",
  "description": "输入主题时长风格，输出逐秒分镜脚本",
- "cn_tc": "分鏡指令碼生成器",
- "desc_tc": "輸入主題時長風格，輸出逐秒分鏡指令碼",
+ "cn_tc": "分鏡腳本生成器",
+ "desc_tc": "輸入主題+時長+風格，輸出逐秒分鏡腳本",
  "cn_sc": "分镜脚本生成器",
- "desc_sc": "输入主题时长风格，输出逐秒分镜脚本"
+ "desc_sc": "输入主题时长风格，输出逐秒分镜脚本",
+ "desc_en": "Generates second-by-second storyboard scripts from a theme, duration and style"
 }

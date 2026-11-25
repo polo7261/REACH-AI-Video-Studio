@@ -5,7 +5,8 @@
  "version": "1.0.2",
  "description": "从人物设定出发设计原创面孔，建立可复用的角色身份卡",
  "cn_tc": "原創 AI 角色捏臉",
- "desc_tc": "從人物設定出發設計原創面孔，建立可複用的角色身份卡",
+ "desc_tc": "從人物設定出發設計原創面孔，建立可複用的角色身份卡，並按目標生圖工具產出定妝照或角色修改提示詞",
  "cn_sc": "原创 AI 角色捏脸",
- "desc_sc": "从人物设定出发设计原创面孔，建立可复用的角色身份卡"
+ "desc_sc": "从人物设定出发设计原创面孔，建立可复用的角色身份卡",
+ "desc_en": "Designs original AI character faces from a persona brief and produces a reusable character identity card with tool-ready portrait prompts"
 }

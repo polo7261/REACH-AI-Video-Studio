@@ -7,5 +7,6 @@
  "cn_tc": "SD2.0提示詞最佳化",
  "desc_tc": "Seedance 2.0 影片生成提示詞最佳化 Skill",
  "cn_sc": "SD2.0提示词优化",
- "desc_sc": "Seedance 2.0 视频生成提示词优化 Skill"
+ "desc_sc": "Seedance 2.0 视频生成提示词优化 Skill",
+ "desc_en": "Optimizes prompts for Seedance 2.0 video generation across six structured modules"
 }

@@ -5,7 +5,8 @@
  "version": "1.0.5",
  "description": "把人物和场景，关键道具给到可以完成超燃打斗，90秒",
  "cn_tc": "熱血打鬥讓人物打鬥燃起來",
- "desc_tc": "把人物和場景，關鍵道具給到可以完成超燃打鬥，90秒",
+ "desc_tc": "提供人物、場景與關鍵道具，產出 90 秒超燃 1VS1 打鬥分鏡",
  "cn_sc": "热血打斗让人物打斗燃起来",
- "desc_sc": "把人物和场景，关键道具给到可以完成超燃打斗，90秒"
+ "desc_sc": "把人物和场景，关键道具给到可以完成超燃打斗，90秒",
+ "desc_en": "Choreographs 1v1 combat into three executable shot groups with special angles, KCU close-ups and continuity locks."
 }

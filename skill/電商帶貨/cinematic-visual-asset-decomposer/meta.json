@@ -7,5 +7,6 @@
  "cn_tc": "電影級 AI 視覺資產導演",
  "desc_tc": "劇本不會做參考圖？一鍵拆解角色、場景、道具和關鍵幀資產。",
  "cn_sc": "电影级 AI 视觉资产导演",
- "desc_sc": "剧本不会做参考图？一键拆解角色、场景、道具和关键帧资产。"
+ "desc_sc": "剧本不会做参考图？一键拆解角色、场景、道具和关键帧资产。",
+ "desc_en": "Breaks scripts and storyboards into character, scene, prop, and keyframe reference assets ready for AI video production"
 }

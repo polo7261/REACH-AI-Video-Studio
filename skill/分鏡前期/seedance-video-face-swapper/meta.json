@@ -5,7 +5,8 @@
  "version": "1.0.0",
  "description": "Seedance 2.5视频反推 + 锁定参考图五官、换人",
  "cn_tc": "Seedance2.5影片反推換人復刻",
- "desc_tc": "Seedance 2.5影片反推 + 鎖定參考圖五官、換人",
+ "desc_tc": "Seedance 2.5 影片反推＋鎖定參考圖五官，完成換人復刻",
  "cn_sc": "Seedance2.5视频反推换人复刻",
- "desc_sc": "Seedance 2.5视频反推 + 锁定参考图五官、换人"
+ "desc_sc": "Seedance 2.5视频反推 + 锁定参考图五官、换人",
+ "desc_en": "Reverse-engineers a source video plus 1-2 reference images into a ready-to-paste Seedance 2.5 prompt that locks the face and swaps the person"
 }

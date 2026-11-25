@@ -7,19 +7,19 @@ description: "Screenshot to promo video: generate promotional short films from U
 
 ## Positioning
 
-Add a layer of "creative guidance + step-by-step confirmation" on top of libtv-skill: **locally** analyze the reference image → propose 3-4 differentiated style directions → user picks → go through the three steps of **script → storyboard → synthesis**, with the user reviewing each step before moving on to the next.
+Add a layer of "creative guidance + step-by-step confirmation" on top of base skill: **locally** analyze the reference image → propose 3-4 differentiated style directions → user picks → go through the three steps of **script → storyboard → synthesis**, with the user reviewing each step before moving on to the next.
 
-Unlike libtv-skill's "pure messenger" positioning, this skill **does allow local creative work at the style-selection step** (explicitly requested by the user). But once the style is chosen, the prompts for every subsequent step are still assembled according to libtv-skill's rules: only the user's goal + selected style + OSS URL / previous step's output — no piling on quality words, no decomposing the storyboard yourself (storyboards are produced by the libtv backend).
+Unlike base skill's "pure messenger" positioning, this skill **does allow local creative work at the style-selection step** (explicitly requested by the user). But once the style is chosen, the prompts for every subsequent step are still assembled according to base skill's rules: only the user's goal + selected style + OSS URL / previous step's output — no piling on quality words, no decomposing the storyboard yourself (storyboards are produced by the platform backend).
 
 ## Prerequisites
 
-- `LIBTV_ACCESS_KEY` is set (a libtv-skill prerequisite).
+- `LIBTV_ACCESS_KEY` is set (a base skill prerequisite).
 - The user has provided a local image path (`.jpg` / `.png` / `.webp` etc.), size < 200MB.
-- libtv-skill's scripts exist at `../libtv-skill/scripts/` (same project). If not in the same project, you need to locate libtv-skill's scripts directory using an absolute path.
+- base skill's scripts exist at `../base skill/scripts/` (same project). If not in the same project, you need to locate base skill's scripts directory using an absolute path.
 
 ## Workflow
 
-**Key principle**: all three steps (script / storyboard / synthesis) append messages within the **same sessionId** (`--session-id`) so the libtv backend retains context; do not open a new session for each step.
+**Key principle**: all three steps (script / storyboard / synthesis) append messages within the **same sessionId** (`--session-id`) so the platform backend retains context; do not open a new session for each step.
 
 ### Step 1: Read the image = understand the product + brainstorm promo directions
 
@@ -53,6 +53,6 @@ Use "Creative Direction" for `header`. `multiSelect: false`.
 
 If the user is unsatisfied with all the candidates, they will go with Other → take their added words directly as the final style description.
 
-### Step 3: Upload the image + have libtv produce the **script / copy**
+### Step 3: Upload the image + have platform produce the **script / copy**
 
 First upload the image:

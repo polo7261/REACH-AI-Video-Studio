@@ -5,7 +5,8 @@
  "version": "1.0.4",
  "description": "一句题材，直出剧本、分镜、美术资产与逐镜提示词，拿到手就能开",
  "cn_tc": "造夢片場",
- "desc_tc": "一句題材，直出劇本、分鏡、美術資產與逐鏡提示詞，拿到手就能開",
+ "desc_tc": "一句題材，直出劇本、分鏡、美術資產與逐鏡提示詞，拿到手就能開拍",
  "cn_sc": "造梦片场",
- "desc_sc": "一句题材，直出剧本、分镜、美术资产与逐镜提示词，拿到手就能开"
+ "desc_sc": "一句题材，直出剧本、分镜、美术资产与逐镜提示词，拿到手就能开",
+ "desc_en": "Turns one theme into script, storyboards, art assets and per-shot prompts ready to shoot"
 }

@@ -1,7 +1,3 @@
-```
-```
-
-```
 ---
 name: Prompt最佳化器
 namespace: libtv-industry
@@ -29,4 +25,3 @@ version: 1.0
 - 每組Prompt含主體+環境+光影+構圖+引數、英文語法正確
 ## Ask User
 - 描述或風格缺失時，先問再生成
-```

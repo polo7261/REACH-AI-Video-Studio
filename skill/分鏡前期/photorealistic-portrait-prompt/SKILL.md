@@ -1,6 +1,7 @@
 ---
-
-## name: photorealistic-portrait-prompts description: Use when the user wants to create a custom photorealistic human portrait prompt from age, gender, facial traits, temperament, clothing, pose, or photographic style without relying on a reference image.
+name: photorealistic-portrait-prompts
+description: Use when the user wants to create a custom photorealistic human portrait prompt from age, gender, facial traits, temperament, clothing, pose, or photographic style without relying on a reference image.
+---
 
 # Photorealistic Portrait Prompts
 
@@ -142,22 +143,7 @@ Do not ask unnecessary follow-up questions.
 
 Build the portrait in this order:
 
-Age\
-→ Gender\
-→ User-defined traits\
-→ Facial structure\
-→ Age-appropriate skin\
-→ Hair\
-→ Expression\
-→ Temperament\
-→ Clothing\
-→ Pose\
-→ Composition\
-→ Lens\
-→ Lighting\
-→ Background\
-→ Color\
-→ Photographic realism
+Age → Gender → User-defined traits → Facial structure → Age-appropriate skin → Hair → Expression → Temperament → Clothing → Pose → Composition → Lens → Lighting → Background → Color → Photographic realism
 
 Age and explicit user-defined traits have the highest priority.
 
@@ -682,19 +668,7 @@ Write one complete natural-language prompt that can be directly copied into an i
 
 Use this order:
 
-Person\
-→ Face\
-→ Skin\
-→ Hair\
-→ Clothing\
-→ Pose\
-→ Expression\
-→ Composition\
-→ Camera\
-→ Lighting\
-→ Background\
-→ Color\
-→ Photorealistic detail
+Person → Face → Skin → Hair → Clothing → Pose → Expression → Composition → Camera → Lighting → Background → Color → Photorealistic detail
 
 Do not write analysis inside the prompt.
 
@@ -746,7 +720,7 @@ A successful output should make it possible to imagine one specific human being.
 Append a concise realism tail when useful:
 
 ```text
-超高畫質擬真人像攝影，真實人類面部結構，自然面部比例，真實皮膚紋理，清晰可見毛孔、細紋與輕微皮膚瑕疵，真實眼睛溼潤反光與虹膜紋理，細膩獨立髮絲，自然皮脂高光，不過度磨皮，無美顏濾鏡，無塑膠皮膚，無蠟像感，專業85mm人像攝影，淺景深，真實物理光照，柔和陰影過渡，高動態範圍，照片級真實感，高解析度，高細節。
+超高畫質擬真人像攝影，真實人類面部結構，自然面部比例，真實皮膚紋理，清晰可見毛孔、細紋與輕微皮膚瑕疵，真實眼睛濕潤反光與虹膜紋理，細膩獨立髮絲，自然皮脂高光，不過度磨皮，無美顏濾鏡，無塑膠皮膚，無蠟像感，專業85mm人像攝影，淺景深，真實物理光照，柔和陰影過渡，高動態範圍，照片級真實感，高解析度，高細節。
 ```
 
 Do not add it if doing so would create unnecessary repetition.
@@ -789,6 +763,6 @@ Fix: Choose one coherent photographic setup.
 
 ## Final Rule
 
-**Character specificity &gt; age realism &gt; skin realism &gt; photography style &gt; resolution buzzwords.**
+**Character specificity > age realism > skin realism > photography style > resolution buzzwords.**
 
 Always make the human being specific before adding visual style.

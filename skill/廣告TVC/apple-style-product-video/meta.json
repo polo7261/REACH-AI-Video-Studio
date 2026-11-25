@@ -1,11 +1,12 @@
 {
- "cn": "苹果广告风产品短片",
- "skillKey": "apple-style-product-video-54ef20fc456e46f2bac3a0e580c7e4c8",
- "templateUuid": "8b6a98be374d4b91849d0df8759b318e",
- "version": "1.0.0",
- "description": "上传产品图一键生成苹果广告风产品短片",
- "cn_tc": "蘋果廣告風產品短片",
- "desc_tc": "上傳產品圖一鍵生成蘋果廣告風產品短片",
- "cn_sc": "苹果广告风产品短片",
- "desc_sc": "上传产品图一键生成苹果广告风产品短片"
+  "cn": "苹果广告风产品短片",
+  "skillKey": "apple-style-product-video-54ef20fc456e46f2bac3a0e580c7e4c8",
+  "templateUuid": "8b6a98be374d4b91849d0df8759b318e",
+  "version": "1.0.0",
+  "description": "上传产品图一键生成苹果广告风产品短片",
+  "cn_tc": "蘋果廣告風產品短片",
+  "desc_tc": "從一張產品圖或一句描述，走完創意概念、分鏡腳本到 Seedance 2.5 影片提示詞，產出蘋果發表會級極簡高階產品廣告",
+  "cn_sc": "苹果广告风产品短片",
+  "desc_sc": "上传产品图一键生成苹果广告风产品短片",
+  "desc_en": "Turns a product photo or one-line description into a full Apple-style minimalist product ad workflow, from creative concept and storyboard to ready-to-use Seedance 2.5 video prompts"
 }

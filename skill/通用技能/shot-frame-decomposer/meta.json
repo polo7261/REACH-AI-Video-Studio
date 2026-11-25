@@ -7,5 +7,6 @@
  "cn_tc": "拆場景-獲得2種場景畫面",
  "desc_tc": "剔除所有敘事元素。獲得自然場景+光影效果場景+畫面配色卡",
  "cn_sc": "拆场景-获得2种场景画面",
- "desc_sc": "剔除所有叙事元素。获得自然场景+光影效果场景+画面配色卡"
+ "desc_sc": "剔除所有叙事元素。获得自然场景+光影效果场景+画面配色卡",
+ "desc_en": "Strips narrative elements from a film still to produce space base and atmosphere frames plus a color palette card"
 }

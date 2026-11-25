@@ -7,5 +7,6 @@
  "cn_tc": "動作導演全能打鬥生成",
  "desc_tc": "支援人物文字描述生成真實質感打鬥場面",
  "cn_sc": "动作导演全能打斗生成",
- "desc_sc": "支持人物文字描述生成真实质感打斗场面"
+ "desc_sc": "支持人物文字描述生成真实质感打斗场面",
+ "desc_en": "Generates realistic-quality fight scenes from text character descriptions"
 }

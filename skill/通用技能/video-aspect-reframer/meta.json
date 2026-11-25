@@ -7,5 +7,6 @@
  "cn_tc": "AI 影片比例重構助手",
  "desc_tc": "影片比例不匹配？智慧重構畫幅，保留主體與視覺完整性。",
  "cn_sc": "AI 视频比例重构助手",
- "desc_sc": "视频比例不匹配？智能重构画幅，保留主体与视觉完整性。"
+ "desc_sc": "视频比例不匹配？智能重构画幅，保留主体与视觉完整性。",
+ "desc_en": "Intelligently reframes videos to a new aspect ratio while preserving subjects and visual integrity"
 }

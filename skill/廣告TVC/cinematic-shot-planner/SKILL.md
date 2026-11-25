@@ -11,7 +11,7 @@ description: "將自然語言轉化為專業電影級運鏡方案。"
 
 ## 輸出
 
-電影級Camera Plan、專業運鏡方案、Camera Path、九宮格Camera Storyboard、AI影片生成Prompt及15秒連續影片，可擴充套件為30秒、60秒等多段連續影片。
+電影級Camera Plan、專業運鏡方案、Camera Path、九宮格Camera Storyboard、AI影片生成Prompt及15秒連續影片，可擴展為30秒、60秒等多段連續影片。
 
 ## 使用方式
 

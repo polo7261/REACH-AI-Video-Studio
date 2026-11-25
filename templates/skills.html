@@ -17,7 +17,8 @@
 .skp-pick img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; background: var(--thumb); }
 .skp-pick button { border: 0; background: none; color: var(--muted); cursor: pointer; font-size: 14px; line-height: 1; padding: 0 2px; }
 .skp-hint { color: var(--muted); font-size: 12px; }
-.skp-send { margin-left: auto; width: 34px; height: 34px; border-radius: 50%; border: 0; background: var(--accent); color: var(--on-accent); cursor: pointer; font-size: 16px; font-weight: 700; display: grid; place-items: center; }
+.skp-send { margin-left: auto; width: 34px; height: 34px; border-radius: 50%; border: 0; background: var(--accent); color: var(--on-accent); cursor: pointer; padding: 0; line-height: 0; display: grid; place-items: center; flex-shrink: 0; }
+.skp-send svg { display: block; }
 .skp-send:disabled { background: var(--panel-2); color: var(--faint); cursor: default; }
 /* Tabs + 分類 + 搜尋 */
 .skp-tabs { display: flex; align-items: center; gap: 22px; margin-bottom: 14px; }
@@ -132,7 +133,7 @@
           </div>
           <div class="skp-chips"><span id="pick"></span><span id="mchips" style="display:contents"></span></div>
           <span class="skp-hint" id="t-hint" style="margin-left:auto">⌘ + Enter 送到 AI 導演</span>
-          <button class="skp-send" id="send" title="送出" disabled style="margin-left:8px">↑</button>
+          <button class="skp-send" id="send" title="送出" disabled style="margin-left:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg></button>
         </div>
         <div class="skp-pop" id="pop-model" hidden></div>
         <div class="skp-pop" id="pop-skill" hidden></div>

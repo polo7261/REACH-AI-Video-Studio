@@ -6,6 +6,7 @@
  "description": "可用于设计、改写和诊断 AI 视频中的打光、光影质感与多镜头",
  "cn_tc": "AI 影片光影提示詞",
  "desc_tc": "可用於設計、改寫和診斷 AI 影片中的打光、光影質感與多鏡頭",
+ "desc_en": "Designs, rewrites and diagnoses lighting, light quality and multi-shot continuity in AI videos",
  "cn_sc": "AI 视频光影提示词",
  "desc_sc": "可用于设计、改写和诊断 AI 视频中的打光、光影质感与多镜头"
 }

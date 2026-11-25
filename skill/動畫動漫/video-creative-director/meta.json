@@ -7,5 +7,6 @@
  "cn_tc": "Seedance 2.5 影片導演",
  "desc_tc": "把影片創意、劇本、人物參考圖、已有影片、音訊或舊提示詞，整理",
  "cn_sc": "Seedance 2.5 视频导演",
- "desc_sc": "把视频创意、剧本、人物参考图、已有视频、音频或旧提示词，整理"
+ "desc_sc": "把视频创意、剧本、人物参考图、已有视频、音频或旧提示词，整理",
+ "desc_en": "Turns video ideas, scripts, character references, existing footage, audio, or old prompts into a director's plan and a final Seedance 2.5 prompt"
 }

@@ -7,5 +7,6 @@
  "cn_tc": "服裝品牌宣傳TVC導演",
  "desc_tc": "上傳模特圖和服裝圖，自動生成具有品牌宣傳效果的TVC大片",
  "cn_sc": "服装品牌宣传TVC导演",
- "desc_sc": "上传模特图和服装图，自动生成具有品牌宣传效果的TVC大片"
+ "desc_sc": "上传模特图和服装图，自动生成具有品牌宣传效果的TVC大片",
+ "desc_en": "Turns model and outfit reference photos into a polished 20-second fashion-brand TVC"
 }

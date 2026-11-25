@@ -1,6 +1,7 @@
 ---
-
-## name: pv-director description: Direct game, film, animation, and IP promotional videos from an idea, script, assets, or reference images into a concise, high-hook PV package. Use for trailer/PV story development, scene structure, directing, storyboard scripts, timed animatics, action staging, video-generation planning, or PV sound design—especially when the work must be visually legible, generation-ready, and editable.
+name: pv-director
+description: Direct game, film, animation, and IP promotional videos from an idea, script, assets, or reference images into a concise, high-hook PV package. Use for trailer/PV story development, scene structure, directing, storyboard scripts, timed animatics, action staging, video-generation planning, or PV sound design—especially when the work must be visually legible, generation-ready, and editable.
+---
 
 # PV Director
 
@@ -59,7 +60,15 @@ Keep one dominant action per beat. Give decisive reactions enough time to read. 
 
 For each shot, provide:
 
-FieldIncludeID and durationEditing duration; normally keep readable shots at 1 second or longer unless an intentional flash cut.Story functionWhat the viewer learns or feels.Framing and movementLens/angle/height plus one primary camera move.ActionOne clear primary action and its result.ContinuityEntry state, exit state, screen direction, prop/weapon hand, lighting state.SoundEssential environment, Foley, weapon, creature, or transition sound.CutHard cut, action cut, sound bridge, or motivated wipe/occlusion only when needed.
+| Field | Include |
+|---|---|
+| ID and duration | Editing duration; normally keep readable shots at 1 second or longer unless an intentional flash cut. |
+| Story function | What the viewer learns or feels. |
+| Framing and movement | Lens/angle/height plus one primary camera move. |
+| Action | One clear primary action and its result. |
+| Continuity | Entry state, exit state, screen direction, prop/weapon hand, lighting state. |
+| Sound | Essential environment, Foley, weapon, creature, or transition sound. |
+| Cut | Hard cut, action cut, sound bridge, or motivated wipe/occlusion only when needed. |
 
 Split a Generation Clip whenever it asks for multiple camera angles, multiple complex actions, a major VFX change plus action, or a hidden cut that the platform cannot reliably perform. Do not treat a long prompt as a substitute for editorial structure.
 
@@ -89,7 +98,7 @@ For no-dialogue PVs, use silence, low-frequency pressure, distant alarms, wind, 
 ## 8. Output in the user’s requested level of detail
 
 - **“只要劇情”**: Output scenes in prose, with no shot table or prompt language.
-- **“分鏡指令碼”**: Output a timed shot table with staging, camera, action, sound, and cuts.
+- **“分鏡腳本”**: Output a timed shot table with staging, camera, action, sound, and cuts.
 - **“生成提示詞”**: First confirm the timed storyboard; then output one prompt per Generation Clip, with start/end state and continuity constraints.
 - **“全套 PV”**: Output, in order: project brief, scene synopsis, timed storyboard, generation-clip map, sound cues, and continuity QA.
 

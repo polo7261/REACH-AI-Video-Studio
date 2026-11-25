@@ -7,5 +7,6 @@
  "cn_tc": "影象高畫質修復",
  "desc_tc": "對模糊、低解析度、有噪點或壓縮損傷的圖片進行高畫質修復與放大",
  "cn_sc": "图像高清修复",
- "desc_sc": "对模糊、低分辨率、有噪点或压缩损伤的图片进行高清修复与放大"
+ "desc_sc": "对模糊、低分辨率、有噪点或压缩损伤的图片进行高清修复与放大",
+ "desc_en": "Restores low-resolution images with smart upscaling, denoising and detail enhancement"
 }

@@ -7,5 +7,6 @@
  "cn_tc": "參考圖轉影片提示詞",
  "desc_tc": "把參考圖提煉成可用的影片生成提示詞",
  "cn_sc": "参考图转视频提示词",
- "desc_sc": "把参考图提炼成可用的视频生成提示词"
+ "desc_sc": "把参考图提炼成可用的视频生成提示词",
+ "desc_en": "Distills reference images into ready-to-use prompts for image-to-video generation"
 }

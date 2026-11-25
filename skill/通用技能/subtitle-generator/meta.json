@@ -5,7 +5,8 @@
  "version": "1.0.13",
  "description": "智能分析视频风格，为你定制字幕样式。",
  "cn_tc": "AI 智慧字幕搭配",
- "desc_tc": "智慧分析影片風格，為你定製字幕樣式。",
+ "desc_tc": "智慧分析影片風格，為你客製字幕樣式。",
  "cn_sc": "AI 智能字幕搭配",
- "desc_sc": "智能分析视频风格，为你定制字幕样式。"
+ "desc_sc": "智能分析视频风格，为你定制字幕样式。",
+ "desc_en": "Analyzes video style and recommends matching subtitle styling"
 }

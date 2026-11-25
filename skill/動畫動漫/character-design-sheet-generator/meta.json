@@ -7,5 +7,6 @@
  "cn_tc": "角色三檢視設定｜鎖定臉部",
  "desc_tc": "真人+3D適用，SD影片生成高品質，基於參考圖生成角色設計表",
  "cn_sc": "角色三视图设定｜锁定脸部",
- "desc_sc": "真人+3D适用，SD视频生成高品质，基于参考图生成角色设计表"
+ "desc_sc": "真人+3D适用，SD视频生成高品质，基于参考图生成角色设计表",
+ "desc_en": "Generates high-quality character design sheets (turnaround and facial close-ups) from reference images for real-person and 3D styles"
 }

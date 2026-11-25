@@ -7,5 +7,6 @@
  "cn_tc": "微表情與情緒表演框架",
  "desc_tc": "約束 AI 人物提示詞的微表情寫作，去 AI 味",
  "cn_sc": "微表情与情绪表演框架",
- "desc_sc": "约束 AI 人物提示词的微表情写作，去 AI 味"
+ "desc_sc": "约束 AI 人物提示词的微表情写作，去 AI 味",
+ "desc_en": "Framework for writing lifelike micro-expression performances in character prompts."
 }

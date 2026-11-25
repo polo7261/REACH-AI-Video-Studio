@@ -5,7 +5,8 @@
  "version": "1.0.1",
  "description": "将惊悚、微恐、悬疑剧本自动拆解为专业 AI 视频分镜提示词，",
  "cn_tc": "驚悚微恐懸疑分鏡模板",
- "desc_tc": "將驚悚、微恐、懸疑劇本自動拆解為專業 AI 影片分鏡提示詞，",
+ "desc_tc": "將驚悚、微恐、懸疑劇本自動拆解為專業 AI 影片分鏡提示詞",
  "cn_sc": "惊悚微恐悬疑分镜模板",
- "desc_sc": "将惊悚、微恐、悬疑剧本自动拆解为专业 AI 视频分镜提示词，"
+ "desc_sc": "将惊悚、微恐、悬疑剧本自动拆解为专业 AI 视频分镜提示词，",
+ "desc_en": "Breaks thriller and suspense scripts into professional AI video storyboard prompts"
 }

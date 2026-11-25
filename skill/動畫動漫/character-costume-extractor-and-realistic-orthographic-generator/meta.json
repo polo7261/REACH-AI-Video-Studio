@@ -7,5 +7,6 @@
  "cn_tc": "劇本人物裝造提取 & 真人寫實三檢視生成",
  "desc_tc": "輸入劇本角色描述或角色參考圖，並生成符合的真人寫實角色三檢視",
  "cn_sc": "剧本人物装造提取 & 真人写实三视图生成",
- "desc_sc": "输入剧本角色描述或角色参考图，并生成符合的真人写实角色三视图"
+ "desc_sc": "输入剧本角色描述或角色参考图，并生成符合的真人写实角色三视图",
+ "desc_en": "Extracts character costumes from scripts or reference images and generates realistic three-view turnaround sheets"
 }

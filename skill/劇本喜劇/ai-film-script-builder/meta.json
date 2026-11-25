@@ -5,7 +5,8 @@
  "version": "1.0.0",
  "description": "把用户最初想法， 逐步发展成一个经过确认、适合AI制作的剧本",
  "cn_tc": "AI影視劇本創作",
- "desc_tc": "把使用者最初想法， 逐步發展成一個經過確認、適合AI製作的劇本",
+ "desc_tc": "把使用者的最初想法逐步發展成經過確認、適合 AI 製作的完整劇本",
  "cn_sc": "AI影视剧本创作",
- "desc_sc": "把用户最初想法， 逐步发展成一个经过确认、适合AI制作的剧本"
+ "desc_sc": "把用户最初想法， 逐步发展成一个经过确认、适合AI制作的剧本",
+ "desc_en": "Develops a user's initial story idea into a confirmed, AI-ready film script through guided iteration"
 }

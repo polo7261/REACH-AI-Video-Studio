@@ -158,7 +158,7 @@ Studio portrait of one adult [CONFIRMED SUBJECT TERM] with [CONFIRMED SKIN TONE,
 3. 妝容符合封閉欄位；最終文字只寫期望畫面，不含否定清單、模型／平臺名、引數、中文、冒號式長清單或未替換槽位。
 4. 最多三句、100 個英文詞；固定保留單人胸像、黑色圓領上衣、中灰背景、柔和均勻正面光與低對比度。
 
-失敗時從封閉欄位重編一次；仍不合格則停止並說明“V8.2 人像 Prompt 未透過提交前檢查”。透過後內部記錄 `V8.2 portrait lint: PASS`，不寫入 Prompt。畫幅與 Raw 只透過介面控制元件設定。
+失敗時從封閉欄位重編一次；仍不合格則停止並說明“V8.2 人像 Prompt 未透過提交前檢查”。透過後內部記錄 `V8.2 portrait lint: PASS`，不寫入 Prompt。畫幅與 Raw 只透過介面控制項設定。
 
 建立節點後回讀實際模型名、Prompt、畫幅與 Raw。Prompt 必須與檢查透過版逐字一致；若被再次翻譯、潤色或刪改，立即停止，不得生成。
 

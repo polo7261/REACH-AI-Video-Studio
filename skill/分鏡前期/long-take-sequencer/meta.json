@@ -6,6 +6,7 @@
  "description": "将长视频拆成连续片段，使多个 片段尽可能形成同一个完整长镜头",
  "cn_tc": "連續長鏡頭導演",
  "desc_tc": "將長影片拆成連續片段，使多個 片段儘可能形成同一個完整長鏡頭",
+ "desc_en": "Plans long AI videos as one continuous long take with unified timelines, keyframes and continuity ledgers",
  "cn_sc": "连续长镜头导演",
  "desc_sc": "将长视频拆成连续片段，使多个 片段尽可能形成同一个完整长镜头"
 }

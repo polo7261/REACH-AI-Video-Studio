@@ -7,5 +7,6 @@
  "cn_tc": "AI版導演分鏡提案助手",
  "desc_tc": "不會拆分鏡？AI幫你生成可稽核的導演級分鏡方案",
  "cn_sc": "AI版导演分镜提案助手",
- "desc_sc": "不会拆分镜？AI帮你生成可审核的导演级分镜方案"
+ "desc_sc": "不会拆分镜？AI帮你生成可审核的导演级分镜方案",
+ "desc_en": "Generates director-level, review-ready storyboard proposals with scene breakdowns and shot design"
 }

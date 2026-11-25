@@ -7,5 +7,6 @@
  "cn_tc": "光影時刻與天氣",
  "desc_tc": "日出/日落/黃金時刻/藍調時刻…以及晴/雨/雪/霧/陰天",
  "cn_sc": "光影时刻与天气",
- "desc_sc": "日出/日落/黄金时刻/蓝调时刻…以及晴/雨/雪/雾/阴天"
+ "desc_sc": "日出/日落/黄金时刻/蓝调时刻…以及晴/雨/雪/雾/阴天",
+ "desc_en": "Relights existing scene images with physically credible time-of-day and weather changes."
 }

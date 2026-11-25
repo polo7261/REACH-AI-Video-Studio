@@ -1,6 +1,7 @@
 ---
-
-## name: continuous-long-take-director description: Use when planning or generating an AI video that should feel like one continuous long take, especially when character identity, props, movement, spatial relations, or camera direction must persist across a long timeline or generation boundaries.
+name: long-take-sequencer
+description: "Use when planning or generating an AI video that should feel like one continuous long take, especially when character identity, props, movement, spatial relations, or camera direction must persist across a long timeline or generation boundaries."
+---
 
 # 連續長鏡頭導演
 
@@ -18,7 +19,7 @@ V0 只負責連續性規劃、統一時間軸生成、必要的影片續寫、�
 
 使用者不需要提供標準影片 Prompt。預設假設使用者提供的是自然語言描述、故事梗概、小說片段、劇情創意、簡單需求、劇本或已有影片 Prompt。
 
-首先判斷輸入型別。如果輸入是已經結構化的影片 Prompt，保留其中明確設定並進入狀態提取。如果輸入屬於 RAW STORY / IDEA，不要要求使用者重新寫成影片 Prompt，先提取以下內容。
+首先判斷輸入類型。如果輸入是已經結構化的影片 Prompt，保留其中明確設定並進入狀態提取。如果輸入屬於 RAW STORY / IDEA，不要要求使用者重新寫成影片 Prompt，先提取以下內容。
 
 ### NARRATIVE FACTS
 
@@ -93,7 +94,7 @@ V0 只負責連續性規劃、統一時間軸生成、必要的影片續寫、�
 
 ## MULTI-SHOT REPRESENTATION
 
-在建立 Master State 前，先把輸入整理成全域性資訊和逐鏡頭資訊。兩者職責不同，不要把全部角色外觀和歷史劇情重複寫進每個鏡頭。
+在建立 Master State 前，先把輸入整理成全域資訊和逐鏡頭資訊。兩者職責不同，不要把全部角色外觀和歷史劇情重複寫進每個鏡頭。
 
 ### GLOBAL STORY CAPTION
 
@@ -133,7 +134,7 @@ SUBJECT REGISTRY
 
 ### CURRENT SHOT CAPTION
 
-每個鏡頭使用一個區域性描述，內容只覆蓋當前可見主體、動作、表情、場景狀態、構圖和攝影機運動。
+每個鏡頭使用一個局部描述，內容只覆蓋當前可見主體、動作、表情、場景狀態、構圖和攝影機運動。
 
 ```text
 CURRENT SHOT CAPTION
@@ -144,7 +145,7 @@ CURRENT SHOT CAPTION
 - 與前後鏡頭有關的方向和交接資訊
 ```
 
-CURRENT SHOT CAPTION 使用 Subject ID 引用全域性身份，不重新改寫主體外觀。角色外觀只有發生劇情允許的可見變化時才更新 Continuity Ledger。
+CURRENT SHOT CAPTION 使用 Subject ID 引用全域身份，不重新改寫主體外觀。角色外觀只有發生劇情允許的可見變化時才更新 Continuity Ledger。
 
 ### VARIABLE SHOT DURATION
 
@@ -155,7 +156,7 @@ CURRENT SHOT CAPTION 使用 Subject ID 引用全域性身份，不重新改寫�
 - 一個 Clip 無法穩定完成全部動作時，拆成多個連續階段。
 - 總時長由使用者要求控制。不要為了平均分配而強迫所有 Clip 等長。
 
-以上結構借鑑多鏡頭生成研究中的全域性描述與逐鏡頭描述分工。它只能改善 Skill 層的資訊組織，不能替代底層模型的聯合多鏡頭生成、參考注入或跨鏡頭位置編碼能力。
+以上結構借鑑多鏡頭生成研究中的全域描述與逐鏡頭描述分工。它只能改善 Skill 層的資訊組織，不能替代底層模型的聯合多鏡頭生成、參考注入或跨鏡頭位置編碼能力。
 
 ## UNIFIED VIDEO TIMELINE
 
@@ -211,7 +212,13 @@ NARRATIVE KEYFRAME [ID]
 
 每個參考資產必須只有一個明確的媒體角色。生成節點和素材輸入槽位必須按角色繫結，不得因為畫面看起來相似而互相替代。
 
-Media Role用途禁止用途`style_reference`色彩、光線、材質、寫實程度首幀、場景、人物或道具參考`character_reference`角色身份、臉部、體型和服裝版本場景或首幀替代`location_reference`建築、空間佈局、場景角度和環境狀態風格錨點或連續邊界替代`prop_reference`核心道具外觀和狀態版本人物、場景或首幀替代`transition_reference`兩個場景之間的出入口和空間連線普通風格參考
+| Media Role | 用途 | 禁止用途 |
+|------------|------|----------|
+| `style_reference` | 色彩、光線、材質、寫實程度 | 首幀、場景、人物或道具參考 |
+| `character_reference` | 角色身份、臉部、體型和服裝版本 | 場景或首幀替代 |
+| `location_reference` | 建築、空間佈局、場景角度和環境狀態 | 風格錨點或連續邊界替代 |
+| `prop_reference` | 核心道具外觀和狀態版本 | 人物、場景或首幀替代 |
+| `transition_reference` | 兩個場景之間的出入口和空間連線 | 普通風格參考 |
 
 - 素材名稱、說明和 REFERENCE MANIFEST 都必須寫出 Media Role。
 - `style_reference` 只能進入風格參考槽位。
@@ -436,7 +443,7 @@ REFERENCE MANIFEST FOR PLANNING UNIT [N]
    - 植物、地形、固定物件和可移動佈景是否與 ENVIRONMENT ELEMENT INVENTORY 一致。
 3. 當前可見核心道具是否使用正確 Prop ID 和狀態版本。
 4. STYLE ANCHOR 是否一致。
-5. 當前模型是否能接收所需參考型別和數量。
+5. 當前模型是否能接收所需參考類型和數量。
 6. 每張素材是否進入與 Media Role 相同的槽位。
 
 缺少會導致角色身份、空間或核心道具不可控的參考時，停止當前生成範圍。先補齊參考、調整鏡頭方案或向使用者說明能力限制，不能靜默放棄關鍵約束。
@@ -449,7 +456,7 @@ REFERENCE MANIFEST FOR PLANNING UNIT [N]
 
 - 創意與劇情目標
 - 總時長和期望節奏
-- 畫幅、風格和型別
+- 畫幅、風格和類型
 - 主要角色及角色參考
 - 核心道具
 - 關鍵空間及其連線關係
@@ -474,7 +481,7 @@ REFERENCE MANIFEST FOR PLANNING UNIT [N]
 
 ### MODE B / VIDEO CONTINUATION MODE
 
-當單次生成時長不足但支援影片續寫時，持續擴充套件同一個影片資產，不分別生成多個成品再合成。
+當單次生成時長不足但支援影片續寫時，持續擴展同一個影片資產，不分別生成多個成品再合成。
 
 ```text
 CONTINUATION SEGMENT
@@ -490,7 +497,7 @@ CONTINUATION SEGMENT
 - 每次續寫必須以上一次已接受的影片資產為源，不能新建無關影片後再拼接。
 - 續寫只讀取固定 Master State、當前實際狀態、下一關鍵幀和到達它所需的連續路徑，不重複全部歷史提示詞。
 - 續寫後檢查原影片邊界附近是否發生凍結、跳切、重繪、動作重啟、音畫斷裂或場景狀態漂移。
-- 只有續寫結果透過檢查，才把擴充套件後的影片資產作為下一次續寫來源。
+- 只有續寫結果透過檢查，才把擴展後的影片資產作為下一次續寫來源。
 
 MODE A 和 MODE B 都不可用時停止執行並報告能力限制。不得建立多個獨立影片、不得退回尾幀圖片接力，也不得提出片段拼接方案。
 
@@ -507,7 +514,7 @@ MODE A 和 MODE B 都不可用時停止執行並報告能力限制。不得建�
  7. 獲得確認後，準備當前生成範圍所需參考並完成 REFERENCE PREFLIGHT。
  8. MODE A 生成完整長影片；MODE B 生成初始影片或只執行下一次續寫。
  9. 檢查實際結果，並用真實畫面更新 Continuity Ledger 和時間軸完成狀態。
-10. MODE B 只在續寫結果透過後繼續擴充套件同一影片資產。
+10. MODE B 只在續寫結果透過後繼續擴展同一影片資產。
 11. 發現阻斷錯誤時停止後續生成，重做當前失敗範圍，不用修改後續文字掩蓋錯誤。
 12. 當前生成範圍透過後展示檢查結果，並按確認規則決定是否繼續。
 13. 完成目標時長後複核整條時間軸並輸出統一長影片資產。
@@ -566,7 +573,7 @@ ENVIRONMENT MAP
 - 穩定光源與空間標誌
 
 STYLE LOCK
-- 影像型別與視覺風格
+- 影像類型與視覺風格
 - 色彩、光線與質感
 - 畫幅
 - 基本攝影機風格
@@ -638,7 +645,7 @@ TIME STATE
 - 持續動作、倒計時和因果事件進度
 ```
 
-狀態賬本只寫當前真實狀態。不要把以前所有劇情重新敘述一遍。
+狀態帳本只寫當前真實狀態。不要把以前所有劇情重新敘述一遍。
 
 ## 劃分時間軸規劃單元
 
@@ -699,7 +706,7 @@ CURRENT RANGE FAILURE ANALYSIS
 - 針對這些錯誤的具體生成約束
 
 CURRENT SHOT CAPTION
-- 當前可見主體、動作、場景和攝影機的區域性描述
+- 當前可見主體、動作、場景和攝影機的局部描述
 
 SCENE REALISM LAYER
 - 當前空間的物理環境與尺度
@@ -777,7 +784,7 @@ DIRECTORIAL INTENT
 2. 檢查真實影片，不以提示詞中的計劃代替畫面事實。
 3. 記錄實際 END STATE。實際結果可接受但與計劃略有差異時，以實際結果更新 Continuity Ledger。
 4. 實際結果命中阻斷錯誤時，不更新後續計劃，先重做當前失敗範圍。
-5. MODE B 的續寫結果被接受後，把擴充套件後的影片 Asset ID 設為下一次續寫的唯一來源。
+5. MODE B 的續寫結果被接受後，把擴展後的影片 Asset ID 設為下一次續寫的唯一來源。
 
 ### MOTION HANDOFF CONTRACT
 
@@ -788,14 +795,14 @@ MOTION HANDOFF
 - Motion Vector / 主體和關鍵道具的運動方向與速度趨勢
 - Action Phase / 未完成動作所處階段
 - Body Momentum / 重心、支撐點和肢體擺動趨勢
-- Camera Motion / 運鏡型別、方向與速度趨勢
+- Camera Motion / 運鏡類型、方向與速度趨勢
 - Environmental Motion / 衣物、頭髮、雨、煙、火焰和枝葉等動態趨勢
 - First-beat Continuation / 下一續寫範圍第一個動作節拍必須發生的延續動作
 - Motion Binding Status / CONTINUOUS or BLOCKED
 ```
 
 - 當前影片應優先結束在動作方向清楚且可自然續寫的時刻，不為交接強迫人物僵硬定格。
-- 下一次續寫必須直接擴充套件同一個影片資產並立即延續 Motion Handoff，禁止靜止展示邊界畫面、重新擺姿勢、重新起步、再次蓄力或重複上一動作。
+- 下一次續寫必須直接擴展同一個影片資產並立即延續 Motion Handoff，禁止靜止展示邊界畫面、重新擺姿勢、重新起步、再次蓄力或重複上一動作。
 - 人物動作、道具運動、攝影機運動和環境動態不得在邊界無理由歸零、反向或重新加速。
 - 提示詞使用可觀察的方向、動作階段和速度趨勢，不要求模型執行精確速度、加速度或慣性數值。
 - 若當前影片結尾無法表達下一動作方向，應重做當前生成範圍的結尾排程，而不是讓下一次續寫猜測運動。
@@ -860,7 +867,7 @@ MOTION HANDOFF
 
 ### 2 至 5 分鐘
 
-必須採用狀態化生成，並使用 MODE B 持續擴充套件同一影片。每個續寫範圍只讀取以下內容。
+必須採用狀態化生成，並使用 MODE B 持續擴展同一影片。每個續寫範圍只讀取以下內容。
 
 - 固定 Master State
 - 當前 Continuity Ledger
@@ -870,7 +877,7 @@ MOTION HANDOFF
 
 不要在後續生成範圍中重複此前全部劇情、全部提示詞或每個舊規劃單元的詳細記錄。
 
-## 型別規則
+## 類型規則
 
 ### 恐怖與 Cult
 
@@ -899,6 +906,6 @@ MOTION HANDOFF
 
 輸出以上規劃後必須立即停止，並明確詢問使用者是否“確認規劃並開始生成”。不要在同一次響應中建立節點、生成初始影片或執行續寫。
 
-MODE B 每次續寫後輸出擴充套件後影片 Asset ID、實際 END STATE、關鍵幀到達情況、連續性檢查和更新後的 Continuity Ledger。隨後詢問使用者是否確認繼續；阻斷錯誤出現時立即停止。
+MODE B 每次續寫後輸出擴展後影片 Asset ID、實際 END STATE、關鍵幀到達情況、連續性檢查和更新後的 Continuity Ledger。隨後詢問使用者是否確認繼續；阻斷錯誤出現時立即停止。
 
 達到目標時長後，輸出統一長影片 Asset ID 和全片連續性複核結果。不生成獨立 Clip，也不執行片段拼接。

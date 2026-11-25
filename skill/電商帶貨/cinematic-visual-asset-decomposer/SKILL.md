@@ -34,7 +34,7 @@
 
 - 完整劇本
 - 場景劇本
-- 分鏡指令碼
+- 分鏡腳本
 - 單鏡頭描述
 - 人物設定
 - 世界觀 / 場景設定
@@ -180,7 +180,7 @@ P2｜按鏡頭呼叫
 
 ---
 
-# 核心資產型別
+# 核心資產類型
 
 ## 1｜人物資產 Character Assets
 
@@ -402,7 +402,7 @@ Panel 1 與 Panel 2 必須保持：
 
 關鍵原則：
 
-STATE &gt; TRANSITION
+STATE > TRANSITION
 
 ---
 
@@ -512,7 +512,7 @@ PRESERVE EXACTLY
 
 一次優先修改一個主要變數。
 
-這一做法與 Lira 中“minimal CHANGE + exhaustive PRESERVE EXACTLY”的編輯原則一致。:contentReference\[oaicite:0\]{index=0}
+這一做法與 Lira 中“minimal CHANGE + exhaustive PRESERVE EXACTLY”的編輯原則一致。
 
 ---
 
@@ -525,7 +525,7 @@ image1 / characterA / scene02final
 
 預設中文命名：
 
-主體名稱\_資產型別\_視角或狀態\_v版本
+主體名稱\_資產類型\_視角或狀態\_v版本
 
 例如：
 
@@ -558,7 +558,7 @@ image1 / characterA / scene02final
 格式：
 
 資產名稱：\
-資產型別：\
+資產類型：\
 後續用途：
 
 建議繼承：

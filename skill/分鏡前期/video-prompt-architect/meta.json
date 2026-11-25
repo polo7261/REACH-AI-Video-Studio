@@ -7,5 +7,6 @@
  "cn_tc": "小杰AIGC｜影片提示詞",
  "desc_tc": "分析創意、素材與分鏡，輸出4—30秒影片提示詞。",
  "cn_sc": "小杰AIGC｜视频提示词",
- "desc_sc": "分析创意、素材与分镜，输出4—30秒视频提示词。"
+ "desc_sc": "分析创意、素材与分镜，输出4—30秒视频提示词。",
+ "desc_en": "Produces ready-to-use 4-30 second video prompts from ideas, assets, or storyboards"
 }

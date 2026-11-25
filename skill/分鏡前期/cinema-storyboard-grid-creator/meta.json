@@ -7,5 +7,6 @@
  "cn_tc": "鏡語師-C 劇情分鏡九宮格",
  "desc_tc": "按劇情文字生成 3×3 電影分鏡九宮格",
  "cn_sc": "镜语师-C 剧情分镜九宫格",
- "desc_sc": "按剧情文本生成 3×3 电影分镜九宫格"
+ "desc_sc": "按剧情文本生成 3×3 电影分镜九宫格",
+ "desc_en": "Designs a 3x3 cinematic storyboard contact sheet from a reference image and story text"
 }

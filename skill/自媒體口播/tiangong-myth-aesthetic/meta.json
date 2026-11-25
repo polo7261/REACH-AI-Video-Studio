@@ -4,8 +4,9 @@
  "templateUuid": "a5719593944c422f9c69b6de3ecde1d3",
  "version": "1.0.3",
  "description": "东方神话天宫美学的图片、视频与音乐提示词创作工具",
- "cn_tc": "天宮國風美學·最佳化版",
+ "cn_tc": "天宮國風美學·優化版",
  "desc_tc": "東方神話天宮美學的圖片、影片與音樂提示詞創作工具",
  "cn_sc": "天宫国风美学·优化版",
- "desc_sc": "东方神话天宫美学的图片、视频与音乐提示词创作工具"
+ "desc_sc": "东方神话天宫美学的图片、视频与音乐提示词创作工具",
+ "desc_en": "Creates celestial-palace Chinese mythology prompts for images, video and music"
 }

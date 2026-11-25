@@ -7,5 +7,6 @@
  "cn_tc": "FPV視角穿越名畫",
  "desc_tc": "上傳一張圖，生成FPV視角的影片",
  "cn_sc": "FPV视角穿越名画",
- "desc_sc": "上传一张图，生成FPV视角的视频"
+ "desc_sc": "上传一张图，生成FPV视角的视频",
+ "desc_en": "Turns a classic painting into an FPV one-take video prompt that ends back on the original artwork."
 }

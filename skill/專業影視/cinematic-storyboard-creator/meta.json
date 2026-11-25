@@ -6,6 +6,7 @@
  "description": "主要用于人物对话戏的分镜图片制作",
  "cn_tc": "對話戲分鏡圖生成器",
  "desc_tc": "主要用於人物對話戲的分鏡圖片製作",
+ "desc_en": "Cinematic dialogue-scene storyboard frames with anchor-image background consistency",
  "cn_sc": "对话戏分镜图生成器",
  "desc_sc": "主要用于人物对话戏的分镜图片制作"
 }

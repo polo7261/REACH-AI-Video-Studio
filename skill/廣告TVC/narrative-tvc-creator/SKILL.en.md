@@ -9,7 +9,7 @@ description: "Narrative TVC commercials: create story-driven product, brand, and
 
 Based on product images or product information, create a story-driven TVC with a scene, a conflict, an emotional connection, and a memorable product moment. The core chain is: product selling point → user situation → emotional conflict → product intervention → state change → brand memory.
 
-This Skill serves the libtv / Seedance 2.0 production pipeline by default. Seedance 2.0 generates at most 15S of video per run, so all ads must be designed in 15S segment units: 15S=1 video, 30S=2 videos, 45S=3 videos, 60S=4 videos. Unless the user explicitly requests dense editing, do not split every small shot into an independent video generation task.
+This Skill serves the 平台 Seedance 2.0 production pipeline by default. Seedance 2.0 generates at most 15S of video per run, so all ads must be designed in 15S segment units: 15S=1 video, 30S=2 videos, 45S=3 videos, 60S=4 videos. Unless the user explicitly requests dense editing, do not split every small shot into an independent video generation task.
 
 ## Global Hard Rules
 

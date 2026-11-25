@@ -7,5 +7,6 @@
  "cn_tc": "東方天宮寫意-最佳化版",
  "desc_tc": "生成東方寫意天宮風格的圖片提示詞與圖生影片提示詞",
  "cn_sc": "东方天宫写意-优化版",
- "desc_sc": "生成东方写意天宫风格的图片提示词与图生视频提示词"
+ "desc_sc": "生成东方写意天宫风格的图片提示词与图生视频提示词",
+ "desc_en": "Generates grouped image and image-to-video prompts for Eastern celestial palace scenes with cloud seas, palette climates, and cinematic scale"
 }

@@ -70,16 +70,16 @@ Complete per the framework (Section III): bright high-key flat lighting, almost 
 ### Step 5 · Output in Seedance 2.0 Format
 Follow the Section 5 format: Chinese style-lock sentence + global settings → numbered shot breakdown under "Strictly follow the order of \[N\] shots:" (shot sizes, including {{Mixed N}}, use `【CUT】` to cut to reaction shots) → Chinese closing sentence. **Write the prompt in Chinese (you can read it directly); keep dialogue in the original text of the chosen language; explicitly state "no subtitles or on-screen text"—subtitles must never enter generation**. List subtitles separately in an appended "Subtitle List" (burned in at Step 7). Wrap the prompt in a code block. **When the duration &gt;15s, split it into 15s segments, outputting one prompt per segment (Segment 1/Segment 2… each in its own code block) + the corresponding subtitle list**, sharing the character/scene bindings and the style-lock sentence, **each segment forming its own joke and landing its own punchline**.
 
-### Step 6 · After Confirmation, Generate on the libtv Canvas
+### Step 6 · After Confirmation, Generate on the Platform Canvas
 
 Once the prompt (in Chinese) is ready, **first make sure the user understands the content, then ask if it's OK or not**:
 
 - Not OK → revise according to the feedback (change the dialogue/engine/styling/language, etc.), then deliver another version.
-- OK → generate on the **libtv canvas** (each segment with its bound character three-view sheets/uploaded images + scene image), **following the pace chosen in Step 1**: generate all segments in one go / confirm segment by segment (each segment approved before generating the next); finally, edit the segments together in order.
+- OK → generate on the **platform canvas** (each segment with its bound character three-view sheets/uploaded images + scene image), **following the pace chosen in Step 1**: generate all segments in one go / confirm segment by segment (each segment approved before generating the next); finally, edit the segments together in order.
 
 ### Step 7 · Add Subtitles After Generation (Required for the Final Video; Subtitles Appear Only at This Step)
 
-After libtv delivers the video (with no subtitles/on-screen text at all), **the final video must carry subtitles**—burn in the chosen **subtitle language (Chinese/English/bilingual) during editing; this is the only** step where subtitles are added and it must not be skipped:
+After the platform delivers the video (with no subtitles/on-screen text at all), **the final video must carry subtitles**—burn in the chosen **subtitle language (Chinese/English/bilingual) during editing; this is the only** step where subtitles are added and it must not be skipped:
 
 - Use the **subtitle list** attached in Step 5 to add subtitles sentence by sentence, following each shot's dialogue timeline, placing TV-style subtitles **centered at the bottom** in **white text with a thin black outline**. Bilingual = Chinese on top, English below, with the **English line noticeably smaller than the Chinese line** (Chinese primary, English secondary).
 - Fine-tune the wording with a comedic ear; the punchline line must be funny in the selected language(s).
@@ -386,7 +386,7 @@ Same method: {{Mixed 1}} confidently delivers a pickup line at the bar → cut t
 - \[ \] Subtitles listed separately in a "Subtitle List" appended after the prompt, burned in only at Step 7 after the final video (default bilingual · Chinese on top / English on bottom)
 - \[ \] Image-to-video: with bound images, prompt focuses on camera movement and action; narration off by default
 - \[ \] **No** glances at the camera / handheld / crash zoom / interview shots
-- \[ \] When the prompt is ready, ask the user for OK first; only after OK, take it to the libtv canvas to generate
+- \[ \] When the prompt is ready, ask the user for OK first; only after OK, take it to the platform canvas to generate
 - \[ \] Single language throughout, code block copyable; duration per Step 1 selection, one laugh point; duo of "chaos × normal"
 - \[ \] &gt;15s already split into 15s segments, each segment a self-contained laugh point landing its own punchline, sharing the bound assets
 
@@ -442,6 +442,6 @@ echo "Locate exact frames: ffmpeg -ss <start> -i <video> -t <len> -vf fps=4 ..."
 - Multi-camera medium-wide shots, stable; cut between "speaking ↔ reaction"; **characters' relative positions are locked and never swapped**; **do not use** glances at the camera / handheld / crash zooms / interview setups.
 - **One complete laugh point every 15s**, three-beat structure, closing lands on a reaction + laughter, tight pacing; 30s/60s = 2/4 short gags strung back-to-back, each landing once.
 - **Write prompts in Chinese** (dialogue kept in the original selected language); **subtitles must never appear at the generation stage**—the prompt explicitly states "no subtitles or on-screen text"; subtitles go in a separate list and are burned in only during post-production editing.
-- Only generate on the **libtv canvas** after confirmation (with bound character/scene images); the background may include low-key extras (no interaction / no looking at the camera / no scene-stealing).
+- Only generate on the **platform canvas** after confirmation (with bound character/scene images); the background may include low-key extras (no interaction / no looking at the camera / no scene-stealing).
 - Frequently pair a "chaos maker + normal person" duo.
 - No content involving real public figures; keep it appropriately harmless.

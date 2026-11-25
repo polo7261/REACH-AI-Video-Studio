@@ -5,7 +5,8 @@
  "version": "1.0.0",
  "description": "年龄+性别，生成照片级真人肖像提示词，打造自然真实AI人像",
  "cn_tc": "影片級逼真人像提示詞",
- "desc_tc": "年齡+性別，生成照片級真人肖像提示詞，打造自然真實AI人像",
+ "desc_tc": "年齡+性別，生成照片級真人肖像提示詞，打造自然真實的 AI 人像",
  "cn_sc": "影片级逼真人像提示词",
- "desc_sc": "年龄+性别，生成照片级真人肖像提示词，打造自然真实AI人像"
+ "desc_sc": "年龄+性别，生成照片级真人肖像提示词，打造自然真实AI人像",
+ "desc_en": "Builds photorealistic human portrait prompts from age and gender, with age-consistent skin, natural facial detail and photography realism"
 }

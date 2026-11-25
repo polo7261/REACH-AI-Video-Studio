@@ -32,7 +32,7 @@ version: 4
 
 ## Internal Workflow and Knowhow
 
-The deliverable of this skill is not "verbally outputting a script and images," but **building a node graph on the liblib canvas that runs automatically**. Each step below corresponds to one or a group of nodes on the canvas; every step must be materialized as nodes and wired together so one run completes the entire pipeline — not steps kept in your head.
+The deliverable of this skill is not "verbally outputting a script and images," but **building a node graph on the platform canvas that runs automatically**. Each step below corresponds to one or a group of nodes on the canvas; every step must be materialized as nodes and wired together so one run completes the entire pipeline — not steps kept in your head.
 
 - **Node chain (upstream → downstream)**: Script node (text) → Asset nodes (character design images, scene image) → Storyboard image nodes ×3 ("Plot Deduction 4-Panel," one 4-panel image per shot) → Storyboard video nodes ×3 (audio-visual sync model, e.g., Kling) → Editing node (assembles one complete final video, the sole final output of the entire graph)
 - **Wiring principles (wired correctly = runs automatically)**:
@@ -75,7 +75,7 @@ Short drama structure and product integration are two separate layers of techniq
 - Once the anchor text is written, all subsequent prompts reuse the exact same passage without changing word order — this is the foundation of cross-shot consistency
 
 ### 4. Storyboard Creation (Storyboard Image Nodes)
-Each shot produces one **4-panel storyboard image**: in the liblib storyboard image node, select the **"Plot Deduction 4-Panel"** option, and unfold the shot's main action over time into 4 panels (start → progression → end), clearly laying out this shot's motion trajectory. It serves as the **motion basis** for the downstream video node — the video receives a clearly decomposed action sequence rather than an information-vague single image, making generation more accurate and controllable.
+Each shot produces one **4-panel storyboard image**: in the platform storyboard image node, select the **"Plot Deduction 4-Panel"** option, and unfold the shot's main action over time into 4 panels (start → progression → end), clearly laying out this shot's motion trajectory. It serves as the **motion basis** for the downstream video node — the video receives a clearly decomposed action sequence rather than an information-vague single image, making generation more accurate and controllable.
 - **Must use the "Plot Deduction 4-Grid" node option**: one shot = one 4-panel image. Do not use ordinary text-to-image to generate the panels one by one, otherwise the storyboard image node will spit out a big pile of scattered images at once and go out of control
 - Generation references: character/scene anchors + original product image
 - **4-panel deduction**: break this shot's subject action down into 4 time steps; the panel order is the chronological order. Example: Shot 2 "taking out the keepsake" → hand reaches toward the pocket → draws it out → raises it → holds still. Each panel is one instant of the action

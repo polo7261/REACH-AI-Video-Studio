@@ -1,3 +1,8 @@
+---
+name: seedance-video-face-swapper
+description: "把一段源影片與 1~2 張參考圖反推成可直接貼進 Seedance 2.5 的中文提示詞，鎖定參考圖五官完成換人復刻"
+---
+
 ## 這個技能幹什麼
 
 把「**1 段源影片 + 1\~2 張參考圖**」變成一條可直接貼上進 Seedance 2.5（或 Seedance 2.0 Fast）的中文提示詞。核心四件事：

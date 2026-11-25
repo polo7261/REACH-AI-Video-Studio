@@ -4,8 +4,9 @@
  "templateUuid": "180886fe0a394dfa978200bd7c4fbcec",
  "version": "1.0.2",
  "description": "把想法写成画面，专业编写、优化与反推图像提示词。",
- "cn_tc": "影象提示詞與反推助手",
- "desc_tc": "把想法寫成畫面，專業編寫、最佳化與反推影象提示詞。",
+ "cn_tc": "圖像提示詞與反推助手",
+ "desc_tc": "把想法寫成畫面，專業編寫、最佳化與反推圖像提示詞。",
  "cn_sc": "图像提示词与反推助手",
- "desc_sc": "把想法写成画面，专业编写、优化与反推图像提示词。"
+ "desc_sc": "把想法写成画面，专业编写、优化与反推图像提示词。",
+ "desc_en": "Writes, optimizes, and reverse-engineers text-to-image prompts with structured visual checks"
 }

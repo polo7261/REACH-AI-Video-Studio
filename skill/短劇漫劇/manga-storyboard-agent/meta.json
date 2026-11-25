@@ -7,5 +7,6 @@
  "cn_tc": "漫劇分鏡創作Agent v8",
  "desc_tc": "畫風確認→錨點集+分鏡總表雙文件輸出",
  "cn_sc": "漫剧分镜创作Agent v8",
- "desc_sc": "画风确认→锚点集+分镜总表双文档输出"
+ "desc_sc": "画风确认→锚点集+分镜总表双文档输出",
+ "desc_en": "Breaks stories into comic-drama storyboards with anchor sets and copy-ready video prompts."
 }

@@ -6,6 +6,7 @@
  "description": "输入主题+平台+时长，输出完整口播文案",
  "cn_tc": "口播文案生成器",
  "desc_tc": "輸入主題+平臺+時長，輸出完整口播文案",
+ "desc_en": "Turns a topic, platform and duration into complete talking-head voiceover scripts",
  "cn_sc": "口播文案生成器",
  "desc_sc": "输入主题+平台+时长，输出完整口播文案"
 }

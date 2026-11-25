@@ -5,7 +5,8 @@
  "version": "1.0.2",
  "description": "把小说、剧本中角色、场景/环境、道具转化专业影视级视觉锚点图",
  "cn_tc": "10大風格錨點圖片生成器",
- "desc_tc": "把小說、劇本中角色、場景/環境、道具轉化專業影視級視覺錨點圖",
+ "desc_tc": "把小說、劇本中角色、場景/環境、道具轉化為專業影視級視覺錨點圖",
+ "desc_en": "Turns novel or script characters, scenes and props into production-ready visual anchor sheets for consistent AI video generation",
  "cn_sc": "10大风格锚点图片生成器",
  "desc_sc": "把小说、剧本中角色、场景/环境、道具转化专业影视级视觉锚点图"
 }

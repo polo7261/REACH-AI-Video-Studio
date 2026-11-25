@@ -5,7 +5,8 @@
  "version": "1.0.3",
  "description": "输入对战设定与站位图，产出双人对战视频",
  "cn_tc": "雙人打鬥影片生成",
- "desc_tc": "輸入對戰設定與站點陣圖，產出雙人對戰影片",
+ "desc_tc": "輸入對戰設定與站位圖，產出雙人對戰影片",
  "cn_sc": "双人打斗视频生成",
- "desc_sc": "输入对战设定与站位图，产出双人对战视频"
+ "desc_sc": "输入对战设定与站位图，产出双人对战视频",
+ "desc_en": "Generates two-character combat videos from matchup settings and a positioning diagram"
 }

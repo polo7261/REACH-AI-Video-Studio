@@ -1,6 +1,6 @@
 ---
 name: thriller-suspense-storyboard-prompter
-description: "將驚悚、微恐、懸疑劇本自動拆解為專業 AI 影片分鏡提示詞，"
+description: "將驚悚、微恐、懸疑劇本自動拆解為專業 AI 影片分鏡提示詞"
 ---
 
 # 驚悚微恐懸疑分鏡模板

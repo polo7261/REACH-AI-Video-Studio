@@ -1,11 +1,12 @@
 {
- "cn": "东方古典写意仙宫场景",
- "skillKey": "oriental-celestial-palace-designer-c6c2e10b3efe4fd881c52b3eb403b2fa",
- "templateUuid": "1f1d6a8d706f4a92bbf420c4567513c4",
- "version": "1.0.8",
- "description": "生成清透东方天宫、云海宫阙、仙境园林的图片提示词与视频提示词",
- "cn_tc": "東方古典寫意仙宮場景",
- "desc_tc": "生成清透東方天宮、雲海宮闕、仙境園林的圖片提示詞與影片提示詞",
- "cn_sc": "东方古典写意仙宫场景",
- "desc_sc": "生成清透东方天宫、云海宫阙、仙境园林的图片提示词与视频提示词"
+  "cn": "东方古典写意仙宫场景",
+  "skillKey": "oriental-celestial-palace-designer-c6c2e10b3efe4fd881c52b3eb403b2fa",
+  "templateUuid": "1f1d6a8d706f4a92bbf420c4567513c4",
+  "version": "1.0.8",
+  "description": "生成清透东方天宫、云海宫阙、仙境园林的图片提示词与视频提示词",
+  "cn_tc": "東方古典寫意仙宮場景",
+  "desc_tc": "生成清透東方天宮、雲海宮闕、仙境園林的圖片提示詞與影片提示詞",
+  "cn_sc": "东方古典写意仙宫场景",
+  "desc_sc": "生成清透东方天宫、云海宫阙、仙境园林的图片提示词与视频提示词",
+  "desc_en": "Generates image and video prompts for ethereal Eastern celestial-palace scenes with cloud seas, Tang-Song architecture and a chosen color palette"
 }

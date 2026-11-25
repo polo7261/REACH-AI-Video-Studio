@@ -1,11 +1,12 @@
 {
- "cn": "爆款复刻旅行登机牌换装",
- "skillKey": "boarding-pass-travel-transition-5e17f63c20b64ca1a5571efe67cc2d04",
- "templateUuid": "58e7c443cca746d3884cab902d4be079",
- "version": "1.0.2",
- "description": "上传角色卡，选择目的地，自动复刻抖音爆款丝滑旅行换装短片",
- "cn_tc": "爆款復刻旅行登機牌換裝",
- "desc_tc": "上傳角色卡，選擇目的地，自動復刻抖音爆款絲滑旅行換裝短片",
- "cn_sc": "爆款复刻旅行登机牌换装",
- "desc_sc": "上传角色卡，选择目的地，自动复刻抖音爆款丝滑旅行换装短片"
+  "cn": "爆款复刻旅行登机牌换装",
+  "skillKey": "boarding-pass-travel-transition-5e17f63c20b64ca1a5571efe67cc2d04",
+  "templateUuid": "58e7c443cca746d3884cab902d4be079",
+  "version": "1.0.2",
+  "description": "上传角色卡，选择目的地，自动复刻抖音爆款丝滑旅行换装短片",
+  "cn_tc": "爆款復刻旅行登機牌換裝",
+  "desc_tc": "上傳角色卡，選擇目的地，自動復刻抖音爆款絲滑旅行換裝短片",
+  "cn_sc": "爆款复刻旅行登机牌换装",
+  "desc_sc": "上传角色卡，选择目的地，自动复刻抖音爆款丝滑旅行换装短片",
+  "desc_en": "Turns a character card into a 15-second realistic travel outfit-change short film with sliding boarding-pass transitions"
 }

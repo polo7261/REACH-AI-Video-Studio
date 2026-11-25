@@ -7,5 +7,6 @@
  "cn_tc": "運鏡規格",
  "desc_tc": "運鏡與鏡頭規格的單一事實源",
  "cn_sc": "运镜规格",
- "desc_sc": "运镜与镜头规格的单一事实源"
+ "desc_sc": "运镜与镜头规格的单一事实源",
+ "desc_en": "Single source of truth for camera movement and shot spec descriptions with built-in self-check rules"
 }

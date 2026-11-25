@@ -1,8 +1,7 @@
 ---
-
-## name: video-workflow-preparer\\
-
+name: xuanhuan-scene-decomposer
 description: 建立全能參考影片節點、連線素材並整理提示詞，不執行生成。
+---
 
 # 精品短劇影片工作流助手
 

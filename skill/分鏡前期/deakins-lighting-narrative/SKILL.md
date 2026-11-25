@@ -1,11 +1,11 @@
 ---
-
-## name: deakins-motivated-light\
+name: deakins-motivated-light
 description: "Design reproducible cinematography plans from story intention using motivated light, restrained camera movement, controlled exposure, and spatial continuity. Use for scene breakdowns, shot design, lighting plans, AI image or video prompts, and reviews that need naturalistic narrative photography rather than a generic visual style."
+---
 
 # 狄金斯光影方法
 
-把劇本意圖轉成能拍、能復現、能檢查的攝影方案。先回答觀眾為什麼要看，再決定光從哪裡來、機位為何移動。
+把劇本意圖轉成能拍、能重現、能檢查的攝影方案。先回答觀眾為什麼要看，再決定光從哪裡來、機位為何移動。
 
 ## 收集輸入
 
@@ -13,7 +13,7 @@ description: "Design reproducible cinematography plans from story intention usin
 
 - 場景文字、人物目標、情緒轉折和必須保留的動作。
 - 場地平面、門窗方向、現有燈具、拍攝時段和天氣。
-- 畫幅、交付平臺、實拍或 AI 生成方式。
+- 畫幅、交付平台、實拍或 AI 生成方式。
 - 角色與道具參考、上一鏡與下一鏡、可用鏡頭或等效視角。
 
 資訊不足時，列出最少假設並繼續給出方案；不要用器材清單掩蓋敘事缺口。
@@ -76,7 +76,7 @@ description: "Design reproducible cinematography plans from story intention usin
 
 逐鏡檢查：主光方向、時間、人物軸線、視線、焦段家族、機位高度、膚色、黑位、高光、霧量和運動方向。
 
-發現問題時按以下順序修正：刪掉無理由元素；恢復主要光源；恢復空間關係；恢復曝光優先順序；最後才調整風格引數。
+發現問題時按以下順序修正：刪掉無理由元素；恢復主要光源；恢復空間關係；恢復曝光優先順序；最後才調整風格參數。
 
 ## 輸出格式
 
@@ -87,8 +87,8 @@ description: "Design reproducible cinematography plans from story intention usin
 3. **鏡頭表**：節拍、景別、焦段、機位、運動、首尾幀。
 4. **曝光與色彩**：主體層級、黑位、高光和連續性。
 5. **生成提示詞**：一版完整提示詞與禁止項。
-6. **質檢清單**：最可能失敗的三項與修復動作。
+6. **檢查清單**：最可能失敗的三項與修復動作。
 
 ## 方法邊界
 
-本技能為獨立的電影攝影方法研究與執行工具，參考 Roger Deakins 及 Team Deakins 公開討論過的創作原則；非本人、其工作室或相關權利方授權、合作或背書。不復制具體影片鏡頭，不使用未經授權的肖像、劇照、標識或文字。
+本技能為獨立的電影攝影方法研究與執行工具，參考 Roger Deakins 及 Team Deakins 公開討論過的創作原則；非本人、其工作室或相關權利方授權、合作或背書。不複製具體影片鏡頭，不使用未經授權的肖像、劇照、標識或文字。

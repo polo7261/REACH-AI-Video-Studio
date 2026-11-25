@@ -88,16 +88,19 @@ Maintain character identity across all outputs through layered reference system:
 
 **Pre-Production Checklist:**
 
-- \[ \] Script parsed into scene list
-- \[ \] Shot duration assignments (2-5s per shot)
-- \[ \] Shot grouping into 15s modules
-- \[ \] Character costume variations identified
-- \[ \] Key location environments listed
-- \[ \] Audio requirements flagged (dialogue, SFX, BGM)
+- [ ] Script parsed into scene list
+- [ ] Shot duration assignments (2-5s per shot)
+- [ ] Shot grouping into 15s modules
+- [ ] Character costume variations identified
+- [ ] Key location environments listed
+- [ ] Audio requirements flagged (dialogue, SFX, BGM)
 
 **Storyboard Table Template:**
 
-ShotDurationScene ContentCharacterLocationCameraAudio NotesS013sMuseum hall, protagonist stands before muralModern costumeInterior museumStatic wide shotAmbient museum soundsS023sClose-up: protagonist's eyes lose focus, finger touches glassModern costumeSamePush-in to close-upClock bell SFX
+| Shot | Duration | Scene Content | Character | Location | Camera | Audio Notes |
+|---|---|---|---|---|---|---|
+| S01 | 3s | Museum hall, protagonist stands before mural | Modern costume | Interior museum | Static wide shot | Ambient museum sounds |
+| S02 | 3s | Close-up: protagonist's eyes lose focus, finger touches glass | Modern costume | Same | Push-in to close-up | Clock bell SFX |
 
 ### 2. Initial Generation Stage
 
@@ -195,7 +198,11 @@ Transition Video:
 
 **BGM Integration Decision Matrix:**
 
-Video Audio StateBGM RecommendationGenerated video has rich ambient/SFXSkip BGM or use only in ending segmentGenerated video has sparse audioFull-length BGM recommendedScript specifies critical SFX momentsExclude BGM from those segments
+| Video Audio State | BGM Recommendation |
+|---|---|
+| Generated video has rich ambient/SFX | Skip BGM or use only in ending segment |
+| Generated video has sparse audio | Full-length BGM recommended |
+| Script specifies critical SFX moments | Exclude BGM from those segments |
 
 **BGM Generation:**
 

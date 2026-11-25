@@ -6,6 +6,7 @@
  "description": "制作一个场景的各个方位",
  "cn_tc": "場景卡",
  "desc_tc": "製作一個場景的各個方位",
+ "desc_en": "Generates a 16:9 scene reference card with multi-angle views and prop inventory",
  "cn_sc": "场景卡",
  "desc_sc": "制作一个场景的各个方位"
 }

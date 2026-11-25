@@ -1,7 +1,3 @@
-```
-```
-
-```
 ---
 name: 口播文案生成器
 namespace: libtv-industry
@@ -29,4 +25,3 @@ version: 1.0
 - 各段用時之和=總時長、每句≤15字、含CTA
 ## Ask User
 - 主題或平臺缺失時，先問再生成
-```

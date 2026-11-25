@@ -6,6 +6,7 @@
  "description": "生成高精度 BJD 人偶感男角色四视图提示词",
  "cn_tc": "BJD人偶感男角色四檢視",
  "desc_tc": "生成高精度 BJD 人偶感男角色四檢視提示詞",
+ "desc_en": "Generates high-precision BJD-doll-style male character turnaround prompts",
  "cn_sc": "BJD人偶感男角色四视图",
  "desc_sc": "生成高精度 BJD 人偶感男角色四视图提示词"
 }

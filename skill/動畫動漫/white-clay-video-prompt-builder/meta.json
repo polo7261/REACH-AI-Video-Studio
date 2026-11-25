@@ -6,6 +6,7 @@
  "description": "将视频转成红白模提示词，制作成视频参考素材。",
  "cn_tc": "AI劉皇叔-3D白膜影片生成",
  "desc_tc": "將影片轉成紅白模提示詞，製作成影片參考素材。",
+ "desc_en": "Converts videos into clay-render (white model) prompts for use as video reference material",
  "cn_sc": "AI刘皇叔-3D白膜视频生成",
  "desc_sc": "将视频转成红白模提示词，制作成视频参考素材。"
 }
