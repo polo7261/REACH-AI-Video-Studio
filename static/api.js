@@ -1,7 +1,7 @@
 (() => {
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   const badge = (st) => {
-    const map = { ok: ["ok", "已實測"], quota: ["warn", "額度上限"], untested: ["", "未打通"] };
+    const map = { ok: ["ok", "已實測"], quota: ["warn", "額度上限"], untested: ["", "未實測"], license: ["err", "條款限制"] };
     const [cls, label] = map[st] || ["", st];
     return `<span class="chip ${cls}">${label}</span>`;
   };

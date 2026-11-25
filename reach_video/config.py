@@ -73,7 +73,7 @@ PROVIDERS: dict[str, dict] = {
             {"id": "image-01", "kind": "image", "status": "ok", "note": "實測 200，回 data[].url"},
             {"id": "image-01-live", "kind": "image", "status": "ok"},
             {"id": "speech-2.5-hd-preview", "kind": "tts", "status": "ok", "note": "實測回傳 27KB mp3"},
-            {"id": "MiniMax-H3", "kind": "video", "status": "ok", "note": "v2 介面；5s 768P 約 91 秒、含音軌、支援首尾幀"},
+            {"id": "MiniMax-H3", "kind": "video", "status": "ok", "note": "v2 介面；5s 768P 約 91 秒、含音軌、支援首尾影格"},
             {"id": "MiniMax-H3-Highspeed", "kind": "video", "status": "untested"},
             {"id": "MiniMax-Hailuo-02", "kind": "video", "status": "ok", "note": "v1 介面；6/10 秒，無音軌"},
             {"id": "music-1.5", "kind": "music", "status": "untested"},
@@ -96,7 +96,7 @@ PROVIDERS: dict[str, dict] = {
         "key_env": "REACH_LTX_KEY",
         "catalog_note": "LTXV 2B（diffusers）/ 24fps / 704x400 / lazy load；3 秒約 1–3 分鐘。需 GPU 空閒。",
         "models": [
-            {"id": "ltxv-2b-0.9.x", "kind": "video", "status": "untested", "note": "服務部署中；比 Wan2.2 5B 輕 2.5 倍"},
+            {"id": "ltxv-2b-0.9.x", "kind": "video", "status": "untested", "note": "服務部署中；參數量約為 Wan2.2 5B 的 2/5"},
         ],
     },
     "volcano-plan": {
