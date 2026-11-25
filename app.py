@@ -32,6 +32,7 @@ from reach_video.store import (
 
 ROOT = Path(__file__).resolve().parent
 DOCS = ROOT / "docs"
+SKILLS = ROOT / "libtv-skills"
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 512 * 1024 * 1024  # 512 MB（影片上傳）
@@ -52,6 +53,127 @@ def page_api():
 @app.get("/docs")
 def page_docs():
     return render_template("docs.html", slugs=_doc_slugs())
+
+
+@app.get("/skills/")
+@app.get("/skills")
+def page_skills():
+    return render_template("skills.html")
+
+
+def _skill_dirs() -> dict[str, dict]:
+    """slug -> meta.json 內容（cn 名稱、版本、來源 UUID）。"""
+    out: dict[str, dict] = {}
+    if not SKILLS.is_dir():
+        return out
+    for d in sorted(SKILLS.iterdir()):
+        meta = d / "meta.json"
+        if d.is_dir() and meta.is_file():
+            try:
+                out[d.name] = json.loads(meta.read_text(encoding="utf-8"))
+            except (ValueError, OSError):
+                out[d.name] = {}
+    return out
+
+
+@app.get("/api/skills")
+def api_skills_list():
+    items = []
+    for slug, meta in _skill_dirs().items():
+        sk = SKILLS / slug / "SKILL.md"
+        if not sk.is_file():
+            continue
+        text = sk.read_text(encoding="utf-8")
+        m = re.match(r"^---\n(.*?)\n---\n\n", text, re.S)
+        dm = re.search(r'description: "(.*)"', fm := (m.group(1) if m else ""))
+        cover = next(
+            (
+                f"cover{ext}"
+                for ext in (".webp", ".png", ".jpg", ".svg")
+                if (SKILLS / slug / f"cover{ext}").is_file()
+            ),
+            None,
+        )
+        items.append(
+            {
+                "slug": slug,
+                "cn": meta.get("cn_tc") or meta.get("cn") or slug,
+                "cn_sc": meta.get("cn_sc") or "",
+                "version": meta.get("version"),
+                "description": {
+                    "tc": meta.get("desc_tc") or (dm.group(1) if dm else ""),
+                    "sc": meta.get("desc_sc") or meta.get("description") or "",
+                    "en": meta.get("desc_en") or "",
+                },
+                "bytes": sk.stat().st_size,
+                "cover": cover,
+                "extras": sorted(
+                    p.name
+                    for p in (SKILLS / slug).glob("*.md")
+                    if p.name != "SKILL.md"
+                    and not re.search(r"\.(zh-Hans|en)\.md$", p.name)
+                ),
+            }
+        )
+    items.sort(key=lambda x: -x["bytes"])
+    return jsonify(skills=items)
+
+
+_SKILL_LANG_FILES = {"tc": "SKILL.md", "sc": "SKILL.zh-Hans.md", "en": "SKILL.en.md"}
+
+
+@app.get("/api/skills/<slug>")
+def api_skill_detail(slug: str):
+    lang = request.args.get("lang", "tc")
+    if lang not in _SKILL_LANG_FILES:
+        return jsonify(error="invalid lang"), 400
+    if not re.fullmatch(r"[a-z0-9\-]+", slug) or slug not in _skill_dirs():
+        return jsonify(error="invalid slug"), 404
+    path = SKILLS / slug / _SKILL_LANG_FILES[lang]
+    if not path.is_file():  # 缺翻譯時退回繁中
+        path = SKILLS / slug / "SKILL.md"
+    text = path.read_text(encoding="utf-8")
+    m = re.match(r"^---\n(.*?)\n---\n\n", text, re.S)
+    return jsonify(
+        slug=slug,
+        lang=lang,
+        frontmatter=m.group(1) if m else "",
+        markdown=text[m.end():] if m else text,
+    )
+
+
+@app.get("/api/skills/<slug>/<name>")
+def api_skill_extra(slug: str, name: str):
+    lang = request.args.get("lang", "tc")
+    if lang not in _SKILL_LANG_FILES:
+        return jsonify(error="invalid lang"), 400
+    if not re.fullmatch(r"[a-z0-9\-]+", slug) or slug not in _skill_dirs():
+        return jsonify(error="invalid slug"), 404
+    if not re.fullmatch(r"[A-Za-z0-9._\-]+", name) or name.startswith("SKILL"):
+        return jsonify(error="invalid file"), 404
+    path = SKILLS / slug / name
+    if lang == "sc":
+        alt = path.with_name(path.stem + ".zh-Hans.md")
+        if alt.is_file():
+            path = alt
+    elif lang == "en":
+        alt = path.with_name(path.stem + ".en.md")
+        if alt.is_file():
+            path = alt
+    if not path.is_file() or path.suffix != ".md":
+        return jsonify(error="invalid file"), 404
+    return jsonify(slug=slug, name=name, markdown=path.read_text(encoding="utf-8"))
+
+
+@app.get("/api/skills/<slug>/cover")
+def api_skill_cover(slug: str):
+    if not re.fullmatch(r"[a-z0-9\-]+", slug) or slug not in _skill_dirs():
+        abort(404)
+    for ext in (".webp", ".png", ".jpg", ".svg"):
+        path = SKILLS / slug / f"cover{ext}"
+        if path.is_file():
+            return send_from_directory(path.parent, path.name)
+    abort(404)
 
 
 # --------------------------------------------------------------------- config
