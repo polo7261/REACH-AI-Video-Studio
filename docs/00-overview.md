@@ -6,7 +6,7 @@ REACH AI Video Studio — 本機影片工作室。把「一句話」變成可追
 - 網址：<http://127.0.0.1:35350/>
 - 獨立於既有 `REACH-AI-Image`（35320），互不影響；不共用資料庫、不共用埠。
 - 模型走雲端 API：阿里雲 MaaS（token-plan 閘道）、MiniMax、火山方舟。金鑰只存在本機 `.env`。
-- 參考對象：<https://www.oiioii.ai/oii-tv>（參考平台的作品展示頁）與其七 Agent 流水線設計。
+- 參考對象：參考平台的產品展示頁與其七 Agent 流水線設計。
 - **分段流程**：① 角色設定圖（人工確認）→ ② 劇本＋分鏡 → ③ 關鍵影格 → ④ 影片 → ⑤ 後製。
   詳見 [`06-workflow-stages.md`](06-workflow-stages.md)。
 

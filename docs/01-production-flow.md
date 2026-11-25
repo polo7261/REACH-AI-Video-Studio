@@ -1,7 +1,6 @@
 # 01 · 製作流程（對照參考平台）
 
-> 參考：<https://www.oiioii.ai/oii-tv>、<https://www.oiioii.ai/zh-Hant/how-it-works>、
-> <https://www.oiioii.ai/zh-Hant/features/canvas>
+> 參考：參考平台的產品展示頁、製作流程說明與畫布功能頁。
 
 ## 參考平台的七 Agent 流水線
 
