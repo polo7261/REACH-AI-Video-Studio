@@ -7,5 +7,6 @@
  "cn_tc": "工業風傢俱設計SKILL",
  "desc_tc": "工業風傢俱設計SKILL",
  "cn_sc": "工业风家具设计SKILL",
- "desc_sc": "工业风家具设计SKILL"
+ "desc_sc": "工业风家具设计SKILL",
+ "desc_en": "Generates photorealistic industrial-style modular furniture image prompts across text-to-image, detail expansion and line-art rendering workflows"
 }

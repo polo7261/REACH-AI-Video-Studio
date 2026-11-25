@@ -4,8 +4,9 @@
  "templateUuid": "f4e857b002a342e49050da1de6831c9e",
  "version": "1.0.0",
  "description": "分析角色与参考素材，输出白底角色设定图提示词。",
- "cn_tc": "小杰AIGC｜角色設定圖提示詞",
- "desc_tc": "分析角色與參考素材，輸出白底角色設定圖提示詞。",
+ "cn_tc": "小傑AIGC｜角色設定圖提示詞",
+ "desc_tc": "分析角色與參考素材，輸出白底角色設定圖提示詞",
  "cn_sc": "小杰AIGC｜角色设定图提示词",
- "desc_sc": "分析角色与参考素材，输出白底角色设定图提示词。"
+ "desc_sc": "分析角色与参考素材，输出白底角色设定图提示词。",
+ "desc_en": "Builds white-background character design sheet prompts from reference images or text ideas"
 }

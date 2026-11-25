@@ -1,3 +1,8 @@
+---
+name: brand-kv-poster
+description: "為品牌活動與新品發表規劃 KV 主視覺海報方案與文生圖提示詞。"
+---
+
 # 品牌 KV 海報策劃專家
 
 ## 用途

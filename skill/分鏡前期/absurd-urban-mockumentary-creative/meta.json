@@ -7,5 +7,6 @@
  "cn_tc": "小瓜荒誕城市skill",
  "desc_tc": "基於城市熱梗與生活規則，生成冷麵紀實風格的4秒荒誕短影片創意",
  "cn_sc": "小瓜荒诞城市skill",
- "desc_sc": "基于城市热梗与生活规则，生成冷面纪实风格的4秒荒诞短视频创意"
+ "desc_sc": "基于城市热梗与生活规则，生成冷面纪实风格的4秒荒诞短视频创意",
+ "desc_en": "Creates deadpan mockumentary 4-second absurd city clips with custom camera language and prompts"
 }

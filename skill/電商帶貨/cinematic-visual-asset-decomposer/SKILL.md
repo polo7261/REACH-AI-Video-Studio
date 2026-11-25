@@ -1,3 +1,8 @@
+---
+name: cinematic-visual-asset-decomposer
+description: "將劇本、分鏡與角色設定拆解為後續 AI 影片可用的角色、場景、道具與關鍵幀參考資產。"
+---
+
 # 電影級 AI 視覺資產導演
 
 ## 做什麼

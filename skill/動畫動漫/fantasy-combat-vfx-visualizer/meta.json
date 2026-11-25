@@ -7,5 +7,6 @@
  "cn_tc": "玄幻技能氛圍特效",
  "desc_tc": "打鬥描述自動配氛圍特效出3D國漫畫面",
  "cn_sc": "玄幻技能氛围特效",
- "desc_sc": "打斗描述自动配氛围特效出3D国漫画面"
+ "desc_sc": "打斗描述自动配氛围特效出3D国漫画面",
+ "desc_en": "Adds atmospheric VFX to fantasy combat descriptions and renders them as 3D donghua-style images"
 }

@@ -5,7 +5,8 @@
  "version": "1.0.3",
  "description": "根据用户描述的题材方向，自动扩写为国风玄幻剧本，并生成风格统",
  "cn_tc": "國風電影感漫劇CG風格",
- "desc_tc": "根據使用者描述的題材方向，自動擴寫為國風玄幻劇本，並生成風格統",
+ "desc_tc": "根據使用者描述的題材方向，自動擴寫為國風玄幻劇本，並生成風格統一的關鍵幀分鏡圖與CG影片",
  "cn_sc": "国风电影感漫剧CG风格",
- "desc_sc": "根据用户描述的题材方向，自动扩写为国风玄幻剧本，并生成风格统"
+ "desc_sc": "根据用户描述的题材方向，自动扩写为国风玄幻剧本，并生成风格统",
+ "desc_en": "Expands a theme into a xianxia script and produces stylistically consistent CG storyboard frames and film"
 }

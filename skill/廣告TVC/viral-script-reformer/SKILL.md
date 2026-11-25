@@ -1,3 +1,8 @@
+---
+name: viral-script-reformer
+description: "把 AI 味劇本改造成高衝突、具爆款潛力的影片腳本。"
+---
+
 # 爆款級 AI 劇本改造師
 
 ## 做什麼

@@ -1,3 +1,8 @@
+---
+name: projector-c4d-ecommerce-video
+description: "C4D 風格電商產品影片製作：風格鎖定、錨點資產、多段敘事與導演級鏡頭表。"
+---
+
 # Cinematic Product Video Production
 
 ## Core Methodology

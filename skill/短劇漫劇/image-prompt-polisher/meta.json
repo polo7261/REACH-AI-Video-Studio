@@ -7,5 +7,6 @@
  "cn_tc": "Prompt最佳化器",
  "desc_tc": "中文大白話轉專業MJ/即夢英文Prompt",
  "cn_sc": "Prompt优化器",
- "desc_sc": "中文大白话转专业MJ/即梦英文Prompt"
+ "desc_sc": "中文大白话转专业MJ/即梦英文Prompt",
+ "desc_en": "Converts plain Chinese descriptions into professional English prompts for Midjourney or Jimeng"
 }

@@ -7,5 +7,6 @@
  "cn_tc": "古風穿越短片創作工作流",
  "desc_tc": "基於劇本自動拆解分鏡、生成角色設定、場景錨點、分鏡圖片、影片",
  "cn_sc": "古风穿越短片创作工作流",
- "desc_sc": "基于剧本自动拆解分镜、生成角色设定、场景锚点、分镜图片、视频"
+ "desc_sc": "基于剧本自动拆解分镜、生成角色设定、场景锚点、分镜图片、视频",
+ "desc_en": "Auto-breaks a script into storyboard frames, character references and scene anchors to produce a period time-travel short film"
 }

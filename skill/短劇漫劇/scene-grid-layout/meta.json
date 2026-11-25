@@ -5,7 +5,8 @@
  "version": "1.0.2",
  "description": "输入你的剧本或脚本或者一个想法，他会自动生成场景九宫格排版图",
  "cn_tc": "場景九宮格一鍵生成",
- "desc_tc": "輸入你的劇本或指令碼或者一個想法，他會自動生成場景九宮格排版圖",
+ "desc_tc": "輸入你的劇本或腳本或者一個想法，它會自動生成場景九宮格排版圖",
  "cn_sc": "场景九宫格一键生成",
- "desc_sc": "输入你的剧本或脚本或者一个想法，他会自动生成场景九宫格排版图"
+ "desc_sc": "输入你的剧本或脚本或者一个想法，他会自动生成场景九宫格排版图",
+ "desc_en": "Generates a nine-grid scene layout sheet from a script, outline or idea"
 }

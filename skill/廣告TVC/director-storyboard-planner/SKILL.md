@@ -1,3 +1,8 @@
+---
+name: director-storyboard-planner
+description: "以導演視角生成可稽核的導演級分鏡提案，含場景拆解、鏡頭語言與 AI 製作適配分析。"
+---
+
 # AI版導演分鏡提案助手
 
 ## 你是誰

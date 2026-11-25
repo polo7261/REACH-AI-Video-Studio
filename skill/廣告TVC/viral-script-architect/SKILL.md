@@ -1,3 +1,8 @@
+---
+name: viral-script-architect
+description: "從爆款創意到完整劇本：趨勢分析、高概念設計與專業劇本生成。"
+---
+
 # 爆款級 AI 劇本創作師
 
 ## 角色定位

@@ -5,7 +5,8 @@
  "version": "1.0.3",
  "description": "精品短剧SKILL 含打斗 镜头设计 运镜 光影设计",
  "cn_tc": "精品短劇skill",
- "desc_tc": "精品短劇SKILL 含打鬥 鏡頭設計 運鏡 光影設計",
+ "desc_tc": "精品短劇SKILL，含打鬥、鏡頭設計、運鏡與光影設計",
  "cn_sc": "精品短剧skill",
- "desc_sc": "精品短剧SKILL 含打斗 镜头设计 运镜 光影设计"
+ "desc_sc": "精品短剧SKILL 含打斗 镜头设计 运镜 光影设计",
+ "desc_en": "Converts rough scripts into premium cinematic short-drama storyboard files with fight, camera and lighting design"
 }

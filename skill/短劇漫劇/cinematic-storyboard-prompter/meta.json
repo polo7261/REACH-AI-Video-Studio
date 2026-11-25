@@ -7,5 +7,6 @@
  "cn_tc": "分鏡提示詞",
  "desc_tc": "解決複雜場景問題，從劇本生成可直接用於出圖的電影分鏡表提示詞",
  "cn_sc": "分镜提示词",
- "desc_sc": "解决复杂场景问题，从剧本生成可直接用于出图的电影分镜表提示词"
+ "desc_sc": "解决复杂场景问题，从剧本生成可直接用于出图的电影分镜表提示词",
+ "desc_en": "Turns scripts into ready-to-use cinematic storyboard image prompts, frame by frame"
 }

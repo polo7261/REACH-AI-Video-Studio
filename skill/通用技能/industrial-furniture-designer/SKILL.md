@@ -18,7 +18,7 @@ product: 工業設計專版
 - **硬質骨架**：工業T型槽鋁合金型材、陽極氧化鋁、彎折鍍鉻鋼管、實木與樺木多層板。
 - **透明/半透明介質**：著色/熒光亞克力板（Plexiglas）、波紋/長虹玻璃、鋼化玻璃桌面。
 - **軟性材料**：粗管狀立體編織布藝（Chunky tubular woven upholstery）、模組化方塊海綿坐墊、高科技防水布。
-- **連線系統**：CNC金屬角碼、3D列印節點、外露拉桿與螺栓緊韌體。
+- **連接系統**：CNC金屬角碼、3D列印節點、外露拉桿與螺栓緊韌體。
 
 **三大核心功能**：
 
@@ -44,15 +44,27 @@ CGI, computer generated, plastic look, fake materials, distorted geometry, blurr
 
 ### 1. 結構與形態語言 (Structural Languages)
 
-類別關鍵詞 / 概念說明**骨架組裝**鋁型材框架拼裝 (Aluminum profile framework), 懸臂結構 (Cantilever structure)展現極致的工業標準件美學與力學之美**幾何模組**模組化網格 (Modular grid), 幾何體塊穿插 (Intersecting geometric volumes)適用於書桌、儲物櫃體設計**有機與柔軟**粗管狀立體編織 (Chunky tubular woven), 繩結穿插 (Knotted and woven structures)與冰冷金屬形成強烈的視覺與觸覺反差**連線系統**3D列印連線件 (3D-printed joints), 外露金屬角碼與螺栓 (Exposed metal corner brackets and bolts), T型管接頭 (T-shaped tube connectors)強調組裝邏輯與“未完成”的機械感
+| 類別 | 關鍵詞 / 概念說明 |
+|---|---|
+| **骨架組裝** | 鋁型材框架拼裝 (Aluminum profile framework), 懸臂結構 (Cantilever structure) — 展現極致的工業標準件美學與力學之美 |
+| **幾何模組** | 模組化網格 (Modular grid), 幾何體塊穿插 (Intersecting geometric volumes) — 適用於書桌、儲物櫃體設計 |
+| **有機與柔軟** | 粗管狀立體編織 (Chunky tubular woven), 繩結穿插 (Knotted and woven structures) — 與冰冷金屬形成強烈的視覺與觸覺反差 |
+| **連接系統** | 3D列印連接件 (3D-printed joints), 外露金屬角碼與螺栓 (Exposed metal corner brackets and bolts), T型管接頭 (T-shaped tube connectors) — 強調組裝邏輯與「未完成」的機械感 |
 
 ### 2. 多元材質組合系統 (Material Combinations)
 
-類別關鍵詞（英文為佳）特質描述**工業主材**Anodized Aluminum Extrusion (陽極氧化鋁型材), Chromed Tubular Steel (鍍鉻鋼管)提供極致的力學支撐與現代工業質感**透光材質**Neon/Tinted Acrylic panels (霓虹/著色亞克力板), Fluted Glass (長虹波紋玻璃)作為擋板或桌面，提供通透感與環境色彩折射**溫潤/軟性材**Birch Plywood edges (樺木多層板裸露邊緣), Overstuffed Tubular Fabric (飽滿管狀填充布藝)中和金屬的冷硬，提升人體工學舒適度
+| 類別 | 關鍵詞（英文為佳） | 特質描述 |
+|---|---|---|
+| **工業主材** | Anodized Aluminum Extrusion (陽極氧化鋁型材), Chromed Tubular Steel (鍍鉻鋼管) | 提供極致的力學支撐與現代工業質感 |
+| **透光材質** | Neon/Tinted Acrylic panels (霓虹/著色亞克力板), Fluted Glass (長虹波紋玻璃) | 作為擋板或桌面，提供通透感與環境色彩折射 |
+| **溫潤/軟性材** | Birch Plywood edges (樺木多層板裸露邊緣), Overstuffed Tubular Fabric (飽滿管狀填充布藝) | 中和金屬的冷硬，提升人體工學舒適度 |
 
 ### 3. 環境與光影 (Environment & Lighting)
 
-類別關鍵詞 / 概念**拍攝背景**極簡水泥灰空間 (Minimalist concrete studio), 純白無縫背景紙 (Seamless white backdrop)**光影調性**影棚柔光箱 (Studio softbox lighting), 霓虹材質帶來的焦散光斑 (Caustic reflections from tinted acrylic)
+| 類別 | 關鍵詞 / 概念 |
+|---|---|
+| **拍攝背景** | 極簡水泥灰空間 (Minimalist concrete studio), 純白無縫背景紙 (Seamless white backdrop) |
+| **光影調性** | 影棚柔光箱 (Studio softbox lighting), 霓虹材質帶來的焦散光斑 (Caustic reflections from tinted acrylic) |
 
 ---
 
@@ -60,7 +72,7 @@ CGI, computer generated, plastic look, fake materials, distorted geometry, blurr
 
 ### 功能一：文生圖 (Text-to-Image Concept Design)
 
-**框架**：\[超寫實錨定\] + \[傢俱類型\] + \[骨架與連線材質\] + \[透光/軟性點綴材質\] + \[結構邏輯細節\] + \[環境與光影\] + \[參數控制\]
+**框架**：「超寫實錨定」 + 「傢俱類型」 + 「骨架與連接材質」 + 「透光/軟性點綴材質」 + 「結構邏輯細節」 + 「環境與光影」 + 「參數控制」
 
 **生成示例（模組化亞克力鋁型材辦公桌）**：
 

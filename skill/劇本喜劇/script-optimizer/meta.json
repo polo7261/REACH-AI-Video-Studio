@@ -7,5 +7,6 @@
  "cn_tc": "劇本邏輯和演繹最佳化SKILL",
  "desc_tc": "最佳化原生劇本的潛在問題。讓你在拆解分鏡前規避大部分BUG",
  "cn_sc": "剧本逻辑和演绎优化SKILL",
- "desc_sc": "优化原生剧本的潜在问题。让你在拆解分镜前规避大部分BUG"
+ "desc_sc": "优化原生剧本的潜在问题。让你在拆解分镜前规避大部分BUG",
+ "desc_en": "Optimizes script logic and performance before storyboard breakdown"
 }

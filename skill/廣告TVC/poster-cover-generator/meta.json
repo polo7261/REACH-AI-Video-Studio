@@ -5,7 +5,8 @@
  "version": "1.0.1",
  "description": "生成海报、书封、专辑封面、社媒封面等成品图",
  "cn_tc": "海報封面生成器",
- "desc_tc": "生成海報、書封、專輯封面、社媒封面等成品圖",
+ "desc_tc": "生成海報、書封、專輯封面、社群媒體封面等成品圖",
  "cn_sc": "海报封面生成器",
- "desc_sc": "生成海报、书封、专辑封面、社媒封面等成品图"
+ "desc_sc": "生成海报、书封、专辑封面、社媒封面等成品图",
+ "desc_en": "Generates finished posters, book covers, album covers and social media covers with typography and layout guidance"
 }

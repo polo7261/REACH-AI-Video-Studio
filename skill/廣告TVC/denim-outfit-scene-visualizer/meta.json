@@ -7,5 +7,6 @@
  "cn_tc": "牛仔褲場景穿搭圖生成",
  "desc_tc": "輸入一條牛仔褲產品圖，批次產出 ins 風場景穿搭圖",
  "cn_sc": "牛仔裤场景穿搭图生成",
- "desc_sc": "输入一条牛仔裤产品图，批量产出 ins 风场景穿搭图"
+ "desc_sc": "输入一条牛仔裤产品图，批量产出 ins 风场景穿搭图",
+ "desc_en": "Batch-generates Instagram-style on-model lifestyle scene images from a single jeans product photo while locking product details"
 }
