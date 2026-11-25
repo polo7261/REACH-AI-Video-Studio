@@ -1,5 +1,5 @@
 #!/bin/bash
-# REACH AI Vidio Studio — 啟動（macOS／Ubuntu 共用）
+# REACH AI Video Studio — 啟動（macOS／Ubuntu 共用）
 #   macOS：Finder 雙擊，或終端機 ./start.command
 #   Ubuntu：./start.command；無桌面或 SSH 連線用 NO_BROWSER=1 ./start.command
 set -euo pipefail

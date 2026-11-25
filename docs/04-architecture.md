@@ -21,7 +21,7 @@ data/projects/<pid>.json   data/jobs/<jid>.json   data/media/<pid>/{S01-….jpg|
 
 ```json
 {
-  "schema": "reach-vidio/plan@1",
+  "schema": "reach-video/plan@1",
   "id": "a1b2c3d4e5",
   "title": "雨夜霓虹追蹤",
   "idea": "一名少女在雨夜的霓虹街道上追逐一枚飄走的紙鶴",

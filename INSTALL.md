@@ -1,12 +1,12 @@
-# REACH AI Vidio Studio — 安裝說明（macOS／Ubuntu）
+# REACH AI Video Studio — 安裝說明（macOS／Ubuntu）
 
 本安裝包**不含任何 API Key**，也不含 `.env`、`.venv`、`data/`、`exports/`。
 同一份程式碼支援 macOS 與 Ubuntu／Debian；安裝包提供兩種格式，內容相同：
 
 | 平台 | 安裝包 | 解壓縮 |
 |---|---|---|
-| macOS | `REACH-AI-Vidio-Studio-<版本>-<日期>.zip` | Finder 雙擊 |
-| Ubuntu／Debian | `REACH-AI-Vidio-Studio-<版本>-<日期>.tar.gz` | `tar xzf <檔名>.tar.gz`（Ubuntu Server 預設沒有 `unzip`） |
+| macOS | `REACH-AI-Video-Studio-<版本>-<日期>.zip` | Finder 雙擊 |
+| Ubuntu／Debian | `REACH-AI-Video-Studio-<版本>-<日期>.tar.gz` | `tar xzf <檔名>.tar.gz`（Ubuntu Server 預設沒有 `unzip`） |
 
 ## 需求
 
@@ -19,7 +19,7 @@
 brew install python ffmpeg          # 若尚未安裝
 ```
 
-1. 解壓縮到任意資料夾，例如 `~/REACH-AI-Vidio-Studio`
+1. 解壓縮到任意資料夾，例如 `~/REACH-AI-Video-Studio`
 2. 雙擊 `install.command`（或終端機執行 `./install.command`）
 3. 編輯 `.env` 填入金鑰（見下方「金鑰」）
 4. 雙擊 `start.command`（或 `./start.command`），瀏覽器自動開啟 <http://127.0.0.1:35350/>
@@ -32,8 +32,8 @@ brew install python ffmpeg          # 若尚未安裝
 ```bash
 sudo apt update
 sudo apt install -y python3 python3-venv ffmpeg
-tar xzf REACH-AI-Vidio-Studio-<版本>-<日期>.tar.gz
-cd REACH-AI-Vidio-Studio
+tar xzf REACH-AI-Video-Studio-<版本>-<日期>.tar.gz
+cd REACH-AI-Video-Studio
 ./install.command                   # 或 bash install.command
 nano .env                           # 填入金鑰
 NO_BROWSER=1 ./start.command        # 無桌面／SSH 連線；有桌面可省略 NO_BROWSER=1
@@ -46,11 +46,11 @@ NO_BROWSER=1 ./start.command        # 無桌面／SSH 連線；有桌面可省�
 
 ### 常駐服務（systemd，選用）
 
-把 `<使用者>`、`<安裝路徑>` 換成實際值，存成 `/etc/systemd/system/reach-vidio.service`：
+把 `<使用者>`、`<安裝路徑>` 換成實際值，存成 `/etc/systemd/system/reach-video.service`：
 
 ```ini
 [Unit]
-Description=REACH AI Vidio Studio
+Description=REACH AI Video Studio
 After=network-online.target
 Wants=network-online.target
 
@@ -66,8 +66,8 @@ WantedBy=multi-user.target
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable --now reach-vidio
-journalctl -u reach-vidio -f        # 看 log
+sudo systemctl enable --now reach-video
+journalctl -u reach-video -f        # 看 log
 ```
 
 ## 金鑰

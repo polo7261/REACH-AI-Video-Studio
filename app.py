@@ -1,4 +1,4 @@
-"""REACH AI Vidio Studio — 本機影片工作室（Flask）。
+"""REACH AI Video Studio — 本機影片工作室（Flask）。
 
 啟動：.venv/bin/python app.py（預設 127.0.0.1:35350）
 不影響既有 REACH-AI-Image（35320）與其他服務。
@@ -785,5 +785,5 @@ def api_doc(slug: str):
 if __name__ == "__main__":
     import waitress
 
-    print("REACH AI Vidio Studio → http://0.0.0.0:35350/ (LAN)", flush=True)
+    print("REACH AI Video Studio → http://0.0.0.0:35350/ (LAN)", flush=True)
     waitress.serve(app, host="0.0.0.0", port=35350, threads=8)
