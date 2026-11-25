@@ -1,0 +1,9 @@
+{
+  "name": "AI电影镜头设计师",
+  "skillKey": "cinematic-shot-designer-cca409ade58949f1ac4e6dae6d804d3d",
+  "version": "1.0.0",
+  "description": "把简单的场景设计成专业电影级镜头语言",
+  "templateUuid": "574f2608cf4a430eb5b1546dd60bcb29",
+  "draftUuid": "7fdec056f2134cd2be209993e1e297a1",
+  "extraction": "agent copy"
+}

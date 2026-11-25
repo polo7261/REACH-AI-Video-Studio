@@ -1,0 +1,9 @@
+{
+  "name": "生活感旅行记忆 Vlog",
+  "skillKey": "lifestyle-travel-vlog-e1a8d149cb6c445b91a5f4926f0a0483",
+  "version": "1.0.0",
+  "description": "把人物、城市和情绪，生成一组像真实手机相册里留下的亚洲旅行生",
+  "templateUuid": "43814774dd6b4146abad17828a58380e",
+  "draftUuid": "1b0c98ce56a144de9d8e783b68aed43e",
+  "extraction": "agent copy"
+}

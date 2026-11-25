@@ -1,0 +1,9 @@
+{
+  "name": "多剧集剧本写作",
+  "skillKey": "episodic-series-writer-71a5fc5f6ae546d58b0b8d75abc87608",
+  "version": "1.0.0",
+  "description": "多集弧光预算，剧集全流程剧本",
+  "templateUuid": "c7e5bd1424264bf5b3ac9ba135d39479",
+  "draftUuid": "d346b5c205b34061a81328051169941f",
+  "extraction": "agent copy"
+}

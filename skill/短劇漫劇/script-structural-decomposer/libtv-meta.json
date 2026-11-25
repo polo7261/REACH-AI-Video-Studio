@@ -1,0 +1,9 @@
+{
+  "name": "剧本结构化拆解-漫剧",
+  "skillKey": "script-structural-decomposer-0bfcda928d704e8da3d20977029a31b8",
+  "version": "1.0.2",
+  "description": "对剧本进行精准拆分，转化为可直接用于漫剧、短剧制作的拍摄底稿",
+  "templateUuid": "3ba745285b774235a0a3fb703e6d96e1",
+  "draftUuid": "9cfdf55db24f4c7f80832e81dda51987",
+  "extraction": "agent copy"
+}

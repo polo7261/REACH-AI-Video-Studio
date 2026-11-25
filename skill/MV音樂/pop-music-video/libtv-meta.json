@@ -1,0 +1,9 @@
+{
+  "name": "POP MV",
+  "skillKey": "pop-music-video-beda8103d1a8414aa15aa0eb1db95a07",
+  "version": "1.0.25",
+  "description": "聚焦国际一线流行音乐MV创作体系，一句话自动完成 MV 创作",
+  "templateUuid": "c04b3b7a24264608a32ae4575cf7fa24",
+  "draftUuid": "8060576edf8742ccb37647f1002d09a0",
+  "extraction": "agent copy"
+}

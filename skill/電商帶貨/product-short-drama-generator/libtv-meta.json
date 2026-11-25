@@ -1,0 +1,9 @@
+{
+  "name": "带货爆款短剧",
+  "skillKey": "product-short-drama-generator-020b92eb952140af9a99e594358a115b",
+  "version": "1.0.0",
+  "description": "把一张商品图转化为一条 3 分镜、约 15 秒的带货短剧成片",
+  "templateUuid": "de24190352784d4798302e9e915bf6f0",
+  "draftUuid": "f0cf4083540e43129f7f3bac45bb1b7c",
+  "extraction": "agent copy"
+}

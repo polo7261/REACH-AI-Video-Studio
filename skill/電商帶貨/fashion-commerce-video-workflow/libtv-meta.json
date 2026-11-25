@@ -1,0 +1,9 @@
+{
+  "name": "活人感女装带货视频生成",
+  "skillKey": "fashion-commerce-video-workflow-5e17f63c20b64ca1a5571efe67cc2d04",
+  "version": "1.0.2",
+  "description": "上传女装图片，一键生成适合社交媒体的 15 秒竖屏带货视频。",
+  "templateUuid": "ee6495dbdee64f19bacc8afe628b0dea",
+  "draftUuid": "7ce001d23d744268ab5f1ce964c4fce6",
+  "extraction": "agent copy"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "国漫终极特效生成",
+  "skillKey": "donghua-vfx-styler-baf2e419ce1cb06812314957efd2e067",
+  "version": "1.0.0",
+  "description": "快速为你的角色添加炫酷特效",
+  "templateUuid": "570e015a420a41ac815db77cee50d69d",
+  "draftUuid": "870c6d5898984be7a2ea5030e7b00bcf",
+  "extraction": "agent copy"
+}

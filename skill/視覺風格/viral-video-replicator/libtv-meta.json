@@ -1,0 +1,9 @@
+{
+  "name": "爆款拉片复刻",
+  "skillKey": "viral-video-replicator-3fdf06a4c10a4f96b98f779e197578c8",
+  "version": "1.0.5",
+  "description": "AI拆解爆款视频，一键复刻同款",
+  "templateUuid": "8a9e8bac7b0146f3a770749838f94495",
+  "draftUuid": "a86caba77baa403cb68e4be69389bee7",
+  "extraction": "agent copy"
+}

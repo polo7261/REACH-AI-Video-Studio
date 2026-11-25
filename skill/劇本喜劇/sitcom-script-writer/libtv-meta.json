@@ -1,0 +1,9 @@
+{
+  "name": "情景喜剧",
+  "skillKey": "sitcom-script-writer-8db3e80ed29a49109eb6c801f13bb76c",
+  "version": "1.0.6",
+  "description": "打造《老友记》《生活大爆炸》同类型情景类喜剧",
+  "templateUuid": "68c9e350fdfc45c6b7f1839751b701db",
+  "draftUuid": "e6da4f2479874193a83ca35b49583751",
+  "extraction": "agent copy"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "AI短剧制片人",
+  "skillKey": "ai-short-drama-flow-71a5fc5f6ae546d58b0b8d75abc87608",
+  "version": "1.0.0",
+  "description": "剧本到成片，一键产出高反转短剧",
+  "templateUuid": "d530bbf586fc428992a1c2559064132c",
+  "draftUuid": "f6d4261fc3334331a43e05895c7a3882",
+  "extraction": "agent copy"
+}

@@ -1,0 +1,9 @@
+{
+  "name": "活人感美妆产品测评视频",
+  "skillKey": "realistic-beauty-product-review-5e17f63c20b64ca1a5571efe67cc2d04",
+  "version": "1.0.0",
+  "description": "上传你的美妆产品图，生成真人感带货种草测评广告。",
+  "templateUuid": "8543666a7c6b4fcfa94fae8ff0892561",
+  "draftUuid": "49a8fa1a0084498691e9b614a67c5053",
+  "extraction": "agent copy"
+}

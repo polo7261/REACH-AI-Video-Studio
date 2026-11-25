@@ -1,0 +1,9 @@
+{
+  "name": "黑白默片喜剧全流程导演",
+  "skillKey": "silent-comedy-director-a015ad0682e441c5a70fd7cac0fc563a",
+  "version": "1.0.1",
+  "description": "把喜剧想法转化为可执行的黑白默片喜剧视频",
+  "templateUuid": "4cb099327ebf46bc919e9c4974f080fa",
+  "draftUuid": "fdbff9fc56914b18832e4113645b458f",
+  "extraction": "agent copy"
+}

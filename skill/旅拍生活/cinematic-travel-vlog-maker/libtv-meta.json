@@ -1,0 +1,9 @@
+{
+  "name": "旅拍大师",
+  "skillKey": "cinematic-travel-vlog-maker-ea101076a01c4630a1e90cb41e56b4d1",
+  "version": "1.0.5",
+  "description": "把旅行地点、人物参考和文案，做成电影感旅拍短片",
+  "templateUuid": "7ecc6d146dc5465e90deb2cdb6586128",
+  "draftUuid": "a9723bbf168642f4b9ecd74c4f32f55a",
+  "extraction": "agent copy"
+}

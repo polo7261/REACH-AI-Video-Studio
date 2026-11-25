@@ -1,0 +1,9 @@
+{
+  "name": "影视分镜自动调度镜头",
+  "skillKey": "cinematic-shot-scheduler-8f1dabacbf094425b9d28edcda999dff",
+  "version": "1.0.0",
+  "description": "剧情片段 AIGC 专业镜头调度分镜视频工作流",
+  "templateUuid": "08ad4a25e91044ee8baaab60296a8c71",
+  "draftUuid": "14f0b91601864408b38b732fb7545ce1",
+  "extraction": "agent copy"
+}

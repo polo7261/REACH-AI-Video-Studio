@@ -1,0 +1,9 @@
+{
+  "name": "空镜覆盖镜头设计",
+  "skillKey": "b-roll-coverage-planner-020b92eb952140af9a99e594358a115b",
+  "version": "1.0.2",
+  "description": "一次产出 5 个风格统一的剪辑级 B-roll 镜头方案",
+  "templateUuid": "cd6aec5918bc4560aca8c6d9a157361e",
+  "draftUuid": "e5b67da24d9d45ac97bf5c3cdc655f72",
+  "extraction": "agent copy"
+}
