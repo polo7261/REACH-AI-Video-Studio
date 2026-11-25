@@ -35,6 +35,17 @@ DOCS = ROOT / "docs"
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 512 * 1024 * 1024  # 512 MB（影片上傳）
+app.config["TEMPLATES_AUTO_RELOAD"] = True  # 改模板不必重啟
+
+
+@app.context_processor
+def _asset_helper():
+    """/static 檔案加上修改時間當版本號，避免瀏覽器快取舊檔。"""
+    def asset(name: str) -> str:
+        f = ROOT / "static" / name
+        v = int(f.stat().st_mtime) if f.is_file() else 0
+        return f"/static/{name}?v={v}"
+    return {"asset": asset}
 
 
 # --------------------------------------------------------------------- pages

@@ -48,6 +48,8 @@
   function renderJobs(jobs) {
     const box = $("#jobs");
     if (!box) return;
+    const cnt = document.getElementById("jobs-count");
+    if (cnt) cnt.textContent = jobs.length ? `（${jobs.length}）` : "";
     if (!jobs.length) { box.innerHTML = '<div class="muted">—</div>'; return; }
     box.innerHTML = `<table class="map"><tr><th>任務</th><th>鏡頭</th><th>模型</th><th>狀態</th></tr>` +
       jobs.map((j) => `<tr><td class="mono">${esc(j.id)}</td><td>${esc(j.shot_id)}</td><td class="mono">${esc(j.model)}</td>
@@ -87,6 +89,7 @@
       renderDetail(data.plan, data.timeline);
       document.querySelectorAll("#projects .pitem").forEach((el) => el.classList.toggle("active", el.dataset.pid === pid));
       $("#detail").style.display = "";
+      $("#st-empty").hidden = true;
       $("#narration-text").value = data.plan.narration || "";
       renderUploads();
       renderFlow(data.plan);
@@ -315,17 +318,32 @@
     const box = $("#uploads");
     try {
       const data = await api(`/api/projects/${state.pid}/uploads`);
+      const cnt = document.getElementById("uploads-count");
+      if (cnt) cnt.textContent = data.uploads.length ? `（${data.uploads.length}）` : "";
       if (!data.uploads.length) { box.innerHTML = '<div class="muted">尚無上傳</div>'; return; }
-      box.innerHTML = data.uploads.map((u) => `
-        <div style="margin:6px 0">
-          <a href="${u.url}" target="_blank">${u.name}</a>
-          <span class="muted" style="font-size:11px"> ${(u.size / 1048576).toFixed(1)} MB</span>
-          ${u.name.endsWith(".mp4") ? `<video src="${u.url}" controls muted style="display:block;max-width:320px;margin-top:4px"></video>` : ""}
-        </div>`).join("");
+      box.innerHTML = data.uploads.map((u) => {
+        const ext = u.name.split(".").pop().toLowerCase();
+        const media = ["mp4", "mov", "webm"].includes(ext) ? `<video src="${esc(u.url)}" muted preload="metadata"></video>`
+          : ["png", "jpg", "jpeg", "webp"].includes(ext) ? `<img src="${esc(u.url)}" loading="lazy" alt="">`
+          : '<span class="muted">♪ 音訊</span>';
+        return `<a class="up-item" href="${esc(u.url)}" target="_blank" title="${esc(u.name)}">
+          <span class="up-thumb">${media}</span>
+          <span class="up-name">${esc(u.name)}</span><span class="muted up-size">${(u.size / 1048576).toFixed(1)} MB</span></a>`;
+      }).join("");
     } catch { box.innerHTML = '<div class="muted">讀取失敗</div>'; }
   }
 
   $("#btn-create").addEventListener("click", createProject);
+  $("#btn-new-toggle").addEventListener("click", () => {
+    const f = $("#st-new"); f.hidden = !f.hidden;
+    $("#btn-new-toggle").textContent = f.hidden ? "＋ 新專案" : "收合";
+    if (!f.hidden) $("#f-idea").focus();
+  });
+  $("#st-tabs").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-pane]"); if (!b) return;
+    document.querySelectorAll("#st-tabs .tab").forEach((x) => x.classList.toggle("active", x === b));
+    document.querySelectorAll(".st-pane").forEach((p) => { p.hidden = p.dataset.pane !== b.dataset.pane; });
+  });
   $("#btn-upload").addEventListener("click", uploadFiles);
   $("#btn-char").addEventListener("click", addCharacter);
   $("#btn-script").addEventListener("click", expandScript);

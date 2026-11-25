@@ -2,53 +2,41 @@
 {% set active = "studio" %}
 {% block title %}Video Studio{% endblock %}
 {% block content %}
-    <h1 data-i18n="studio.title">影片工作室</h1>
-    <div class="sub">一句話 → 分鏡 → 出圖 → 影片 → 配音；模型走阿里雲 / MiniMax / 火山方舟（另行配置）。</div>
+    <div class="st-head">
+      <h1 data-i18n="studio.title">影片工作室</h1>
+      <span class="sub" style="margin:0">一句話 → 分鏡 → 出圖 → 影片 → 配音</span>
+    </div>
 
-    <div class="grid two">
+    <div class="st-layout">
+    <aside class="st-side">
       <section class="card">
-        <h3>建立影片專案</h3>
+        <div class="st-side-head"><h3 style="margin:0">專案</h3>
+          <button class="small" type="button" id="btn-new-toggle">＋ 新專案</button></div>
+        <div class="st-new" id="st-new" hidden>
         <label>專案名稱</label>
         <input type="text" id="f-title" placeholder="例：雨夜霓虹追蹤">
         <label>一句話故事（必要）</label>
-        <textarea id="f-idea" placeholder="例：一名少女在雨夜的霓虹街道上追逐一枚飄走的紙鶴"></textarea>
+        <textarea id="f-idea" rows="2" placeholder="例：一名少女在雨夜的霓虹街道上追逐一枚飄走的紙鶴"></textarea>
         <div class="row">
-          <div>
-            <label>風格</label>
-            <input type="text" id="f-style" value="電影感寫實">
-          </div>
-          <div>
-            <label>片長（秒）</label>
-            <input type="number" id="f-duration" value="24" min="6" max="180">
-          </div>
+          <div><label>風格</label><input type="text" id="f-style" value="電影感寫實"></div>
+          <div><label>片長（秒）</label><input type="number" id="f-duration" value="24" min="6" max="180"></div>
         </div>
         <div class="row">
-          <div>
-            <label>比例</label>
-            <select id="f-ratio">
-              <option>16:9</option><option>9:16</option><option>1:1</option><option>4:3</option>
-            </select>
-          </div>
-          <div>
-            <label>角色鎖定（可留空）</label>
-            <input type="text" id="f-character" placeholder="例：短髮少女、米色風衣">
-          </div>
+          <div><label>比例</label>
+            <select id="f-ratio"><option>16:9</option><option>9:16</option><option>1:1</option><option>4:3</option></select></div>
+          <div><label>角色鎖定</label><input type="text" id="f-character" placeholder="可留空"></div>
         </div>
-        <label>場景鎖定（可留空）</label>
-        <input type="text" id="f-location" placeholder="例：雨夜霓虹街道、積水反光">
-        <div class="actions">
-          <button id="btn-create">建立並產生分鏡</button>
-          <span class="muted" style="align-self:center;font-size:12px">四鏡模板：建立／衝突／轉折／收束</span>
+        <label>場景鎖定</label>
+        <input type="text" id="f-location" placeholder="可留空，例：雨夜霓虹街道">
+        <div class="actions"><button id="btn-create">建立並產生分鏡</button></div>
+        <div class="muted" style="font-size:11.5px;margin-top:6px">四鏡模板：建立／衝突／轉折／收束</div>
         </div>
+        <div id="projects" class="plist scroll-box st-plist"><div class="muted">尚無專案</div></div>
       </section>
-
-      <section class="card">
-        <h3>專案</h3>
-        <div id="projects" class="plist"><div class="muted">尚無專案</div></div>
-      </section>
-    </div>
-
-    <section id="detail" style="display:none; margin-top:18px">
+    </aside>
+    <div class="st-main">
+    <div class="muted st-empty" id="st-empty">選擇左側專案，或按「＋ 新專案」建立。</div>
+    <section id="detail" style="display:none">
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
         <h1 id="d-title" style="margin:0"></h1>
         <span class="chip" id="d-meta"></span>
@@ -78,10 +66,14 @@
       </section>
       <div id="shots" class="shots" style="margin-top:12px"></div>
 
-      <div class="grid two" style="margin-top:18px">
-        <section class="card">
-          <h3>旁白配音</h3>
-          <textarea id="narration-text" placeholder="輸入旁白或留空（預設用故事描述）"></textarea>
+      <section class="card st-tabs-card">
+        <div class="tabs st-tabs" id="st-tabs">
+          <button class="tab active" type="button" data-pane="tts">旁白配音</button>
+          <button class="tab" type="button" data-pane="jobs">工作任務 <span class="muted" id="jobs-count"></span></button>
+          <button class="tab" type="button" data-pane="uploads">上傳素材 <span class="muted" id="uploads-count"></span></button>
+        </div>
+        <div class="st-pane" data-pane="tts">
+          <textarea id="narration-text" rows="3" placeholder="輸入旁白或留空（預設用故事描述）"></textarea>
           <div class="actions">
             <select id="tts-voice" style="max-width:200px">
               <option value="male-qn-qingse">male-qn-qingse</option>
@@ -92,18 +84,20 @@
             <button id="btn-tts">生成配音</button>
           </div>
           <div id="tts-out" style="margin-top:10px"></div>
-        </section>
-        <section class="card">
-          <h3>工作任務</h3>
-          <div id="jobs" class="muted">—</div>
-        </section>
-        <section class="card">
-          <h3>上傳素材（影片／圖片／音訊）</h3>
-          <input type="file" id="upload-input" multiple accept=".mp4,.mov,.webm,.png,.jpg,.jpeg,.webp,.mp3,.wav,.m4a">
-          <div class="actions"><button id="btn-upload">上傳到專案</button></div>
-          <div id="uploads" class="muted" style="margin-top:10px">—</div>
-        </section>
-      </div>
+        </div>
+        <div class="st-pane" data-pane="jobs" hidden>
+          <div id="jobs" class="muted scroll-box">—</div>
+        </div>
+        <div class="st-pane" data-pane="uploads" hidden>
+          <div class="actions" style="margin-top:0">
+            <input type="file" id="upload-input" multiple accept=".mp4,.mov,.webm,.png,.jpg,.jpeg,.webp,.mp3,.wav,.m4a" style="max-width:280px">
+            <button id="btn-upload">上傳到專案</button>
+          </div>
+          <div id="uploads" class="muted scroll-box up-grid" style="margin-top:10px">—</div>
+        </div>
+      </section>
     </section>
+    </div>
+    </div>
 {% endblock %}
-{% block scripts %}<script src="/static/studio.js"></script>{% endblock %}
+{% block scripts %}<script src="{{ asset('studio.js') }}"></script>{% endblock %}
