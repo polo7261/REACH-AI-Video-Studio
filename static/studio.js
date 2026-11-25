@@ -1,6 +1,7 @@
 (() => {
   const $ = (sel) => document.querySelector(sel);
-  const state = { pid: null, plan: null, polls: new Set() };
+  const state = { pid: null, plan: null, polls: new Set(), cfg: null };
+  const PROJECT_STEPS = ["script", "character", "keyframe", "tts"];
 
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -89,7 +90,45 @@
       $("#narration-text").value = data.plan.narration || "";
       renderUploads();
       renderFlow(data.plan);
+      renderModelBar(data.plan);
     } catch (err) { toast(err.message, true); }
+  }
+
+  // ------------------------------------------------------------- 專案模型選擇
+  async function renderModelBar(plan) {
+    const box = $("#model-bar");
+    try {
+      if (!state.cfg) state.cfg = await api("/api/config");
+    } catch (err) { box.innerHTML = `<div class="muted">模型清單讀取失敗：${esc(err.message)}</div>`; return; }
+    const cfg = state.cfg;
+    const own = plan.models || {};
+    const scopeName = { cloud: "雲端", local: "地端" };
+    box.innerHTML = cfg.steps.filter((s) => PROJECT_STEPS.includes(s.id)).map((s) => {
+      const g = cfg.routing[s.id];
+      const cur = own[s.id] ? `${own[s.id].provider}|${own[s.id].model}` : "";
+      const groups = ["cloud", "local"].map((scope) => {
+        const opts = cfg.providers.filter((p) => p.scope === scope).flatMap((p) =>
+          p.models.filter((m) => m.kind === s.kind && m.status !== "license").map((m) => {
+            const v = `${p.id}|${m.id}`;
+            const mark = m.status === "ok" ? "✓ " : m.status === "quota" ? "⚠ " : "· ";
+            return `<option value="${esc(v)}" ${v === cur ? "selected" : ""}>${mark}${esc(m.id)}（${esc(p.name)}）</option>`;
+          }));
+        return opts.length ? `<optgroup label="${scopeName[scope]}">${opts.join("")}</optgroup>` : "";
+      }).join("");
+      return `<div><label>${esc(s.label)}</label>
+        <select data-model-step="${esc(s.id)}">
+          <option value="" ${cur ? "" : "selected"}>沿用全域（${esc(g.model)}）</option>${groups}
+        </select></div>`;
+    }).join("");
+    box.querySelectorAll("[data-model-step]").forEach((sel) => sel.addEventListener("change", async () => {
+      const [provider = "", model = ""] = sel.value ? sel.value.split("|") : [];
+      try {
+        const res = await api(`/api/projects/${plan.id}/models`, { method: "PUT",
+          body: JSON.stringify({ step: sel.dataset.modelStep, provider, model }) });
+        plan.models = res.models;
+        toast(model ? `本專案改用：${model}` : "已改回沿用全域設定");
+      } catch (err) { toast(err.message, true); }
+    }));
   }
 
   async function renderFlow(plan) {
@@ -295,6 +334,8 @@
   loadProjects()
     .then(async () => {
       // 自動打開最新專案，避免只看到表單
+      const want = new URLSearchParams(location.search).get("pid");
+      if (want) { await openProject(want); return; }
       if (!state.pid) {
         const first = document.querySelector("#projects .pitem");
         if (first) await openProject(first.dataset.pid);

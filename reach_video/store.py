@@ -55,6 +55,8 @@ def list_projects() -> list[dict]:
                 "shots": len(plan.get("shots") or []),
                 "images": sum(1 for s in plan.get("shots") or [] if s.get("image")),
                 "videos": sum(1 for s in plan.get("shots") or [] if s.get("video")),
+                "cover": next((s["image"] for s in plan.get("shots") or [] if s.get("image")), None)
+                or next((c["sheet"] for c in plan.get("cast") or [] if c.get("sheet")), None),
             }
         )
     return out

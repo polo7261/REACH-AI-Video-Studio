@@ -1,25 +1,8 @@
-<!doctype html>
-<html lang="zh-Hant">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>REACH AI · Video Studio</title>
-<link rel="stylesheet" href="/static/app.css">
-</head>
-<body>
-<div class="layout">
-  <aside>
-    <div class="brand">REACH AI<small>VIDEO STUDIO</small></div>
-    <nav>
-      <a href="/" class="active">▣ 影片工作室</a>
-      <a href="/api-page">⚙ API 與網址</a>
-      <a href="/docs/">▤ 技術文件</a>
-    </nav>
-    <div style="margin-top:auto" class="muted mono">v0.3 · 127.0.0.1:35350</div>
-  </aside>
-
-  <main>
-    <h1>影片工作室</h1>
+{% extends "base.html" %}
+{% set active = "studio" %}
+{% block title %}Video Studio{% endblock %}
+{% block content %}
+    <h1 data-i18n="studio.title">影片工作室</h1>
     <div class="sub">一句話 → 分鏡 → 出圖 → 影片 → 配音；模型走阿里雲 / MiniMax / 火山方舟（另行配置）。</div>
 
     <div class="grid two">
@@ -76,6 +59,8 @@
       <div id="timeline" class="timeline"></div>
       <section class="card" style="margin-top:12px">
         <h3>製作流程：① 角色 → ② 劇本／分鏡 → ③ 出圖 → ④ 影片</h3>
+        <div class="muted" style="font-size:12px;margin-bottom:6px">本專案使用模型（選「沿用全域」= 依 <a href="/api-page">API 與網址</a> 的設定）</div>
+        <div id="model-bar" class="modelbar" style="margin-bottom:14px"></div>
         <div class="grid two" style="gap:12px">
           <div>
             <label>新增角色：名稱</label>
@@ -95,7 +80,7 @@
 
       <div class="grid two" style="margin-top:18px">
         <section class="card">
-          <h3>旁白配音（MiniMax TTS）</h3>
+          <h3>旁白配音</h3>
           <textarea id="narration-text" placeholder="輸入旁白或留空（預設用故事描述）"></textarea>
           <div class="actions">
             <select id="tts-voice" style="max-width:200px">
@@ -120,8 +105,5 @@
         </section>
       </div>
     </section>
-  </main>
-</div>
-<script src="/static/studio.js"></script>
-</body>
-</html>
+{% endblock %}
+{% block scripts %}<script src="/static/studio.js"></script>{% endblock %}

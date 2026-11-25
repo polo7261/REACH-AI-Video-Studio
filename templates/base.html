@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REACH AI · {% block title %}Video Studio{% endblock %}</title>
+<script>
+  // 先套用主題，避免閃白
+  try { const t = localStorage.getItem("reach.theme"); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+{% from "_icons.html" import icon %}
+{% set settings_open = active in ("api", "docs") %}
+<div class="layout">
+  <aside>
+    <a class="brand" href="/">
+      <span class="logo-mark" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 26 26"><rect x="1" y="1" width="24" height="24" rx="7" fill="var(--accent)"/><path d="M10 8.5v9l7.5-4.5z" fill="var(--on-accent)"/></svg></span>
+      <span>REACH AI<small>VIDEO STUDIO</small></span>
+    </a>
+    <nav class="side">
+      <a href="/" class="{{ 'active' if active == 'home' }}">{{ icon("home") }}<span data-i18n="nav.home">首頁</span></a>
+      <a href="/studio" class="{{ 'active' if active == 'studio' }}">{{ icon("project") }}<span data-i18n="nav.projects">專案</span></a>
+      <a href="/assets" class="{{ 'active' if active == 'assets' }}">{{ icon("assets") }}<span data-i18n="nav.assets">素材庫</span></a>
+
+      <div class="nav-group" data-i18n="nav.create">創作</div>
+      <a class="soon" title="規劃中">{{ icon("director") }}<span data-i18n="nav.director">AI 導演</span><span class="tag">BETA</span></a>
+      <a class="soon" title="規劃中">{{ icon("canvas") }}<span data-i18n="nav.canvas">無限畫布</span><span class="tag" data-i18n="tag.soon">即將推出</span></a>
+      <a class="soon" title="規劃中">{{ icon("timeline") }}<span data-i18n="nav.timeline">時間軸剪輯</span><span class="tag" data-i18n="tag.soon">即將推出</span></a>
+    </nav>
+
+    <div class="side-bottom">
+      <button class="settings-toggle {{ 'open' if settings_open }}" id="settings-toggle" type="button" aria-expanded="{{ 'true' if settings_open else 'false' }}">
+        {{ icon("gear") }}<span data-i18n="nav.settings">設定</span><span class="chev">{{ icon("chevron", 14) }}</span>
+      </button>
+      <nav class="side sub" id="settings-menu" {{ '' if settings_open else 'hidden' }}>
+        <a href="/api-page" class="{{ 'active' if active == 'api' }}">{{ icon("api", 16) }}<span data-i18n="nav.api">API 與網址</span></a>
+        <a href="/docs/" class="{{ 'active' if active == 'docs' }}">{{ icon("docs", 16) }}<span data-i18n="nav.docs">技術文件</span></a>
+      </nav>
+      <div class="muted mono ver">v0.4 · 127.0.0.1:35350</div>
+    </div>
+  </aside>
+
+  <div class="page">
+    <header class="topbar">
+      <div class="crumb">{% block crumb %}{% endblock %}</div>
+      <div class="top-actions">
+        <div class="menu-wrap">
+          <button class="icon-btn" id="lang-btn" type="button" aria-haspopup="true" aria-expanded="false" title="Language">{{ icon("globe") }}</button>
+          <div class="menu" id="lang-menu" role="menu" hidden>
+            <button type="button" role="menuitemradio" data-lang="zh-Hant"><span>繁體中文</span><em>繁</em></button>
+            <button type="button" role="menuitemradio" data-lang="zh-Hans"><span>简体中文</span><em>简</em></button>
+            <button type="button" role="menuitemradio" data-lang="en"><span>English</span><em>EN</em></button>
+          </div>
+        </div>
+        <button class="icon-btn" id="theme-toggle" type="button" title="切換亮色／暗色">
+          <span class="when-dark">{{ icon("sun") }}</span><span class="when-light">{{ icon("moon") }}</span>
+        </button>
+      </div>
+    </header>
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
+<script src="/static/shell.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

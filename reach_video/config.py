@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import time
 from pathlib import Path
@@ -47,6 +48,7 @@ def mask(secret: str, tail: int = 6) -> str:
 #   untested  = 尚未打通（需 endpoint id 或正確路由）
 PROVIDERS: dict[str, dict] = {
     "aliyun": {
+        "scope": "cloud",
         "name": "阿里雲 MaaS（token-plan 閘道）",
         "base_url": env("ALIYUN_BASE_URL", "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"),
         "extra": {"anthropic": env("ALIYUN_ANTHROPIC_URL")},
@@ -64,6 +66,7 @@ PROVIDERS: dict[str, dict] = {
         ],
     },
     "minimax": {
+        "scope": "cloud",
         "name": "MiniMax（中國站）",
         "base_url": env("MINIMAX_BASE_URL", "https://api.minimaxi.com/v1"),
         "kind": "minimax",
@@ -80,6 +83,7 @@ PROVIDERS: dict[str, dict] = {
         ],
     },
     "local-wan": {
+        "scope": "local",
         "name": "地端 Wan2.2（192.168.0.219）",
         "base_url": env("REACH_WAN_BASE", "http://192.168.0.219:35331"),
         "kind": "local-wan",
@@ -90,6 +94,7 @@ PROVIDERS: dict[str, dict] = {
         ],
     },
     "local-ltx": {
+        "scope": "local",
         "name": "地端 LTXV 2B（192.168.0.219）",
         "base_url": env("REACH_LTX_BASE", "http://192.168.0.219:35332"),
         "kind": "local-ltx",
@@ -100,6 +105,7 @@ PROVIDERS: dict[str, dict] = {
         ],
     },
     "volcano-plan": {
+        "scope": "cloud",
         "name": "火山方舟 Agent Plan",
         "base_url": env("VOLC_PLAN_BASE_URL", "https://ark.cn-beijing.volces.com/api/plan/v3"),
         "kind": "ark-plan",
@@ -116,6 +122,7 @@ PROVIDERS: dict[str, dict] = {
         ],
     },
     "volcano": {
+        "scope": "cloud",
         "name": "火山方舟 Ark",
         "base_url": env("VOLC_BASE_URL", "https://ark.cn-beijing.volces.com/api/v3"),
         "kind": "ark",
@@ -141,6 +148,71 @@ DEFAULT_IMAGE = {"provider": "volcano-plan", "model": "doubao-seedream-5.5"}
 DEFAULT_VIDEO = {"provider": "minimax", "model": env("MINIMAX_VIDEO_MODEL") or "MiniMax-H3"}
 DEFAULT_TTS = {"provider": "minimax", "model": "speech-2.5-hd-preview", "voice": "male-qn-qingse"}
 
+# 製作流程步驟 → 需要的模型類型與預設模型
+STEPS: list[dict] = [
+    {"id": "script", "label": "劇本／分鏡", "kind": "text", "default": DEFAULT_TEXT},
+    {"id": "character", "label": "角色設定圖", "kind": "image", "default": DEFAULT_IMAGE},
+    {"id": "keyframe", "label": "分鏡關鍵影格", "kind": "image",
+     "default": {"provider": "volcano", "model": "doubao-seedream-5-5-261028"}},
+    {"id": "video", "label": "影片生成", "kind": "video", "default": DEFAULT_VIDEO},
+    {"id": "tts", "label": "旁白配音", "kind": "tts", "default": DEFAULT_TTS},
+]
+STEP_MAP = {s["id"]: s for s in STEPS}
+ROUTING_PATH = DATA / "routing.json"
+
+
+def find_model(provider_id: str, model_id: str) -> dict | None:
+    p = PROVIDERS.get(provider_id)
+    if not p:
+        return None
+    return next((m for m in p["models"] if m["id"] == model_id), None)
+
+
+def valid_choice(step: str, provider_id: str, model_id: str) -> bool:
+    s = STEP_MAP.get(step)
+    m = find_model(provider_id, model_id)
+    return bool(s and m and m["kind"] == s["kind"] and m.get("status") != "license")
+
+
+def load_routing() -> dict:
+    """全域：每個步驟目前使用的 provider/model（存在 data/routing.json）。"""
+    saved: dict = {}
+    if ROUTING_PATH.is_file():
+        try:
+            saved = json.loads(ROUTING_PATH.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            saved = {}
+    out = {}
+    for s in STEPS:
+        c = saved.get(s["id"]) or {}
+        if valid_choice(s["id"], c.get("provider", ""), c.get("model", "")):
+            out[s["id"]] = {"provider": c["provider"], "model": c["model"]}
+        else:
+            out[s["id"]] = {"provider": s["default"]["provider"], "model": s["default"]["model"]}
+    return out
+
+
+def save_routing(step: str, provider_id: str, model_id: str) -> dict:
+    if not valid_choice(step, provider_id, model_id):
+        raise ValueError("模型類型與步驟不符或不可用")
+    routing = load_routing()
+    routing[step] = {"provider": provider_id, "model": model_id}
+    ROUTING_PATH.write_text(json.dumps(routing, ensure_ascii=False, indent=2), encoding="utf-8")
+    return routing
+
+
+def resolve(step: str, plan: dict | None = None, body: dict | None = None) -> tuple[str, str]:
+    """優先序：請求參數 > 專案設定 > 全域設定 > 內建預設。"""
+    body = body or {}
+    if body.get("provider") and body.get("model"):
+        return body["provider"], body["model"]
+    override = ((plan or {}).get("models") or {}).get(step) or {}
+    if valid_choice(step, override.get("provider", ""), override.get("model", "")):
+        return override["provider"], override["model"]
+    r = load_routing()[step]
+    return r["provider"], r["model"]
+
+
 def key_for(provider_id: str) -> str:
     return env(PROVIDERS[provider_id]["key_env"])
 
@@ -156,6 +228,7 @@ def public_config() -> dict:
                 "base_url": p["base_url"],
                 "extra": p.get("extra", {}),
                 "kind": p["kind"],
+                "scope": p.get("scope", "cloud"),
                 "key_state": "configured" if key else "missing",
                 "key_mask": mask(key),
                 "models": p["models"],
@@ -164,6 +237,8 @@ def public_config() -> dict:
     return {
         "providers": out,
         "defaults": {"text": DEFAULT_TEXT, "image": DEFAULT_IMAGE, "video": DEFAULT_VIDEO, "tts": DEFAULT_TTS},
+        "steps": [{k: s[k] for k in ("id", "label", "kind")} for s in STEPS],
+        "routing": load_routing(),
         "verified_at": "2026-11-21",
         "checked_seconds_ago": 0,
         "server_time": time.strftime("%Y-%m-%d %H:%M:%S"),
