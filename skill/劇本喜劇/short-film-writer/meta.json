@@ -1,0 +1,15 @@
+{
+ "cn": "叙事短片剧本写作",
+ "skillKey": "short-film-writer-71a5fc5f6ae546d58b0b8d75abc87608",
+ "version": "1.0.0",
+ "description": "单一事件冲刺到底的短片剧本",
+ "templateUuid": "b1e8bebcdb184e76990094aaeee0615f",
+ "cn_tc": "敘事短片劇本寫作",
+ "cn_sc": "叙事短片剧本写作",
+ "desc_tc": "單一事件衝刺到底的短片劇本",
+ "desc_sc": "单一事件冲刺到底的短片剧本",
+ "cover": "cover.png",
+ "desc_en": "Narrative short film script writing: a short film script driven by a single event from start to finish.",
+ "draftUuid": "d5dfb78204a940a287e347dbaa43ca72",
+ "extraction": "agent copy"
+}

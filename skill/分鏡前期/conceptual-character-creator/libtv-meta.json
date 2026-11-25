@@ -1,9 +1,0 @@
-{
-  "name": "概念角色SSS级技能展示",
-  "skillKey": "conceptual-character-creator-e1a8d149cb6c445b91a5f4926f0a0483",
-  "version": "1.0.1",
-  "description": "输入一个角色想法，自动生成原创概念角色、角色板和15秒视频",
-  "templateUuid": "5b7e6dc66a0a496d92b166a29125546c",
-  "draftUuid": "7ed29266d983410bb9cafb25d25bbc41",
-  "extraction": "agent copy"
-}

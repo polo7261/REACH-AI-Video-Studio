@@ -1,9 +1,0 @@
-{
-  "name": "手办动画",
-  "skillKey": "toy-figure-animator-3fdf06a4c10a4f96b98f779e197578c8",
-  "version": "1.0.11",
-  "description": "无需建模，轻松生成日式特摄、潮玩、毛毡定格三种动画风格短片。",
-  "templateUuid": "a4b5386b5c7c410f83a49099028f44d0",
-  "draftUuid": "4eff7f4a37e24c17b54d4ebc58da4052",
-  "extraction": "agent copy"
-}

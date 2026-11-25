@@ -3,7 +3,7 @@
 一句話 → 分鏡 → 關鍵影格 → 影片 → 配音。本機影片工作室，獨立於 `REACH-AI-Image`。
 
 - 工作室：<http://127.0.0.1:35350/>
-- Skill 庫：<http://127.0.0.1:35350/skills/>（112 個 LibTV skill，`libtv-skills/`，掛載用 API：`/api/skills`）
+- Skill 庫：<http://127.0.0.1:35350/skills/>（112 個 skill，`skill/<分類>/`，掛載用 API：`/api/skills`）
 - API 與網址頁：<http://127.0.0.1:35350/api-page>
 - 技術文件：<http://127.0.0.1:35350/docs/>（原始檔在 `docs/`）
 

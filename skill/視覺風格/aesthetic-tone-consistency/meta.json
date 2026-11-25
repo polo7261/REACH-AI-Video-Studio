@@ -1,0 +1,15 @@
+{
+ "cn": "美学统一调性短片",
+ "skillKey": "aesthetic-tone-consistency-020b92eb952140af9a99e594358a115b",
+ "version": "1.0.1",
+ "description": "sref 一码锁定全片影调,美学不跑偏,逐镜成片调性如一",
+ "templateUuid": "f14bd9181d6f47a7befe15fa57ceba7c",
+ "cn_tc": "美學統一調性短片",
+ "cn_sc": "美学统一调性短片",
+ "desc_tc": "sref 一碼鎖定全片影調,美學不跑偏,逐鏡成片調性如一",
+ "desc_sc": "sref 一码锁定全片影调,美学不跑偏,逐镜成片调性如一",
+ "cover": "cover.png",
+ "desc_en": "Aesthetic tone-consistent short film: one sref code locks the whole film's look — no aesthetic drift, consistent tone shot by shot",
+ "draftUuid": "8422f966951745acaf75e12c686f5a97",
+ "extraction": "agent copy"
+}

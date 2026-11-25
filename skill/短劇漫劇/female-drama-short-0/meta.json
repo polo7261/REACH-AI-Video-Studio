@@ -1,0 +1,15 @@
+{
+ "cn": "甜宠短剧导演",
+ "skillKey": "female-drama-short-0",
+ "version": "1.0.1",
+ "description": "甜宠钩子生成分镜成片",
+ "templateUuid": "90220e570dd74276badd08651e0ddb22",
+ "cn_tc": "甜寵短劇導演",
+ "cn_sc": "甜宠短剧导演",
+ "desc_tc": "甜寵鉤子生成分鏡成片",
+ "desc_sc": "甜宠钩子生成分镜成片",
+ "cover": "cover.png",
+ "desc_en": "Sweet romance short drama director: generates sweet-romance hooks, storyboards, and finished films",
+ "draftUuid": "0aa71834237c4fbbbc1430b85e497f6a",
+ "extraction": "agent copy"
+}

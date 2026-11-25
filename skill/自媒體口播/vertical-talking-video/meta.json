@@ -1,0 +1,15 @@
+{
+ "cn": "竖屏口播短视频",
+ "skillKey": "vertical-talking-video-020b92eb952140af9a99e594358a115b",
+ "version": "1.0.6",
+ "description": "制作无真人出镜的竖屏短视频，一键打造自媒体口播爆款短片",
+ "templateUuid": "278171c0f6404198aef44a0c530ee54a",
+ "cn_tc": "豎屏口播短影片",
+ "cn_sc": "竖屏口播短视频",
+ "desc_tc": "製作無真人出鏡的豎屏短影片，一鍵打造自媒體口播爆款短片",
+ "desc_sc": "制作无真人出镜的竖屏短视频，一键打造自媒体口播爆款短片",
+ "cover": "cover.png",
+ "desc_en": "Vertical talking-head short video: produce vertical shorts with no on-camera talent—one-click creation of viral voiceover shorts.",
+ "draftUuid": "e88b19ac03ae4f1081be6ed8e2b6d35a",
+ "extraction": "agent copy"
+}

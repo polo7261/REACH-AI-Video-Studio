@@ -1,9 +1,0 @@
-{
-  "name": "3D视频转真人视频-漫剧",
-  "skillKey": "video-to-real-life-converter-0bfcda928d704e8da3d20977029a31b8",
-  "version": "1.0.10",
-  "description": "转绘真人、3D、二次元、海外均可，操作简单，易上手，上传视频",
-  "templateUuid": "753e80085e7244afbdafc06d2ecb8c71",
-  "draftUuid": "8a6c332e979c4ee39656b73c43cd6daa",
-  "extraction": "agent copy"
-}

@@ -1,9 +1,0 @@
-{
-  "name": "皮克斯动画故事",
-  "skillKey": "pixar-animation-story-builder-5de625e86d1143e6a4fd948ca25ec34b",
-  "version": "1.0.9",
-  "description": "皮克斯动画广告附属Skill，从角色设计、剧本创作到多段视频",
-  "templateUuid": "b3d8b79e75bb4267b8a1a715776d17df",
-  "draftUuid": "c53804c914584253b3e4126d4fb93cc8",
-  "extraction": "agent copy"
-}

@@ -1,9 +1,0 @@
-{
-  "name": "截图转宣传片",
-  "skillKey": "promo-video-0",
-  "version": "1.0.1",
-  "description": "UI截图生成宣传短片",
-  "templateUuid": "c1cd937150ed424e8de1f1074c8e7d0e",
-  "draftUuid": "0d8d125182da48ea900b64579a7aff09",
-  "extraction": "agent copy"
-}

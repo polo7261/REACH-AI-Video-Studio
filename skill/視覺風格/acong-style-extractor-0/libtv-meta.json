@@ -1,9 +1,0 @@
-{
-  "name": "主体风格提取",
-  "skillKey": "acong-style-extractor-0",
-  "version": "1.0.1",
-  "description": "参考图提取可迁移风格",
-  "templateUuid": "2bdcd03886ba4e95adf6a11da5ec1087",
-  "draftUuid": "bac3c4abea2341f886d55af6e97a2182",
-  "extraction": "agent copy"
-}

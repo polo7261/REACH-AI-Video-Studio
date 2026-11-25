@@ -1,0 +1,15 @@
+{
+ "cn": "日系偶像MV导演",
+ "skillKey": "idol-mv-71a5fc5f6ae546d58b0b8d75abc87608-ce1b6fd9",
+ "version": "1.0.1",
+ "description": "校园青春滤镜，一键出片女团MV",
+ "templateUuid": "1393e613c05e4b62aaa8320f1751ec1a",
+ "cn_tc": "日系偶像MV導演",
+ "cn_sc": "日系偶像MV导演",
+ "desc_tc": "校園青春濾鏡，一鍵出片女團MV",
+ "desc_sc": "校园青春滤镜，一键出片女团MV",
+ "cover": "cover.png",
+ "desc_en": "Japanese idol MV director: campus-youth filter, generate girl-group MVs in one click",
+ "draftUuid": "cf2b79fdce68472484f33297137b7b8b",
+ "extraction": "agent copy"
+}

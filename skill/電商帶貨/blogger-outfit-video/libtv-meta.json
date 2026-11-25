@@ -1,9 +1,0 @@
-{
-  "name": "穿搭种草视频",
-  "skillKey": "blogger-outfit-video-a525497e294e4ad9a36146901df89a6d",
-  "version": "1.0.20",
-  "description": "一键生成小红书博主穿搭种草视频。",
-  "templateUuid": "908eb22291b0482e92da2d3e78f53235",
-  "draftUuid": "b5f634aa34fc410d8195e0f4abdca645",
-  "extraction": "agent copy"
-}

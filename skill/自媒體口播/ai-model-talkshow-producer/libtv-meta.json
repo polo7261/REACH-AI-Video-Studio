@@ -1,9 +1,0 @@
-{
-  "name": "AI模特脱口秀skill",
-  "skillKey": "ai-model-talkshow-producer-5e17f63c20b64ca1a5571efe67cc2d04",
-  "version": "1.0.4",
-  "description": "自动生成模特，场景，脱口秀文案和脚本，并输出完整的脱口秀短片",
-  "templateUuid": "f39174669ea04c9f88dfd5cd6a4bdedd",
-  "draftUuid": "f5717a6c00e34d43b0f552a9216366b1",
-  "extraction": "agent copy (retry)"
-}

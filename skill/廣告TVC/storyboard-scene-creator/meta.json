@@ -1,0 +1,15 @@
+{
+ "cn": "广告TVC成片skill",
+ "skillKey": "storyboard-scene-creator-aa3eede3b47a41fea48a08d6fc53de7f",
+ "version": "1.0.5",
+ "description": "脚本→故事板→视频成片全链路",
+ "templateUuid": "4f60ee60000e4d8faaf8b2c798059a97",
+ "cn_tc": "廣告TVC成片skill",
+ "cn_sc": "广告TVC成片skill",
+ "desc_tc": "指令碼→故事板→影片成片全鏈路",
+ "desc_sc": "脚本→故事板→视频成片全链路",
+ "cover": "cover.png",
+ "desc_en": "Ad TVC production skill: full pipeline from script → storyboard → final video.",
+ "draftUuid": "61ace8e1525d4680bcb0a037f28d25ba",
+ "extraction": "agent copy"
+}

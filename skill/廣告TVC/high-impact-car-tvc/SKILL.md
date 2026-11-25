@@ -1,3 +1,8 @@
+---
+name: high-impact-car-tvc
+description: "上傳圖片或簡單文字敘述即可一鍵打造超爽感轟炸流TVC廣告"
+---
+
 # Fast-Cut Sensory TVC Production
 
 ## Core Methodology

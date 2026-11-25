@@ -1,0 +1,15 @@
+{
+ "cn": "纸艺剪纸定格风导演",
+ "skillKey": "paper-art-stop-motion-director-a015ad0682e441c5a70fd7cac0fc563a",
+ "version": "1.0.1",
+ "description": "制作纸艺、剪纸、手工拼贴、分层纸景和绘本动画感的图片和视频",
+ "templateUuid": "ba54121661e6412da0071780bbf553ba",
+ "cn_tc": "紙藝剪紙定格風導演",
+ "cn_sc": "纸艺剪纸定格风导演",
+ "desc_tc": "製作紙藝、剪紙、手工拼貼、分層紙景和繪本動畫感的圖片和影片",
+ "desc_sc": "制作纸艺、剪纸、手工拼贴、分层纸景和绘本动画感的图片和视频",
+ "cover": "cover.png",
+ "desc_en": "Paper art & papercut stop-motion director: create paper-craft, papercut, handmade collage, layered paper-set, and picture-book animated images and videos",
+ "draftUuid": "cf47bba4bb6b439e96f519ee9ef770c3",
+ "extraction": "agent copy"
+}

@@ -1,0 +1,15 @@
+{
+ "cn": "宝矿力广告导演",
+ "skillKey": "pocari-commercial-director-0",
+ "version": "1.0.0",
+ "description": "产品生成宝矿力风广告",
+ "templateUuid": "ad990bad3d5b4f38803ff98f78c3386d",
+ "cn_tc": "寶礦力廣告導演",
+ "cn_sc": "宝矿力广告导演",
+ "desc_tc": "產品生成寶礦力風廣告",
+ "desc_sc": "产品生成宝矿力风广告",
+ "cover": "cover.png",
+ "desc_en": "Pocari Sweat commercial director: generate Pocari Sweat-style ads from product shots",
+ "draftUuid": "7973eb0edb2644328bdcd9b27500e613",
+ "extraction": "agent copy"
+}

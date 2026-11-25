@@ -1,6 +1,7 @@
 ---
-
-## name: ai-cinematic-shot-designer description: Design, rewrite, diagnose, and quality-check camera-language prompts for AI films and videos. Use when a user needs shot angles, camera height, lens and perspective, framing, camera movement, blocking-to-camera timing, shot transitions, or a coherent shot list; do not activate for general image styling with no camera-design need.
+name: cinematic-shot-designer
+description: "Design, rewrite, diagnose, and quality-check camera-language prompts for AI films and videos. Use when a user needs shot angles, camera height, lens and perspective, framing, camera movement, blocking-to-camera timing, shot transitions, or a coherent shot list; do not activate for general image styling with no camera-design need."
+---
 
 # AI Cinematic Shot Designer
 

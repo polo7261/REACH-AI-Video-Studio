@@ -1,9 +1,0 @@
-{
-  "name": "韩系杂志风女装时尚广告",
-  "skillKey": "wander-fashion-lookbook-ad-5e17f63c20b64ca1a5571efe67cc2d04",
-  "version": "1.0.5",
-  "description": "只需上传服装图，自动生成模特和场景，输出真实摄影质感女装广告",
-  "templateUuid": "ff8759a422214c7c8a9c5ba1c9fc6f26",
-  "draftUuid": "0ff84d7f30804f94b4549e3121dda3a3",
-  "extraction": "agent copy"
-}

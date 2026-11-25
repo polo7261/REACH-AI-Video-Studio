@@ -1,0 +1,15 @@
+{
+ "cn": "剧情TVC广告片",
+ "skillKey": "narrative-tvc-creator-020b92eb952140af9a99e594358a115b",
+ "version": "1.0.1",
+ "description": "创作剧情化商品、品牌、服务类 TVC 广告片",
+ "templateUuid": "9df8a2399c7244358c419c0b833f1abd",
+ "cn_tc": "劇情TVC廣告片",
+ "cn_sc": "剧情TVC广告片",
+ "desc_tc": "創作劇情化商品、品牌、服務類 TVC 廣告片",
+ "desc_sc": "创作剧情化商品、品牌、服务类 TVC 广告片",
+ "cover": "cover.jpg",
+ "desc_en": "Narrative TVC commercials: create story-driven product, brand, and service TVC ads",
+ "draftUuid": "f9531c7c664a4ea396fde92206b6000b",
+ "extraction": "agent copy"
+}

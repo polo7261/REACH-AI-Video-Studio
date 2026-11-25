@@ -1,0 +1,15 @@
+{
+ "cn": "AI短剧制片人",
+ "skillKey": "ai-short-drama-flow-71a5fc5f6ae546d58b0b8d75abc87608",
+ "version": "1.0.0",
+ "description": "剧本到成片，一键产出高反转短剧",
+ "templateUuid": "d530bbf586fc428992a1c2559064132c",
+ "cn_tc": "AI短劇製片人",
+ "cn_sc": "AI短剧制片人",
+ "desc_tc": "劇本到成片，一鍵產出高反轉短劇",
+ "desc_sc": "剧本到成片，一键产出高反转短剧",
+ "cover": "cover.png",
+ "desc_en": "AI short drama producer: from script to finished film, one-click production of high-twist short dramas",
+ "draftUuid": "f6d4261fc3334331a43e05895c7a3882",
+ "extraction": "agent copy"
+}

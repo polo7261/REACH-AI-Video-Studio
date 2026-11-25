@@ -1,0 +1,15 @@
+{
+ "cn": "无厘头喜剧",
+ "skillKey": "absurdist-comedy-maker-8db3e80ed29a49109eb6c801f13bb76c",
+ "version": "1.0.8",
+ "description": "将任意主题转成无厘头创意短片，支持剧本改写和照片玩梗。",
+ "templateUuid": "d474c84673f544adafd7d3060087b098",
+ "cn_tc": "無厘頭喜劇",
+ "cn_sc": "无厘头喜剧",
+ "desc_tc": "將任意主題轉成無厘頭創意短片，支援劇本改寫和照片玩梗。",
+ "desc_sc": "将任意主题转成无厘头创意短片，支持剧本改写和照片玩梗。",
+ "cover": "cover.png",
+ "desc_en": "Absurdist comedy: turns any topic into a nonsense-comedy short; supports script rewriting and photo memes",
+ "draftUuid": "b7dc74c0a73645c2ad4b9ecc4d253db5",
+ "extraction": "agent copy"
+}

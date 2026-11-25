@@ -1,0 +1,15 @@
+{
+ "cn": "浮世绘美学动画风导演",
+ "skillKey": "ukiyo-e-animation-director-a015ad0682e441c5a70fd7cac0fc563a",
+ "version": "1.0.2",
+ "description": "制作海浪妖怪神话和屏风绘卷的浮世绘动画或者图片",
+ "templateUuid": "da1200fb231a4db084c45523083e3104",
+ "cn_tc": "浮世繪美學動畫風導演",
+ "cn_sc": "浮世绘美学动画风导演",
+ "desc_tc": "製作海浪妖怪神話和屏風繪卷的浮世繪動畫或者圖片",
+ "desc_sc": "制作海浪妖怪神话和屏风绘卷的浮世绘动画或者图片",
+ "cover": "cover.png",
+ "desc_en": "Ukiyo-e aesthetic animation director: create ukiyo-e animations or images of wave-yokai myths and folding-screen picture scrolls.",
+ "draftUuid": "ef68dade55c0460fbb15b5ba3cc11cbf",
+ "extraction": "agent copy"
+}

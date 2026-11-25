@@ -1,0 +1,15 @@
+{
+ "cn": "AI电影镜头设计师",
+ "skillKey": "cinematic-shot-designer-cca409ade58949f1ac4e6dae6d804d3d",
+ "version": "1.0.0",
+ "description": "把简单的场景设计成专业电影级镜头语言",
+ "templateUuid": "574f2608cf4a430eb5b1546dd60bcb29",
+ "cn_tc": "AI電影鏡頭設計師",
+ "cn_sc": "AI电影镜头设计师",
+ "desc_tc": "把簡單的場景設計成專業電影級鏡頭語言",
+ "desc_sc": "把简单的场景设计成专业电影级镜头语言",
+ "cover": "cover.png",
+ "desc_en": "AI cinematic shot designer: turns simple scenes into professional cinematic shot language",
+ "draftUuid": "7fdec056f2134cd2be209993e1e297a1",
+ "extraction": "agent copy"
+}

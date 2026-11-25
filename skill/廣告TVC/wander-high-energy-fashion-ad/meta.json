@@ -1,0 +1,15 @@
+{
+ "cn": "高机能时尚风配饰酷炫广告",
+ "skillKey": "wander-high-energy-fashion-ad-5e17f63c20b64ca1a5571efe67cc2d04",
+ "version": "1.0.3",
+ "description": "上传眼镜、手表等配饰图，自动生成节奏强、质感高级的时尚广告。",
+ "templateUuid": "6f1f72f4055f485f85c3a521318fd2f4",
+ "cn_tc": "高機能時尚風配飾酷炫廣告",
+ "cn_sc": "高机能时尚风配饰酷炫广告",
+ "desc_tc": "上傳眼鏡、手錶等配飾圖，自動生成節奏強、質感高階的時尚廣告。",
+ "desc_sc": "上传眼镜、手表等配饰图，自动生成节奏强、质感高级的时尚广告。",
+ "cover": "cover.png",
+ "desc_en": "High-tech fashion accessory ad: upload images of glasses, watches, and other accessories to auto-generate high-tempo, premium-quality fashion ads.",
+ "draftUuid": "700b6963ff9c498c902f5d852f68f522",
+ "extraction": "agent copy"
+}

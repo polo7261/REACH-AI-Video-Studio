@@ -1,0 +1,15 @@
+{
+ "cn": "名流获奖短片",
+ "skillKey": "celebrity-award-moment-020b92eb952140af9a99e594358a115b",
+ "version": "1.0.1",
+ "description": "15 秒电影级颁奖名场面,聚光灯锁定人群里的TA",
+ "templateUuid": "55bf93528e2148da8a9b6089a062a87e",
+ "cn_tc": "名流獲獎短片",
+ "cn_sc": "名流获奖短片",
+ "desc_tc": "15 秒電影級頒獎名場面,聚光燈鎖定人群裡的TA",
+ "desc_sc": "15 秒电影级颁奖名场面,聚光灯锁定人群里的TA",
+ "cover": "cover.png",
+ "desc_en": "Celebrity award-moment short: a 15-second cinematic awards scene, spotlight locking onto them in the crowd",
+ "draftUuid": "a29f0a651f8f48d0b313f5684bef68cf",
+ "extraction": "agent copy"
+}

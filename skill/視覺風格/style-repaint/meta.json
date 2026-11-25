@@ -1,0 +1,15 @@
+{
+ "cn": "风格转绘",
+ "skillKey": "style-repaint-71a5fc5f6ae546d58b0b8d75abc87608",
+ "version": "1.0.4",
+ "description": "真人转动漫/2D/3D风格转换",
+ "templateUuid": "7184b20a9ff14a42932f1a30a283d1e1",
+ "cn_tc": "風格轉繪",
+ "cn_sc": "风格转绘",
+ "desc_tc": "真人轉動漫/2D/3D風格轉換",
+ "desc_sc": "真人转动漫/2D/3D风格转换",
+ "cover": "cover.png",
+ "desc_en": "Style repaint: convert live-action footage to anime, 2D, or 3D styles.",
+ "draftUuid": "5bc8a6a5d7734a65abf4a951e8996ac7",
+ "extraction": "agent copy"
+}

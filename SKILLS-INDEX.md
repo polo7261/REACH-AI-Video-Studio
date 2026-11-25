@@ -1,4 +1,4 @@
-# LibTV Skills 收藏（liblib.tv/skill）
+# Skill 收藏（liblib.tv/skill）
 
 共 112 個 skill，下載於 2026-11-25。來源：`api.liblib.tv`；對話轉生型經 Agent 技能管理複製取出。
 

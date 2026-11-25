@@ -1,3 +1,8 @@
+---
+name: cinematic-image-transformer
+description: "一句大白話就能生成超質感電影級多風格圖片"
+---
+
 # Cinematic Visual Storytelling
 
 ## Core Methodology
@@ -18,7 +23,7 @@ Treat every visual output as independently controllable layers:
 
 Style routing is a pre-generation decision tree that maps user intent to visual parameters:
 
-**Input signals**: user's descriptive keywords (e.g., "冷寂" cold desolation, "压迫感" overwhelming scale, "废土" wasteland, "科技" high-tech)
+**Input signals**: user's descriptive keywords (e.g., "冷寂" cold desolation, "壓迫感" overwhelming scale, "廢土" wasteland, "科技" high-tech)
 
 **Routing logic**:
 
@@ -146,8 +151,8 @@ NEVER generate multiple variations without explicit user permission.
 
 **When multiple outputs are allowed**:
 
-- User explicitly requests "多生几组" (multiple sets) or "给我几个版本" (give me several versions)
-- Agent asks "是否需要多生几组图片作对比?" (Do you need multiple sets for comparison?) and user confirms
+- User explicitly requests "多生幾組" (multiple sets) or "給我幾個版本" (give me several versions)
+- Agent asks "是否需要多生幾組圖片作對比?" (Do you need multiple sets for comparison?) and user confirms
 
 If user does NOT confirm multi-generation request, produce exactly 1 output.
 
@@ -158,18 +163,18 @@ If user does NOT confirm multi-generation request, produce exactly 1 output.
 If user feedback indicates compositional issues:
 
 - "太近了" (too close) → reduce subject scale, pull camera back, wider shot
-- "看不清细节" (can't see details) → tighter framing, closer shot, increase subject scale
-- "角度不对" (wrong angle) → adjust camera height (low-angle for power, high-angle for vulnerability, eye-level for neutrality)
-- "不够震撼" (not impactful enough) → extreme perspective (fisheye distortion, dramatic low-angle, overhead god's-eye view)
+- "看不清細節" (can't see details) → tighter framing, closer shot, increase subject scale
+- "角度不對" (wrong angle) → adjust camera height (low-angle for power, high-angle for vulnerability, eye-level for neutrality)
+- "不夠震撼" (not impactful enough) → extreme perspective (fisheye distortion, dramatic low-angle, overhead god's-eye view)
 
 **Optimization Dimension 2: Atmosphere Refinement**
 
 If user feedback targets mood:
 
-- "不够冷" (not cold enough) → reduce color temperature (shift blue), increase desaturation, add fog/mist
+- "不夠冷" (not cold enough) → reduce color temperature (shift blue), increase desaturation, add fog/mist
 - "太暗了" (too dark) → lift shadows while maintaining contrast, add rim lighting or practical light sources
-- "颜色太饱和" (colors too saturated) → reduce saturation by 20-30%, shift toward muted/dusty palette
-- "氛围不够压抑" (atmosphere not oppressive enough) → lower horizon line, increase shadow mass, add claustrophobic framing (tight crop, blocked exits)
+- "顏色太飽和" (colors too saturated) → reduce saturation by 20-30%, shift toward muted/dusty palette
+- "氛圍不夠壓抑" (atmosphere not oppressive enough) → lower horizon line, increase shadow mass, add claustrophobic framing (tight crop, blocked exits)
 
 **Optimization Dimension 3: Scale and Detail Balance**
 
@@ -275,11 +280,11 @@ Regenerate when:
 
 ## Recommended Tools & Models
 
-**Midjourney (MJ)**: Best for stylized, artistic interpretations with strong aesthetic coherence. Use when user requests "极具特色" (highly distinctive style) or specifies "用MJ模型". Requires strict prompt compression (≤800 chars, keyword phrases only).
+**Midjourney (MJ)**: Best for stylized, artistic interpretations with strong aesthetic coherence. Use when user requests "極具特色" (highly distinctive style) or specifies "用MJ模型". Requires strict prompt compression (≤800 chars, keyword phrases only).
 
-**Seedream 5.0 Pro**: Optimal for high-resolution photorealistic outputs with complex scene details. Supports natural language prompts with technical photography terminology. Use for "高清" (high resolution) or "写实" (photorealistic) requests.
+**Seedream 5.0 Pro**: Optimal for high-resolution photorealistic outputs with complex scene details. Supports natural language prompts with technical photography terminology. Use for "高畫質" (high resolution) or "寫實" (photorealistic) requests.
 
-**Lib Image (image2)**: Specialized for image-to-image refinement and upscaling. Mandatory for "放大4K" (upscale 4K) or "重塑细节" (detail enhancement) requests. Always append quality suffix: "Low ISO, no visible grain noise, no heavy film grain, no dirt, no mud spots, no mold marks, no dust spots, clean optical clarity".
+**Lib Image (image2)**: Specialized for image-to-image refinement and upscaling. Mandatory for "放大4K" (upscale 4K) or "重塑細節" (detail enhancement) requests. Always append quality suffix: "Low ISO, no visible grain noise, no heavy film grain, no dirt, no mud spots, no mold marks, no dust spots, clean optical clarity".
 
 ## Advanced Techniques
 

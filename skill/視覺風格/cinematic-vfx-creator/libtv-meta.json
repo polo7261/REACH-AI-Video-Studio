@@ -1,9 +1,0 @@
-{
-  "name": "影视打斗特效skill",
-  "skillKey": "cinematic-vfx-creator-9d8925c591a643bbad8ca8cfbb87922c",
-  "version": "1.0.8",
-  "description": "一句话生成角色人物影视特效支持文字参考图/视频",
-  "templateUuid": "e34caf9cbad3423fafde536334a91f03",
-  "draftUuid": "370d153ac9434824a741627d4b7b2b34",
-  "extraction": "agent copy (retry)"
-}

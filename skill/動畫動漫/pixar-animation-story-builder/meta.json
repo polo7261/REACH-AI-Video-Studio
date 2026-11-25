@@ -1,0 +1,15 @@
+{
+ "cn": "皮克斯动画故事",
+ "skillKey": "pixar-animation-story-builder-5de625e86d1143e6a4fd948ca25ec34b",
+ "version": "1.0.9",
+ "description": "皮克斯动画广告附属Skill，从角色设计、剧本创作到多段视频",
+ "templateUuid": "b3d8b79e75bb4267b8a1a715776d17df",
+ "cn_tc": "皮克斯動畫故事",
+ "cn_sc": "皮克斯动画故事",
+ "desc_tc": "皮克斯動畫廣告附屬Skill，從角色設計、劇本創作到多段影片",
+ "desc_sc": "皮克斯动画广告附属Skill，从角色设计、剧本创作到多段视频",
+ "cover": "cover.png",
+ "desc_en": "Pixar animation story: companion Skill for Pixar-style animated ads, from character design and scriptwriting to multi-shot videos",
+ "draftUuid": "c53804c914584253b3e4126d4fb93cc8",
+ "extraction": "agent copy"
+}

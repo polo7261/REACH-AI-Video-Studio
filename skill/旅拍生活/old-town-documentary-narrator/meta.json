@@ -1,0 +1,15 @@
+{
+ "cn": "老城叙事人文片",
+ "skillKey": "old-town-documentary-narrator-020b92eb952140af9a99e594358a115b",
+ "version": "1.0.2",
+ "description": "小城人文短片，非戏剧性情感叙事，轻松打造纪录片质感",
+ "templateUuid": "967310ab621a40e78713d80c3eda1831",
+ "cn_tc": "老城敘事人文片",
+ "cn_sc": "老城叙事人文片",
+ "desc_tc": "小城人文短片，非戲劇性情感敘事，輕鬆打造紀錄片質感",
+ "desc_sc": "小城人文短片，非戏剧性情感叙事，轻松打造纪录片质感",
+ "cover": "cover.png",
+ "desc_en": "Old-town humanistic narrative films: small-town culture shorts with understated emotional storytelling and an effortless documentary feel",
+ "draftUuid": "823c11102b414159b13b4d07ec3a6967",
+ "extraction": "agent copy"
+}

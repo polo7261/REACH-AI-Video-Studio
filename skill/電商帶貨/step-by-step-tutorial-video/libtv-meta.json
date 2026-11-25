@@ -1,9 +1,0 @@
-{
-  "name": "自媒体分步教学短视频",
-  "skillKey": "step-by-step-tutorial-video-020b92eb952140af9a99e594358a115b",
-  "version": "1.0.4",
-  "description": "博主分步演示产品用法,适用自媒体种草短视频",
-  "templateUuid": "54967ef3a1d94e33b6636d6e10e3fd91",
-  "draftUuid": "338e318a88d04d35a68d6b7ce31e26ec",
-  "extraction": "agent copy"
-}
