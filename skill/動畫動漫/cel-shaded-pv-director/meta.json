@@ -3,5 +3,9 @@
  "skillKey": "cel-shaded-pv-director-ef78b3807d1a48b7ab94eef5852bc286",
  "templateUuid": "d0947dd9ee5649278d3018e76365b34a",
  "version": "1.0.7",
- "description": "一键生成赛璐璐风格的游戏pv"
+ "description": "一键生成赛璐璐风格的游戏pv",
+ "cn_tc": "賽璐璐風格遊戲PV導演",
+ "desc_tc": "一鍵生成賽璐璐風格的遊戲pv",
+ "cn_sc": "赛璐璐风格游戏PV导演",
+ "desc_sc": "一键生成赛璐璐风格的游戏pv"
 }

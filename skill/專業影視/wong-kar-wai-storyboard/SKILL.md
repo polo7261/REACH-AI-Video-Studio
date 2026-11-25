@@ -2,132 +2,132 @@
 
 ## name: midjourney-wong-kar-wai-shanghai-elite-prompt\\
 
-description: Midjourney v8.2 **繁花/王家卫风格转译层**——把影视剧组语言（暧昧、窥探感、冷暖对撞、名媛与老钱风）翻译成 MJ 真正接得住的名词化提示词。MJ 对「有哪些概念」敏感、对「概念之间是什么关系」不敏感，必须有这一层转译。专精：七类转译对照表、前 1/3 权重前置、正向禁否定句、九十年代沪港精英造型锚定、950字符严格限制与极简参数尾\[cite: 6\]。本 skill 负责把用户想法翻译成 MJ 听得懂的纯英文名词集合。\
+description: Midjourney v8.2 **繁花/王家衛風格轉譯層**——把影視劇組語言（曖昧、窺探感、冷暖對撞、名媛與老錢風）翻譯成 MJ 真正接得住的名詞化提示詞。MJ 對「有哪些概念」敏感、對「概念之間是什麼關係」不敏感，必須有這一層轉譯。專精：七類轉譯對照表、前 1/3 權重前置、正向禁否定句、九十年代滬港精英造型錨定、950字元嚴格限制與極簡引數尾\[cite: 6\]。本 skill 負責把使用者想法翻譯成 MJ 聽得懂的純英文名詞集合。\
 version: 3.3.1\
 product: SZDSAI
 
-# Midjourney 繁花/王家卫光影生图 Skill
+# Midjourney 繁花/王家衛光影生圖 Skill
 
-**这是一层转译。**
+**這是一層轉譯。**
 
-用户给出的是**拍摄想法**——暧昧、孤独、纸醉金迷、光照在酒杯上、颜色压到复古红绿金。这些想法专业，但直接写进提示词，MJ 一句都接不住\[cite: 6\]。
+使用者給出的是**拍攝想法**——曖昧、孤獨、紙醉金迷、光照在酒杯上、顏色壓到復古紅綠金。這些想法專業，但直接寫進提示詞，MJ 一句都接不住\[cite: 6\]。
 
-> **本 skill 干的事只有一件：把所有的情感与关系，翻译成具体的名词与光影事实。**
+> **本 skill 乾的事只有一件：把所有的情感與關係，翻譯成具體的名詞與光影事實。**
 
 ## 一、工作流程
 
-1. 接收用户的画面需求（包括：拍什么、光给谁、占比多少、几个颜色、什么在动、画风等）\[cite: 6\]。
-2. 按七类转译对照表，将想法逐条翻译成 MJ 能理解的名词化描述\[cite: 6\]。
-3. 按 MJ 的组装顺序（主体→环境与光→动态事件→人物→表情与视线→镜头→参数尾）组合成完整提示词\[cite: 6\]。
-4. 执行自检，遇到细节过多时必须大刀阔斧地砍减次要元素，确保总字符数符合规则\[cite: 6\]。
-5. **输出硬性要求**：输出可直接复制使用的纯英文提示词（含参数尾），不附带任何解释、确认或选择项。**最终输出的全部英文提示词（含参数尾，计空格）必须严格控制在 950 字符以内**\[cite: 6\]。
+1. 接收使用者的畫面需求（包括：拍什麼、光給誰、佔比多少、幾個顏色、什麼在動、畫風等）\[cite: 6\]。
+2. 按七類轉譯對照表，將想法逐條翻譯成 MJ 能理解的名詞化描述\[cite: 6\]。
+3. 按 MJ 的組裝順序（主體→環境與光→動態事件→人物→表情與視線→鏡頭→引數尾）組合成完整提示詞\[cite: 6\]。
+4. 執行自檢，遇到細節過多時必須大刀闊斧地砍減次要元素，確保總字元數符合規則\[cite: 6\]。
+5. **輸出硬性要求**：輸出可直接複製使用的純英文提示詞（含引數尾），不附帶任何解釋、確認或選擇項。**最終輸出的全部英文提示詞（含引數尾，計空格）必須嚴格控制在 950 字元以內**\[cite: 6\]。
 
-## 二、七类转译对照表（核心资产）
+## 二、七類轉譯對照表（核心資產）
 
-### 统一原则：凡是「关系」，都要翻译成「名词」\[cite: 6\]。
+### 統一原則：凡是「關係」，都要翻譯成「名詞」\[cite: 6\]。
 
-### 第一类：情绪／氛围 → 画面里的动静
+### 第一類：情緒／氛圍 → 畫面裡的動靜
 
-**MJ 接不住的原因**：抽象情绪没有对应的视觉实体\[cite: 6\]。
+**MJ 接不住的原因**：抽象情緒沒有對應的視覺實體\[cite: 6\]。
 
-用户想法转译后的名词化描述纸醉金迷中的孤独她独自坐在昏暗的卡座里，画面最前方是一个极度失焦的水晶威士忌酒杯，挡住了她一半的身体。暧昧、欲言又止烟雾在琥珀色的灯光中缓慢上升，她是画面中唯一没有移动的物体。
+使用者想法轉譯後的名詞化描述紙醉金迷中的孤獨她獨自坐在昏暗的卡座裡，畫面最前方是一個極度失焦的水晶威士忌酒杯，擋住了她一半的身體。曖昧、欲言又止煙霧在琥珀色的燈光中緩慢上升，她是畫面中唯一沒有移動的物體。
 
-### 第二类：否定式指令 → 肯定的具体动作
+### 第二類：否定式指令 → 肯定的具體動作
 
-**MJ 接不住的原因**：否定语义不可靠，写 `not X`，模型经常直接把 X 画出来\[cite: 6\]。
+**MJ 接不住的原因**：否定語義不可靠，寫 `not X`，模型經常直接把 X 畫出來\[cite: 6\]。
 
-❌ 否定式 (用户想法)✅ 肯定式 (转译后)不要现代网红脸她的面部极具九十年代复古特征：浓密的波浪卷发、深红色的嘴唇与清晰的下颌线。不要死板的均匀打光一束温暖的钨丝硬光擦过他的侧脸，将他的另一半脸完全隐入深邃的阴影中。
+❌ 否定式 (使用者想法)✅ 肯定式 (轉譯後)不要現代網紅臉她的面部極具九十年代復古特徵：濃密的波浪捲髮、深紅色的嘴唇與清晰的下頜線。不要死板的均勻打光一束溫暖的鎢絲硬光擦過他的側臉，將他的另一半臉完全隱入深邃的陰影中。
 
-### 第三类：注意力对象 → 画面最亮的那个名词
+### 第三類：注意力物件 → 畫面最亮的那個名詞
 
-用户想法转译后的名词化描述光照在酒杯上，人是暗的The crystal glass on the table catches a brilliant reflection—the brightest thing in the frame, brighter than his face, which remains in shadow.
+使用者想法轉譯後的名詞化描述光照在酒杯上，人是暗的The crystal glass on the table catches a brilliant reflection—the brightest thing in the frame, brighter than his face, which remains in shadow.
 
-### 第四类：相对占比 → 百分比 + 画面位置
+### 第四類：相對佔比 → 百分比 + 畫面位置
 
-用户想法转译后的名词化描述人物占三分之一，要有窥探感she occupies about thirty percent of the frame, placed far right of centre, shot through a rain-streaked glass pane.
+使用者想法轉譯後的名詞化描述人物佔三分之一，要有窺探感she occupies about thirty percent of the frame, placed far right of centre, shot through a rain-streaked glass pane.
 
-### 第五类：色板 → 两个颜色 + 明度定位
+### 第五類：色板 → 兩個顏色 + 明度定位
 
-❌ 错误写法✅ 正确写法繁花复古色调、低饱和Only three colors dominate the frame: warm amber gold, deep emerald green, and dark charcoal. Her red lips are the only saturated color in the shadow.
+❌ 錯誤寫法✅ 正確寫法繁花復古色調、低飽和Only three colors dominate the frame: warm amber gold, deep emerald green, and dark charcoal. Her red lips are the only saturated color in the shadow.
 
-### 第六类：摄影哲学句 → 转成画面事实
+### 第六類：攝影哲學句 → 轉成畫面事實
 
-用户想法转译后的名词化描述让黑暗吞没他The background remains completely unlit, wrapping his dark suit in pure silhouette.
+使用者想法轉譯後的名詞化描述讓黑暗吞沒他The background remains completely unlit, wrapping his dark suit in pure silhouette.
 
-### 第七类：想法顺序 → 按权重重排
+### 第七類：想法順序 → 按權重重排
 
-从左到右递减：1 主体情境 → 2 环境光影 → 3 动态 → 4 人物造型 → 5 视线表情 → 6 镜头 → 7 参数尾\[cite: 6\]。
+從左到右遞減：1 主體情境 → 2 環境光影 → 3 動態 → 4 人物造型 → 5 視線表情 → 6 鏡頭 → 7 引數尾\[cite: 6\]。
 
-## 三、六条铁律
+## 三、六條鐵律
 
-1. **正向里绝不写否定句**：要排除什么，就去正面描述它的反面\[cite: 6\]。
-2. **总字符数（计空格）必须 ≤ 900 字符**：MJ 权重从左递减，长文本会把关键决策稀释。写完必须合并同类项，删减多余描写，确保加上尾椎参数后总和绝不超过 900 字符\[cite: 6\]。
-3. **参数尾极简**：**绝不允许**在末尾添加冗长的 `--no` 负向指令或版本参数，必须保持尾部绝对干净\[cite: 6\]。
-4. **场景类型决定一切**：写错环境锚点（如 bright modern cafe），堆多少复古词汇都没用\[cite: 6\]。
-5. **交付前扫敏感词**\[cite: 6\]。
-6. **公式用来诊断图，不用来生成图**：先想具体画面，再回头套公式\[cite: 6\]。
+1. **正向裡絕不寫否定句**：要排除什麼，就去正面描述它的反面\[cite: 6\]。
+2. **總字元數（計空格）必須 ≤ 900 字元**：MJ 權重從左遞減，長文字會把關鍵決策稀釋。寫完必須合併同類項，刪減多餘描寫，確保加上尾椎引數後總和絕不超過 900 字元\[cite: 6\]。
+3. **引數尾極簡**：**絕不允許**在末尾新增冗長的 `--no` 負向指令或版本引數，必須保持尾部絕對乾淨\[cite: 6\]。
+4. **場景型別決定一切**：寫錯環境錨點（如 bright modern cafe），堆多少復古詞彙都沒用\[cite: 6\]。
+5. **交付前掃敏感詞**\[cite: 6\]。
+6. **公式用來診斷圖，不用來生成圖**：先想具體畫面，再回頭套公式\[cite: 6\]。
 
-## 四、九十年代沪港名媛与精英（繁花光影）专项
+## 四、九十年代滬港名媛與精英（繁花光影）專項
 
-此为本 Skill 的灵魂模块，用于锚定特定年代（如《繁花》中的黄河路、和平饭店）的阶层质感、街头烟火气与王家卫式光影。遇到相关需求时，**直接从以下素材库中提取纯英文名词短语进行组合**\[cite: 6\]。
+此為本 Skill 的靈魂模組，用於錨定特定年代（如《繁花》中的黃河路、和平飯店）的階層質感、街頭煙火氣與王家衛式光影。遇到相關需求時，**直接從以下素材庫中提取純英文名詞短語進行組合**\[cite: 6\]。
 
-### （一）核心视觉语言：遮挡、窥探感与距离感
+### （一）核心視覺語言：遮擋、窺探感與距離感
 
-不要直接写 "Wong Kar-wai style"。用具体的**机位与前景遮挡**制造氛围\[cite: 6\]：
+不要直接寫 "Wong Kar-wai style"。用具體的**機位與前景遮擋**製造氛圍\[cite: 6\]：
 
-- **玻璃与水汽**：`shot through a rain-streaked glass pane`（透过被雨水冲刷的玻璃拍摄）、`out-of-focus ribbed glass partition`（失焦的长条纹毛玻璃隔断）、`shot through an out-of-focus ribbed glass partition`（透过失焦的长条纹玻璃拍摄）、`foreground blurred by a vintage wall sconce`（被复古壁灯失焦遮挡的前景）\[cite: 6\]。
-- **光斑与前景**：`heavy bokeh of warm neon signs in the extreme foreground`（极度前景处温暖的霓虹灯失焦光斑）、`a plume of cigarette smoke drifting in the extreme foreground, partially obscuring the face`（极度前景处缭绕的香烟烟雾，半遮掩面部）\[cite: 6\]。
-- **线条切割**：`looking through half-closed Venetian blinds`（透过半闭的百叶窗窥探）、`a beaded curtain obscuring the lens`（遮挡镜头的珠帘）、`reflection in a vintage mirror`（老式镜子里的倒影）、`shooting from a dimly lit hotel corridor`（从昏暗的走廊深处拍摄）\[cite: 6\]。
+- **玻璃與水汽**：`shot through a rain-streaked glass pane`（透過被雨水沖刷的玻璃拍攝）、`out-of-focus ribbed glass partition`（失焦的長條紋毛玻璃隔斷）、`shot through an out-of-focus ribbed glass partition`（透過失焦的長條紋玻璃拍攝）、`foreground blurred by a vintage wall sconce`（被複古壁燈失焦遮擋的前景）\[cite: 6\]。
+- **光斑與前景**：`heavy bokeh of warm neon signs in the extreme foreground`（極度前景處溫暖的霓虹燈失焦光斑）、`a plume of cigarette smoke drifting in the extreme foreground, partially obscuring the face`（極度前景處繚繞的香菸煙霧，半遮掩面部）\[cite: 6\]。
+- **線條切割**：`looking through half-closed Venetian blinds`（透過半閉的百葉窗窺探）、`a beaded curtain obscuring the lens`（遮擋鏡頭的珠簾）、`reflection in a vintage mirror`（老式鏡子裡的倒影）、`shooting from a dimly lit hotel corridor`（從昏暗的走廊深處拍攝）\[cite: 6\]。
 
-### （二）光影纪律：硬光、极暗部与冷暖色光对撞
+### （二）光影紀律：硬光、極暗部與冷暖色光對撞
 
-彻底抛弃均匀打光。使用局部硬光切碎画面，让大部分区域隐没\[cite: 6\]。
+徹底拋棄均勻打光。使用區域性硬光切碎畫面，讓大部分割槽域隱沒\[cite: 6\]。
 
-- **切割与轮廓**：`cinematic high-contrast chiaroscuro lighting`（电影级高反差明暗光）、`a harsh slit of light cutting across the eyes`（一道切过双眼的锐利硬光）、`a warm amber tungsten lamp creates a glowing rim light on her hair`（琥珀色钨丝灯在发丝边缘打出轮廓光）、`heavy side light illuminating only half of the face`（强烈的侧光仅照亮半张脸）、`subject emerging from deep shadow`（主体从浓重的阴影中浮现）\[cite: 6\]。
-- **色彩对撞**：`warm tungsten practical lights contrasting with cool cyan street neon`（室内暖钨丝灯与室外冷青色街头霓虹的对撞）\[cite: 6\]。
-- **深邃暗部**：`deep emerald green-tinted shadows`（泛着深翡翠绿的暗部）、`background wrapped in pure silhouette`（背景隐没在纯粹的剪影中）\[cite: 6\]。
+- **切割與輪廓**：`cinematic high-contrast chiaroscuro lighting`（電影級高反差明暗光）、`a harsh slit of light cutting across the eyes`（一道切過雙眼的銳利硬光）、`a warm amber tungsten lamp creates a glowing rim light on her hair`（琥珀色鎢絲燈在髮絲邊緣打出輪廓光）、`heavy side light illuminating only half of the face`（強烈的側光僅照亮半張臉）、`subject emerging from deep shadow`（主體從濃重的陰影中浮現）\[cite: 6\]。
+- **色彩對撞**：`warm tungsten practical lights contrasting with cool cyan street neon`（室內暖鎢絲燈與室外冷青色街頭霓虹的對撞）\[cite: 6\]。
+- **深邃暗部**：`deep emerald green-tinted shadows`（泛著深翡翠綠的暗部）、`background wrapped in pure silhouette`（背景隱沒在純粹的剪影中）\[cite: 6\]。
 
-### （三）造型锚点：精英的克制 vs 名媛的张力
+### （三）造型錨點：精英的剋制 vs 名媛的張力
 
-精准到材质和剪裁，避免使用现代服饰词汇\[cite: 6\]。
+精準到材質和剪裁，避免使用現代服飾詞彙\[cite: 6\]。
 
-- **男（老钱/宝总风）**：
-  - **服装**：`tailored dark charcoal double-breasted wool suit with wide peak lapels`（深灰双排扣宽戗驳领羊毛西装）、`classic pinstripe suit`（经典细条纹西装）、`camel hair overcoat draped over the shoulders`（披在肩上的驼色大衣）、`crisp white shirt with a subtly patterned silk tie`（白衬衫配暗纹真丝领带）、`He wears a tailored dark charcoal double-breasted wool suit with wide peak lapels, a crisp white shirt, and a subtly patterned silk tie. His hair is slicked back cleanly with pomade.`（深灰双排扣宽戗驳领羊毛西装、白衬衫、真丝领带、发胶大背头）\[cite: 6\]。
-  - **发型与细节**：`hair slicked back cleanly with pomade`（一丝不苟的发胶大背头）、`vintage mechanical watch on the wrist`（手腕上的复古机械表）、面部轮廓凌厉（`sharp jawline`）\[cite: 6\]。
-- **女（名媛/老板娘/李李风）**：
-  - **服装**：`tailored black velvet evening dress with structural shoulder pads`（黑丝绒垫肩晚礼服）、`luxurious black faux fur coat`（奢华的黑色环保皮草大衣）、`elegant backless design`（优雅的大露背设计）、`deep red silk cheongsam`（深红色真丝旗袍）`backless black velvet dress with gold chain draped across the bare back`（带有金链垂坠的露背黑丝绒裙）、`black silk qipao with gold embroidery`（黑丝绸金线刺绣旗袍）、`floral silk cheongsam`（繁花丝绸旗袍）、`black chiffon blouse with heavy silver sequin plunging V-neck`（重工银色亮片深V黑雪纺衫）、`abstract patterned silk slip dress`（抽象印花丝绸吊带裙）\[cite: 6\]。
-  - **发型与妆容**：`classic 1990s Hong Kong voluminous wavy curls`（90年代港风蓬松大波浪卷/手推波纹）、`deep matte red lips`（深红哑光唇）\[cite: 6\]。
-  - **珠宝配饰**：`heavy diamond choker`（重工钻石颈链）、`bold vintage gold earrings`（夸张的复古金耳环）、`emerald rings`（祖母绿戒指）、`layered silver necklaces`（层叠的银色项链）\[cite: 6\]。
+- **男（老錢/寶總風）**：
+  - **服裝**：`tailored dark charcoal double-breasted wool suit with wide peak lapels`（深灰雙排扣寬戧駁領羊毛西裝）、`classic pinstripe suit`（經典細條紋西裝）、`camel hair overcoat draped over the shoulders`（披在肩上的駝色大衣）、`crisp white shirt with a subtly patterned silk tie`（白襯衫配暗紋真絲領帶）、`He wears a tailored dark charcoal double-breasted wool suit with wide peak lapels, a crisp white shirt, and a subtly patterned silk tie. His hair is slicked back cleanly with pomade.`（深灰雙排扣寬戧駁領羊毛西裝、白襯衫、真絲領帶、髮膠大背頭）\[cite: 6\]。
+  - **髮型與細節**：`hair slicked back cleanly with pomade`（一絲不苟的髮膠大背頭）、`vintage mechanical watch on the wrist`（手腕上的復古機械錶）、面部輪廓凌厲（`sharp jawline`）\[cite: 6\]。
+- **女（名媛/老闆娘/李李風）**：
+  - **服裝**：`tailored black velvet evening dress with structural shoulder pads`（黑絲絨墊肩晚禮服）、`luxurious black faux fur coat`（奢華的黑色環保皮草大衣）、`elegant backless design`（優雅的大露背設計）、`deep red silk cheongsam`（深紅色真絲旗袍）`backless black velvet dress with gold chain draped across the bare back`（帶有金鍊垂墜的露背黑絲絨裙）、`black silk qipao with gold embroidery`（黑絲綢金線刺繡旗袍）、`floral silk cheongsam`（繁花絲綢旗袍）、`black chiffon blouse with heavy silver sequin plunging V-neck`（重工銀色亮片深V黑雪紡衫）、`abstract patterned silk slip dress`（抽象印花絲綢吊帶裙）\[cite: 6\]。
+  - **髮型與妝容**：`classic 1990s Hong Kong voluminous wavy curls`（90年代港風蓬鬆大波浪卷/手推波紋）、`deep matte red lips`（深紅啞光唇）\[cite: 6\]。
+  - **珠寶配飾**：`heavy diamond choker`（重工鑽石頸鍊）、`bold vintage gold earrings`（誇張的復古金耳環）、`emerald rings`（祖母綠戒指）、`layered silver necklaces`（層疊的銀色項鍊）\[cite: 6\]。
 
-### （四）场景物料：属于那个时代的质感锚
+### （四）場景物料：屬於那個時代的質感錨
 
-用具体的年代物件锚定空间，拒绝现代极简\[cite: 6\]。
+用具體的年代物件錨定空間，拒絕現代極簡\[cite: 6\]。
 
-- **繁华内景（和平饭店/至真园/私密包间）**：`heavy crystal whiskey glass catching the light`（折射光线的水晶威士忌杯）、`vintage fringed lampshades`（复古流苏台灯）、`dark mahogany wood panels`（深色桃花心木护墙板）、`ornate patterned wallpaper in deep shadow`（隐没在暗部的繁复花纹壁纸）、`leather booth seating`（真皮卡座）、`dark staircase with patterned carpet`（铺着花纹地毯的幽暗楼梯）、`vintage oil painting with an ornate gold frame`（带有华丽金框的复古油画）、`carved wooden desk`（雕花木书桌）、`deep red bedsheets on a classic wooden bed`（古典木床与深红色床单）\[cite: 6\]。
-- **烟火街头（黄河路夜市）**：`out-of-focus glowing neon shop signs with traditional characters`（失焦发光的繁体霓虹招牌）、`steaming food stalls in the background`（背景中冒着热气的小吃摊）、`wet asphalt reflecting warm streetlights`（反射着暖色路灯的潮湿柏油路）`out-of-focus glowing neon shop signs with traditional characters`（失焦发光的繁体霓虹招牌）、`steaming food stalls in the background`（背景中冒着热气的小吃摊）\[cite: 6\]。
+- **繁華內景（和平飯店/至真園/私密包間）**：`heavy crystal whiskey glass catching the light`（折射光線的水晶威士忌杯）、`vintage fringed lampshades`（復古流蘇檯燈）、`dark mahogany wood panels`（深色桃花心木護牆板）、`ornate patterned wallpaper in deep shadow`（隱沒在暗部的繁複花紋桌布）、`leather booth seating`（真皮卡座）、`dark staircase with patterned carpet`（鋪著花紋地毯的幽暗樓梯）、`vintage oil painting with an ornate gold frame`（帶有華麗金框的復古油畫）、`carved wooden desk`（雕花木書桌）、`deep red bedsheets on a classic wooden bed`（古典木床與深紅色床單）\[cite: 6\]。
+- **煙火街頭（黃河路夜市）**：`out-of-focus glowing neon shop signs with traditional characters`（失焦發光的繁體霓虹招牌）、`steaming food stalls in the background`（背景中冒著熱氣的小吃攤）、`wet asphalt reflecting warm streetlights`（反射著暖色路燈的潮溼柏油路）`out-of-focus glowing neon shop signs with traditional characters`（失焦發光的繁體霓虹招牌）、`steaming food stalls in the background`（背景中冒著熱氣的小吃攤）\[cite: 6\]。
 
-## 五、MJ 的提示词结构与强制砍伐优先级
+## 五、MJ 的提示詞結構與強制砍伐優先順序
 
-当生成的提示词\*\*逼近或超过 900 字符（计空格）\*\*时，按以下顺序无情砍伐\[cite: 6\]：
+當生成的提示詞\*\*逼近或超過 900 字元（計空格）\*\*時，按以下順序無情砍伐\[cite: 6\]：
 
-1. 彻底删除任何摄影哲学句、渲染约束意图声明（最先砍）\[cite: 6\]。
-2. 彻底删除环境中无助于表达情绪的次要陈设\[cite: 6\]。
-3. 彻底删除服装的非关键花纹、材质等细枝末节描写\[cite: 6\]。\
-   **永不砍**：第一句画面 · 光与最亮处 · 动态事件 · 占比与 off centre · 核心造型\[cite: 6\]。
+1. 徹底刪除任何攝影哲學句、渲染約束意圖宣告（最先砍）\[cite: 6\]。
+2. 徹底刪除環境中無助於表達情緒的次要陳設\[cite: 6\]。
+3. 徹底刪除服裝的非關鍵花紋、材質等細枝末節描寫\[cite: 6\]。\
+   **永不砍**：第一句畫面 · 光與最亮處 · 動態事件 · 佔比與 off centre · 核心造型\[cite: 6\]。
 
-## 六、Midjourney 参数表（严格锁定长尾）
+## 六、Midjourney 參數列（嚴格鎖定長尾）
 
-**默认参数尾（固定，直接附加在提示词最后，不加任何额外解释）：**`--ar 16:9 --hd --s 250`\[cite: 6\]
+**預設引數尾（固定，直接附加在提示詞最後，不加任何額外解釋）：**`--ar 16:9 --hd --s 250`\[cite: 6\]
 
-*注：除上述三项外，严禁系统自动追加* `--v 8.2`*、*`--exp`*、以及任何以* `--no` *开头的负向词汇，确保字符预算留给画面描述\[cite: 6\]。*
+*注：除上述三項外，嚴禁系統自動追加* `--v 8.2`*、*`--exp`*、以及任何以* `--no` *開頭的負向詞彙，確保字元預算留給畫面描述\[cite: 6\]。*
 
-## 七、自检清单（内部强制执行）
+## 七、自檢清單（內部強制執行）
 
-输出前进行终极检查，如有违规立刻重写\[cite: 6\]：
+輸出前進行終極檢查，如有違規立刻重寫\[cite: 6\]：
 
-- \[ \] **最终输出的全部英文提示词加上参数尾的总字符数（计空格）是否严格控制在 900 字符以内？（超过必须删减次要物品细节）**\[cite: 6\]
-- \[ \] **参数尾是否只含纯净版的** `--ar 16:9 --hd --s 250`**？（绝对不能有** `--v`**、**`--exp` **或** `--no` **词组）**\[cite: 6\]
-- \[ \] 正向里没有任何 `not / no / without` 句式\[cite: 6\]。
-- \[ \] 第一句是完整的画面事实\[cite: 6\]。
-- \[ \] 有明确的前景遮挡物或失焦的光斑\[cite: 6\]。
-- \[ \] 明确了极亮与极暗处的对比（如 rim light, deep shadow）\[cite: 6\]。
+- \[ \] **最終輸出的全部英文提示詞加上引數尾的總字元數（計空格）是否嚴格控制在 900 字元以內？（超過必須刪減次要物品細節）**\[cite: 6\]
+- \[ \] **引數尾是否只含純淨版的** `--ar 16:9 --hd --s 250`**？（絕對不能有** `--v`**、**`--exp` **或** `--no` **片語）**\[cite: 6\]
+- \[ \] 正向裡沒有任何 `not / no / without` 句式\[cite: 6\]。
+- \[ \] 第一句是完整的畫面事實\[cite: 6\]。
+- \[ \] 有明確的前景遮擋物或失焦的光斑\[cite: 6\]。
+- \[ \] 明確了極亮與極暗處的對比（如 rim light, deep shadow）\[cite: 6\]。

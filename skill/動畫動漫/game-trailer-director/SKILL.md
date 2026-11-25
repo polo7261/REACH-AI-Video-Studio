@@ -88,9 +88,9 @@ For no-dialogue PVs, use silence, low-frequency pressure, distant alarms, wind, 
 
 ## 8. Output in the user’s requested level of detail
 
-- **“只要剧情”**: Output scenes in prose, with no shot table or prompt language.
-- **“分镜脚本”**: Output a timed shot table with staging, camera, action, sound, and cuts.
-- **“生成提示词”**: First confirm the timed storyboard; then output one prompt per Generation Clip, with start/end state and continuity constraints.
+- **“只要劇情”**: Output scenes in prose, with no shot table or prompt language.
+- **“分鏡指令碼”**: Output a timed shot table with staging, camera, action, sound, and cuts.
+- **“生成提示詞”**: First confirm the timed storyboard; then output one prompt per Generation Clip, with start/end state and continuity constraints.
 - **“全套 PV”**: Output, in order: project brief, scene synopsis, timed storyboard, generation-clip map, sound cues, and continuity QA.
 
 Do not add subtitles, logos, voiceover, music, characters, weapons, or visual effects that the user has forbidden.

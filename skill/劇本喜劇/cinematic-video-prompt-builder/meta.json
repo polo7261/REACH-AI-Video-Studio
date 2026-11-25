@@ -3,5 +3,9 @@
  "skillKey": "cinematic-video-prompt-builder-8202932176ac485b9572011074a9f39c",
  "templateUuid": "7327ce6c6f4c430ea9bc014d42b554e2",
  "version": "1.0.0",
- "description": "复杂镜头不会写？把素材、动作、运镜变成可执行视频提示词。"
+ "description": "复杂镜头不会写？把素材、动作、运镜变成可执行视频提示词。",
+ "cn_tc": "電影級 AI 影片提示詞導演",
+ "desc_tc": "複雜鏡頭不會寫？把素材、動作、運鏡變成可執行影片提示詞。",
+ "cn_sc": "电影级 AI 视频提示词导演",
+ "desc_sc": "复杂镜头不会写？把素材、动作、运镜变成可执行视频提示词。"
 }

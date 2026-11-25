@@ -3,5 +3,9 @@
  "skillKey": "character-design-sheet-generator-6fc0978574fc42009792ba8b00fa0464",
  "templateUuid": "c9ccb813007f4470b6bcbf13b8e4a877",
  "version": "1.0.18",
- "description": "真人+3D适用，SD视频生成高品质，基于参考图生成角色设计表"
+ "description": "真人+3D适用，SD视频生成高品质，基于参考图生成角色设计表",
+ "cn_tc": "角色三檢視設定｜鎖定臉部",
+ "desc_tc": "真人+3D適用，SD影片生成高品質，基於參考圖生成角色設計表",
+ "cn_sc": "角色三视图设定｜锁定脸部",
+ "desc_sc": "真人+3D适用，SD视频生成高品质，基于参考图生成角色设计表"
 }

@@ -3,5 +3,9 @@
  "skillKey": "product-tvc-ad-director-e130c69fac6848e38177528d6d6fd05e",
  "templateUuid": "48347a3988294e16ab6d1224d5b8a286",
  "version": "1.0.6",
- "description": "专业TVC广告导演式创作Skill，适用各类产品"
+ "description": "专业TVC广告导演式创作Skill，适用各类产品",
+ "cn_tc": "產品TVC廣告",
+ "desc_tc": "專業TVC廣告導演式創作Skill，適用各類產品",
+ "cn_sc": "产品TVC广告",
+ "desc_sc": "专业TVC广告导演式创作Skill，适用各类产品"
 }

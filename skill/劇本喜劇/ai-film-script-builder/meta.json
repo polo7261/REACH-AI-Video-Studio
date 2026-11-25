@@ -3,5 +3,9 @@
  "skillKey": "ai-film-script-builder-aa87a4b7936c4d008cf7eee7912bf0c2",
  "templateUuid": "dc09c85b816b41d48e0c872a11f0376d",
  "version": "1.0.0",
- "description": "把用户最初想法， 逐步发展成一个经过确认、适合AI制作的剧本"
+ "description": "把用户最初想法， 逐步发展成一个经过确认、适合AI制作的剧本",
+ "cn_tc": "AI影視劇本創作",
+ "desc_tc": "把使用者最初想法， 逐步發展成一個經過確認、適合AI製作的劇本",
+ "cn_sc": "AI影视剧本创作",
+ "desc_sc": "把用户最初想法， 逐步发展成一个经过确认、适合AI制作的剧本"
 }

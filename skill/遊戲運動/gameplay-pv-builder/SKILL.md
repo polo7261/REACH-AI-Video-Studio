@@ -17,7 +17,7 @@ game-promo-video
 
 本 skill 自帶戰鬥動態/鎖 UI/畫素錨定/類 gameplay 鏡頭語言/卡點剪輯節奏等全部工藝，不外包給其它 skill。
 
-本環境適配（源模型名 → 13 工具/SP）：image2 出圖（畫質引數由 Ask 使用者確認） → 全部走 generate_image_v3（同一影象引擎保三段一致）；四檢視/3D 形象卡可配 character_turnaround_3view 玩法；Seedance 2.0 → generate_video_v3；三段拼接 → composite_video（video layer + audio layer 均開）；Final_Video\_[Spec.md](http://Spec.md) / 規範文件 → text_editor（寫檔案）；storyboard_designer → 內部分鏡階段；multimodal_analyze_tool → 多模態讀圖（3D 材質分析 / UI 畫素錨定 / LUT 提取 / 使用者照片特徵提取）；Image_A1…A5 節點引用 → reference_nodes + {{NodeKey}} 佔位符；暫停/審閱 → reply_to_user 或卡片；使用者照片 ImageToImage 變角色 → reference_nodes 圖生圖路徑。源無付費/會員語義需剝離（含"高階會員 1080p"）。
+本環境適配（源模型名 → 13 工具/SP）：image2 出圖（畫質引數由 Ask 使用者確認） → 全部走 generate_image_v3（同一影象引擎保三段一致）；四檢視/3D 形象卡可配 character_turnaround_3view 玩法；Seedance 2.0 → generate_video_v3；三段拼接 → composite_video（video layer + audio layer 均開）；Final_Video\_[Spec.md](http://Spec.md) / 規範檔案 → text_editor（寫檔案）；storyboard_designer → 內部分鏡階段；multimodal_analyze_tool → 多模態讀圖（3D 材質分析 / UI 畫素錨定 / LUT 提取 / 使用者照片特徵提取）；Image_A1…A5 節點引用 → reference_nodes + {{NodeKey}} 佔位符；暫停/審閱 → reply_to_user 或卡片；使用者照片 ImageToImage 變角色 → reference_nodes 圖生圖路徑。源無付費/會員語義需剝離（含"高階會員 1080p"）。
 
 生圖前，必須 Ask 使用者確認本次用 image2 模型的什麼畫質引數釋出，詢問 4 個選項：1，2k標準畫質（價效比高）；2，2k高畫質（價效比適中）；3，4k高畫質（土豪請隨意）；4，其他。
 
@@ -111,7 +111,7 @@ UI 畫素錨定（核心）：分析帶 HUD 截圖，記錄血條、技能欄、
 
 方案一（經典角色原型）：使用內建角色原型庫建立人物（見下方原型庫），直接生成符合本風格、3D 遊戲實機質感的 3D 渲染參考圖（generate_image_v3）。
 
-方案二（使用者定製角色）：使用者上傳個人照片（僅作創意參考）。多模態分析只提取性別與大概形象/氣質（如：性別、大致年齡範圍、面部大致輪廓或核心神態眼神），不描述或提取髮型、妝容、服裝穿著、配飾等具體細節——生圖階段由 ImageToImage 視覺參考路徑（reference_nodes 圖生圖）自適應提煉這些細節，無需在提示詞中生硬規定。輸出極簡英文特徵詞，例如：A Hispanic male in his 20s, with sharp facial features and determined eyes。強調將使用者現實基礎形象抽象為"該風格 3D 遊戲角色、第三人稱遊戲實機、UE 渲染"的底色，剔除照片背景與光照干擾。若使用者另上傳第三方影片/動圖作為動作或色調參考，需分析其鏡頭運動（第三人稱跟隨、低機位車輛追逐等）和色彩成分，轉寫供故事板與生成階段使用。
+方案二（使用者定製角色）：使用者上傳個人照片（僅作創意參考）。多模態分析只提取性別與大概形象/氣質（如：性別、大致年齡範圍、面部大致輪廓或核心神態眼神），不描述或提取髮型、妝容、服裝穿著、配飾等具體細節——生圖階段由 ImageToImage 視覺參考路徑（reference_nodes 圖生圖）自適應提煉這些細節，無需在提示詞中生硬規定。輸出極簡英文特徵詞，例如：A Hispanic male in his 20s, with sharp facial features and determined eyes。強調將使用者現實基礎形象抽象為"該風格 3D 遊戲角色、第三人稱遊戲實機、UE 渲染"的底色，剔除照片背景與光照幹擾。若使用者另上傳第三方影片/動圖作為動作或色調參考，需分析其鏡頭運動（第三人稱跟隨、低機位車輛追逐等）和色彩成分，轉寫供故事板與生成階段使用。
 
 3. 角色原型庫 + 場景模板庫
 

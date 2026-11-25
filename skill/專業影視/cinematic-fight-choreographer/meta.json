@@ -3,5 +3,9 @@
  "skillKey": "cinematic-fight-choreographer-cca409ade58949f1ac4e6dae6d804d3d",
  "templateUuid": "bb64aa4589b34d33a35b134a165aee15",
  "version": "1.0.0",
- "description": "把用户的场景写成可执行的动作调度。优先保证动作清楚、空间稳定"
+ "description": "把用户的场景写成可执行的动作调度。优先保证动作清楚、空间稳定",
+ "cn_tc": "AI電影打鬥提示詞",
+ "desc_tc": "把使用者的場景寫成可執行的動作排程。優先保證動作清楚、空間穩定",
+ "cn_sc": "AI电影打斗提示词",
+ "desc_sc": "把用户的场景写成可执行的动作调度。优先保证动作清楚、空间稳定"
 }

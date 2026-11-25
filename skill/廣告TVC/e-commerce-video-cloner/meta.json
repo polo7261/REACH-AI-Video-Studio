@@ -3,5 +3,9 @@
  "skillKey": "e-commerce-video-cloner-b3ea027c52894c3cb06b2977903e28aa",
  "templateUuid": "68563da8c0f34e679898f9c8ba375389",
  "version": "1.0.3",
- "description": "上传参考视频，一键生成同款带货短视频"
+ "description": "上传参考视频，一键生成同款带货短视频",
+ "cn_tc": "電商帶貨影片克隆創作",
+ "desc_tc": "上傳參考影片，一鍵生成同款帶貨短影片",
+ "cn_sc": "电商带货视频克隆创作",
+ "desc_sc": "上传参考视频，一键生成同款带货短视频"
 }

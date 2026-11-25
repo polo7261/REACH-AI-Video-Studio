@@ -3,5 +3,9 @@
  "skillKey": "character-headless-three-view-builder-b0b7351c94e24e11a572be9671f3d9a2",
  "templateUuid": "f7a5f45523d547ac8220535265d5ee59",
  "version": "1.0.3",
- "description": "左侧定妆特写+右侧正/侧无头、背面带发的等比三视图角色卡"
+ "description": "左侧定妆特写+右侧正/侧无头、背面带发的等比三视图角色卡",
+ "cn_tc": "角色無頭三檢視設定卡",
+ "desc_tc": "左側定妝特寫+右側正/側無頭、背面帶發的等比三檢視角色卡",
+ "cn_sc": "角色无头三视图设定卡",
+ "desc_sc": "左侧定妆特写+右侧正/侧无头、背面带发的等比三视图角色卡"
 }

@@ -3,5 +3,9 @@
  "skillKey": "seedance-video-face-swapper-e316e54bb4204bf6aa0222d384967333",
  "templateUuid": "176e92206b234b6ab89b6cdac2a79fe5",
  "version": "1.0.0",
- "description": "Seedance 2.5视频反推 + 锁定参考图五官、换人"
+ "description": "Seedance 2.5视频反推 + 锁定参考图五官、换人",
+ "cn_tc": "Seedance2.5影片反推換人復刻",
+ "desc_tc": "Seedance 2.5影片反推 + 鎖定參考圖五官、換人",
+ "cn_sc": "Seedance2.5视频反推换人复刻",
+ "desc_sc": "Seedance 2.5视频反推 + 锁定参考图五官、换人"
 }

@@ -3,5 +3,9 @@
  "skillKey": "intense-combat-choreographer-e584cbab13014447a0cd9027762f8392",
  "templateUuid": "2248e8aab1bd4d14ad22a0ca1b5cb3fc",
  "version": "1.0.5",
- "description": "把人物和场景，关键道具给到可以完成超燃打斗，90秒"
+ "description": "把人物和场景，关键道具给到可以完成超燃打斗，90秒",
+ "cn_tc": "熱血打鬥讓人物打鬥燃起來",
+ "desc_tc": "把人物和場景，關鍵道具給到可以完成超燃打鬥，90秒",
+ "cn_sc": "热血打斗让人物打斗燃起来",
+ "desc_sc": "把人物和场景，关键道具给到可以完成超燃打斗，90秒"
 }

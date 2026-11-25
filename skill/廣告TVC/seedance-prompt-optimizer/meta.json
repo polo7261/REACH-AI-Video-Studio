@@ -3,5 +3,9 @@
  "skillKey": "seedance-prompt-optimizer-7f2308dc89df4e64a17a6bb5a6c1af3b",
  "templateUuid": "bae664f9eb2f4ac186e576b07a773a6a",
  "version": "1.0.7",
- "description": "Seedance 2.0 视频生成提示词优化 Skill"
+ "description": "Seedance 2.0 视频生成提示词优化 Skill",
+ "cn_tc": "SD2.0提示詞最佳化",
+ "desc_tc": "Seedance 2.0 影片生成提示詞最佳化 Skill",
+ "cn_sc": "SD2.0提示词优化",
+ "desc_sc": "Seedance 2.0 视频生成提示词优化 Skill"
 }

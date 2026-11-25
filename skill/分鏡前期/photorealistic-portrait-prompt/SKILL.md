@@ -44,11 +44,11 @@ Use this skill when the user asks to:
 
 Typical requests:
 
-- “生成一个70岁亚洲男性老人”
-- “25岁女性，清冷感，高颧骨”
-- “40岁男性，成熟商务感”
-- “80岁老人，纪实摄影”
-- “生成一个真实感很强的人像提示词”
+- “生成一個70歲亞洲男性老人”
+- “25歲女性，清冷感，高顴骨”
+- “40歲男性，成熟商務感”
+- “80歲老人，紀實攝影”
+- “生成一個真實感很強的人像提示詞”
 
 Do not require a reference image.
 
@@ -68,8 +68,8 @@ If the user provides only age and gender, automatically complete all remaining c
 Example:
 
 ```text
-年龄：65岁
-性别：男性
+年齡：65歲
+性別：男性
 ```
 
 ---
@@ -664,7 +664,7 @@ cartoon, anime, illustration, painting, CGI, 3D render, doll face, wax figure, p
 
 Unless the user requests another format, return exactly these sections:
 
-### ① 人物设定
+### ① 人物設定
 
 Briefly summarize:
 
@@ -676,7 +676,7 @@ Briefly summarize:
 
 Keep this concise.
 
-### ② 完整中文提示词
+### ② 完整中文提示詞
 
 Write one complete natural-language prompt that can be directly copied into an image-generation model.
 
@@ -698,11 +698,11 @@ Person\
 
 Do not write analysis inside the prompt.
 
-### ③ 英文拟真增强词
+### ③ 英文擬真增強詞
 
 Provide a compact set of useful English realism and photography terms.
 
-### ④ 负面提示词
+### ④ 負面提示詞
 
 Provide a concise negative prompt focused on AI portrait artifacts.
 
@@ -746,7 +746,7 @@ A successful output should make it possible to imagine one specific human being.
 Append a concise realism tail when useful:
 
 ```text
-超高清拟真人像摄影，真实人类面部结构，自然面部比例，真实皮肤纹理，清晰可见毛孔、细纹与轻微皮肤瑕疵，真实眼睛湿润反光与虹膜纹理，细腻独立发丝，自然皮脂高光，不过度磨皮，无美颜滤镜，无塑料皮肤，无蜡像感，专业85mm人像摄影，浅景深，真实物理光照，柔和阴影过渡，高动态范围，照片级真实感，高分辨率，高细节。
+超高畫質擬真人像攝影，真實人類面部結構，自然面部比例，真實皮膚紋理，清晰可見毛孔、細紋與輕微皮膚瑕疵，真實眼睛溼潤反光與虹膜紋理，細膩獨立髮絲，自然皮脂高光，不過度磨皮，無美顏濾鏡，無塑膠皮膚，無蠟像感，專業85mm人像攝影，淺景深，真實物理光照，柔和陰影過渡，高動態範圍，照片級真實感，高解析度，高細節。
 ```
 
 Do not add it if doing so would create unnecessary repetition.

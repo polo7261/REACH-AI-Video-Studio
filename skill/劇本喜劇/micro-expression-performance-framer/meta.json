@@ -3,5 +3,9 @@
  "skillKey": "micro-expression-performance-framer-3ba680f25cb144aa883dd52936c6a724",
  "templateUuid": "1f922f0d0dc24d3a8d315ed960c6198b",
  "version": "1.0.1",
- "description": "约束 AI 人物提示词的微表情写作，去 AI 味"
+ "description": "约束 AI 人物提示词的微表情写作，去 AI 味",
+ "cn_tc": "微表情與情緒表演框架",
+ "desc_tc": "約束 AI 人物提示詞的微表情寫作，去 AI 味",
+ "cn_sc": "微表情与情绪表演框架",
+ "desc_sc": "约束 AI 人物提示词的微表情写作，去 AI 味"
 }

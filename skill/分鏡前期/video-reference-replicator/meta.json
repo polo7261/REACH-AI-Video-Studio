@@ -3,5 +3,9 @@
  "skillKey": "video-reference-replicator-e005bce3d57d491fba5d1b0d5b68a048",
  "templateUuid": "1be747b153af43988fb4e0da1b56a638",
  "version": "1.0.4",
- "description": "上传参考视频，自动搭建阶梯抽帧与图生视频复刻工作流。"
+ "description": "上传参考视频，自动搭建阶梯抽帧与图生视频复刻工作流。",
+ "cn_tc": "libtv-參考影片復刻",
+ "desc_tc": "上傳參考影片，自動搭建階梯抽幀與圖生影片復刻工作流。",
+ "cn_sc": "libtv-参考视频复刻",
+ "desc_sc": "上传参考视频，自动搭建阶梯抽帧与图生视频复刻工作流。"
 }

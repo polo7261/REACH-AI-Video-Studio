@@ -3,5 +3,9 @@
  "skillKey": "photorealistic-portrait-generator-cc300ceef4d14152bcf455af0323ffab",
  "templateUuid": "0178a68ffe5b4776ab18827056595ccb",
  "version": "1.0.2",
- "description": "告别AI大众脸，生成高辨识度真实人像"
+ "description": "告别AI大众脸，生成高辨识度真实人像",
+ "cn_tc": "真實感人像生成器",
+ "desc_tc": "告別AI大眾臉，生成高辨識度真實人像",
+ "cn_sc": "真实感人像生成器",
+ "desc_sc": "告别AI大众脸，生成高辨识度真实人像"
 }

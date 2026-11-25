@@ -3,5 +3,9 @@
  "skillKey": "viral-cover-replicator-0184c7b0b8ee44b19fd90db02f83c4a2",
  "templateUuid": "9be124647db54d349c778b82687b8911",
  "version": "1.0.1",
- "description": "一键生成热门同款视频封面"
+ "description": "一键生成热门同款视频封面",
+ "cn_tc": "爆款封面一鍵復刻",
+ "desc_tc": "一鍵生成熱門同款影片封面",
+ "cn_sc": "爆款封面一键复刻",
+ "desc_sc": "一键生成热门同款视频封面"
 }

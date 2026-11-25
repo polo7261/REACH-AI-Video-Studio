@@ -3,5 +3,9 @@
  "skillKey": "cinematic-storyboard-upgrader-3d776a2ef18c4c1287eacdf8dc9ad747",
  "templateUuid": "f1f568b7399b41059006bfe91d5755ae",
  "version": "1.0.3",
- "description": "把普通分镜升级成有镜头语言的专业导演分镜"
+ "description": "把普通分镜升级成有镜头语言的专业导演分镜",
+ "cn_tc": "分鏡升鏡師",
+ "desc_tc": "把普通分鏡升級成有鏡頭語言的專業導演分鏡",
+ "cn_sc": "分镜升镜师",
+ "desc_sc": "把普通分镜升级成有镜头语言的专业导演分镜"
 }

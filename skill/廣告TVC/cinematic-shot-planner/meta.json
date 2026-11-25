@@ -3,5 +3,9 @@
  "skillKey": "cinematic-shot-planner-e130c69fac6848e38177528d6d6fd05e",
  "templateUuid": "3ebebbed3322466185c56d0f70aae9b0",
  "version": "1.0.3",
- "description": "将自然语言转化为专业电影级运镜方案。"
+ "description": "将自然语言转化为专业电影级运镜方案。",
+ "cn_tc": "電影運鏡設計",
+ "desc_tc": "將自然語言轉化為專業電影級運鏡方案。",
+ "cn_sc": "电影运镜设计",
+ "desc_sc": "将自然语言转化为专业电影级运镜方案。"
 }

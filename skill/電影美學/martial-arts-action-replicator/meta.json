@@ -3,5 +3,9 @@
  "skillKey": "martial-arts-action-replicator-748be1af79c84fb49f9550d485059553",
  "templateUuid": "1f2394d91f2841a1b258468e25a03c05",
  "version": "1.0.2",
- "description": "港式武侠真人实拍的武打动作、音效、镜头三段库"
+ "description": "港式武侠真人实拍的武打动作、音效、镜头三段库",
+ "cn_tc": "武俠基礎動作復刻",
+ "desc_tc": "港式武俠真人實拍的武打動作、音效、鏡頭三段庫",
+ "cn_sc": "武侠基础动作复刻",
+ "desc_sc": "港式武侠真人实拍的武打动作、音效、镜头三段库"
 }

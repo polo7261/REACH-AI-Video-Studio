@@ -3,5 +3,9 @@
  "skillKey": "script-optimizer-81cb71f5ca734fe3b6a94148f79fc207",
  "templateUuid": "737a16b7b0494d25b216990bcf409f01",
  "version": "1.0.3",
- "description": "优化原生剧本的潜在问题。让你在拆解分镜前规避大部分BUG"
+ "description": "优化原生剧本的潜在问题。让你在拆解分镜前规避大部分BUG",
+ "cn_tc": "劇本邏輯和演繹最佳化SKILL",
+ "desc_tc": "最佳化原生劇本的潛在問題。讓你在拆解分鏡前規避大部分BUG",
+ "cn_sc": "剧本逻辑和演绎优化SKILL",
+ "desc_sc": "优化原生剧本的潜在问题。让你在拆解分镜前规避大部分BUG"
 }

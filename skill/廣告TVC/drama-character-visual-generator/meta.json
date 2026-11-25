@@ -3,5 +3,9 @@
  "skillKey": "drama-character-visual-generator-8d012fbe5b224c7bab64318012900756",
  "templateUuid": "d9cf22b36e694ee791b37470223ab849",
  "version": "1.0.1",
- "description": "提取剧本中所有出场角色，并为每个角色生成专业级全身三视图"
+ "description": "提取剧本中所有出场角色，并为每个角色生成专业级全身三视图",
+ "cn_tc": "短劇全形色視覺設定生成器",
+ "desc_tc": "提取劇本中所有出場角色，併為每個角色生成專業級全身三檢視",
+ "cn_sc": "短剧全角色视觉设定生成器",
+ "desc_sc": "提取剧本中所有出场角色，并为每个角色生成专业级全身三视图"
 }

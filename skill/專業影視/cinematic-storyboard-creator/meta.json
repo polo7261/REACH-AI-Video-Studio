@@ -3,5 +3,9 @@
  "skillKey": "cinematic-storyboard-creator-431590b021c143a0b10d6988d3c3a50c",
  "templateUuid": "b4d7e62d6eca4971ada59bc2ecd4fae8",
  "version": "1.0.8",
- "description": "主要用于人物对话戏的分镜图片制作"
+ "description": "主要用于人物对话戏的分镜图片制作",
+ "cn_tc": "對話戲分鏡圖生成器",
+ "desc_tc": "主要用於人物對話戲的分鏡圖片製作",
+ "cn_sc": "对话戏分镜图生成器",
+ "desc_sc": "主要用于人物对话戏的分镜图片制作"
 }

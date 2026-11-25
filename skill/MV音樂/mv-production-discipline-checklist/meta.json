@@ -3,5 +3,9 @@
  "skillKey": "mv-production-discipline-checklist-ab9dc9ba4fa24f5a995d95271e575b83",
  "templateUuid": "e2a5ff25a7fa42c1bcff1f6acf653e19",
  "version": "1.0.1",
- "description": "音乐驱动多分镜 MV 的逐条执行纪律自查表"
+ "description": "音乐驱动多分镜 MV 的逐条执行纪律自查表",
+ "cn_tc": "MV 製作紀律",
+ "desc_tc": "音樂驅動多分鏡 MV 的逐條執行紀律自查表",
+ "cn_sc": "MV 制作纪律",
+ "desc_sc": "音乐驱动多分镜 MV 的逐条执行纪律自查表"
 }

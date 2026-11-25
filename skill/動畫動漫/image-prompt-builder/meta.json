@@ -3,5 +3,9 @@
  "skillKey": "image-prompt-builder-0a88962ad9bf41668381d23440015181",
  "templateUuid": "e628b5b368914f758f1b22c1a5aee987",
  "version": "1.0.2",
- "description": "把用户的画面想法整理为可直接使用的生图提示词"
+ "description": "把用户的画面想法整理为可直接使用的生图提示词",
+ "cn_tc": "大師級電影感圖片提示詞",
+ "desc_tc": "把使用者的畫面想法整理為可直接使用的生圖提示詞",
+ "cn_sc": "大师级电影感图片提示词",
+ "desc_sc": "把用户的画面想法整理为可直接使用的生图提示词"
 }

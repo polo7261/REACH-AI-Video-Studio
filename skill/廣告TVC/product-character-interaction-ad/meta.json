@@ -3,5 +3,9 @@
  "skillKey": "product-character-interaction-ad-05022498e46d43c3aaf8146d278170a4",
  "templateUuid": "60e5acc7ddbc447dabf00017293701cb",
  "version": "1.0.1",
- "description": "产品图+角色图生成互动广告视频"
+ "description": "产品图+角色图生成互动广告视频",
+ "cn_tc": "產品人物互動廣告影片",
+ "desc_tc": "產品圖+角色圖生成互動廣告影片",
+ "cn_sc": "产品人物互动广告视频",
+ "desc_sc": "产品图+角色图生成互动广告视频"
 }

@@ -3,5 +3,9 @@
  "skillKey": "premium-short-drama-director-a3558c3e718141f6ac75f05abd6f40f4",
  "templateUuid": "433f7d4616184139abed11c5290b6a11",
  "version": "1.0.3",
- "description": "精品短剧SKILL 含打斗 镜头设计 运镜 光影设计"
+ "description": "精品短剧SKILL 含打斗 镜头设计 运镜 光影设计",
+ "cn_tc": "精品短劇skill",
+ "desc_tc": "精品短劇SKILL 含打鬥 鏡頭設計 運鏡 光影設計",
+ "cn_sc": "精品短剧skill",
+ "desc_sc": "精品短剧SKILL 含打斗 镜头设计 运镜 光影设计"
 }

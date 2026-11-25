@@ -3,5 +3,9 @@
  "skillKey": "semi-realistic-female-3d-modeler-672ccad9a90c404ea17ab867843f43ce",
  "templateUuid": "798b45b8982247fb94d94f3140d9a8e1",
  "version": "1.0.2",
- "description": "生成半写实国漫 BJD 精致感女角色四视图提示词"
+ "description": "生成半写实国漫 BJD 精致感女角色四视图提示词",
+ "cn_tc": "BJD半寫實女角色四檢視",
+ "desc_tc": "生成半寫實國漫 BJD 精緻感女角色四檢視提示詞",
+ "cn_sc": "BJD半写实女角色四视图",
+ "desc_sc": "生成半写实国漫 BJD 精致感女角色四视图提示词"
 }

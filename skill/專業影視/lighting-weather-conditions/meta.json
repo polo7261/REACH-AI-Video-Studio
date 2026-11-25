@@ -3,5 +3,9 @@
  "skillKey": "lighting-weather-conditions-ef40fcd188c64418aa1c460553cc87b0",
  "templateUuid": "8c9e47e6e5a44454a9e12f6f07303207",
  "version": "1.0.0",
- "description": "日出/日落/黄金时刻/蓝调时刻…以及晴/雨/雪/雾/阴天"
+ "description": "日出/日落/黄金时刻/蓝调时刻…以及晴/雨/雪/雾/阴天",
+ "cn_tc": "光影時刻與天氣",
+ "desc_tc": "日出/日落/黃金時刻/藍調時刻…以及晴/雨/雪/霧/陰天",
+ "cn_sc": "光影时刻与天气",
+ "desc_sc": "日出/日落/黄金时刻/蓝调时刻…以及晴/雨/雪/雾/阴天"
 }

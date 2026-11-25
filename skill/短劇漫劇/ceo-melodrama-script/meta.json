@@ -3,5 +3,9 @@
  "skillKey": "ceo-melodrama-script-9bfd9a36ba3b4046a13732b642a4cbf0",
  "templateUuid": "2ab2448110b247bd903aa83079aba32e",
  "version": "1.0.2",
- "description": "生成离谱狗血霸总短剧"
+ "description": "生成离谱狗血霸总短剧",
+ "cn_tc": "霸總狗血劇",
+ "desc_tc": "生成離譜狗血霸總短劇",
+ "cn_sc": "霸总狗血剧",
+ "desc_sc": "生成离谱狗血霸总短剧"
 }

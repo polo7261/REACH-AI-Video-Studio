@@ -3,5 +3,9 @@
  "skillKey": "storyboard-script-generator-d711f42ff4e248abb509c1ff3bc6f644-1d627b8a",
  "templateUuid": "b34633826a814c68a3786fb05cd5dc2b",
  "version": "1.0.0",
- "description": "输入主题时长风格，输出逐秒分镜脚本"
+ "description": "输入主题时长风格，输出逐秒分镜脚本",
+ "cn_tc": "分鏡指令碼生成器",
+ "desc_tc": "輸入主題時長風格，輸出逐秒分鏡指令碼",
+ "cn_sc": "分镜脚本生成器",
+ "desc_sc": "输入主题时长风格，输出逐秒分镜脚本"
 }

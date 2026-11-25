@@ -3,5 +3,9 @@
  "skillKey": "reverse-prompt-engineer-8202932176ac485b9572011074a9f39c",
  "templateUuid": "77d32ea23823441eb8685cfe26e5d340",
  "version": "1.0.0",
- "description": "看到喜欢的画面不会复刻？帮你拆解并生成 AI 提示词。"
+ "description": "看到喜欢的画面不会复刻？帮你拆解并生成 AI 提示词。",
+ "cn_tc": "AI 影片圖片反推助手",
+ "desc_tc": "看到喜歡的畫面不會復刻？幫你拆解並生成 AI 提示詞。",
+ "cn_sc": "AI 视频图片反推助手",
+ "desc_sc": "看到喜欢的画面不会复刻？帮你拆解并生成 AI 提示词。"
 }

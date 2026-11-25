@@ -3,5 +3,9 @@
  "skillKey": "xuanhuan-scene-decomposer-b93ed9ec9b4c4dc4bacff8d25e6b5a02",
  "templateUuid": "26162cc1470d4b8392e025b0ad1f15d5",
  "version": "1.0.15",
- "description": "专为精品手搓党打造，自动搭建工作流，创作全程可控。"
+ "description": "专为精品手搓党打造，自动搭建工作流，创作全程可控。",
+ "cn_tc": "精品短劇手搓黨助手",
+ "desc_tc": "專為精品手搓黨打造，自動搭建工作流，創作全程可控。",
+ "cn_sc": "精品短剧手搓党助手",
+ "desc_sc": "专为精品手搓党打造，自动搭建工作流，创作全程可控。"
 }

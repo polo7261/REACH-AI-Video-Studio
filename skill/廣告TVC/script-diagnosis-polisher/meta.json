@@ -3,5 +3,9 @@
  "skillKey": "script-diagnosis-polisher-a2d8eb2fd4984b249b57a71943ff8aee",
  "templateUuid": "be4ab1ef415146ef9eeb0111c789bf42",
  "version": "1.0.2",
- "description": "为你的剧本进行逐场解析、导演诊断、授权修订、版本锁定"
+ "description": "为你的剧本进行逐场解析、导演诊断、授权修订、版本锁定",
+ "cn_tc": "AI導演-劇本診斷改稿",
+ "desc_tc": "為你的劇本進行逐場解析、導演診斷、授權修訂、版本鎖定",
+ "cn_sc": "AI导演-剧本诊断改稿",
+ "desc_sc": "为你的剧本进行逐场解析、导演诊断、授权修订、版本锁定"
 }

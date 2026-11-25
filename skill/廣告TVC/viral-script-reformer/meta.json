@@ -3,5 +3,9 @@
  "skillKey": "viral-script-reformer-8202932176ac485b9572011074a9f39c",
  "templateUuid": "11c69b26e91a4d77a6bc7ce4ff2ce426",
  "version": "1.0.6",
- "description": "把AI味剧本改造成高冲突爆款视频脚本"
+ "description": "把AI味剧本改造成高冲突爆款视频脚本",
+ "cn_tc": "爆款級 AI 劇本改造師",
+ "desc_tc": "把AI味劇本改造成高衝突爆款影片指令碼",
+ "cn_sc": "爆款级 AI 剧本改造师",
+ "desc_sc": "把AI味剧本改造成高冲突爆款视频脚本"
 }

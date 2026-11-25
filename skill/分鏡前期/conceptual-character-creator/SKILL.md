@@ -176,7 +176,7 @@ solo, one person only, single character, full body, centered composition, no gro
 - 服裝結構是否可讀
 - 身份是否被誤解
 - 是否提前生成多檢視 / 多面板
-- 是否有文字、logo、UI、亂碼干擾
+- 是否有文字、logo、UI、亂碼幹擾
 
 如不合格，先呼叫 `references/mj-common-error-repair-library.md` 返修，不進入角色板。
 
@@ -504,7 +504,7 @@ SD2.0 15秒影片：已生成 / 未生成
 
 ---
 
-## 14. 關鍵文件索引
+## 14. 關鍵檔案索引
 
 ```text
 references/agent-auto-run-workflow.md
@@ -632,7 +632,7 @@ references/prompt-language-density-control.md
 references/video-resolution-lock.md
 ```
 
-### V0.7 新增 / 合併文件
+### V0.7 新增 / 合併檔案
 
 ```text
 references/prompt-language-density-control.md

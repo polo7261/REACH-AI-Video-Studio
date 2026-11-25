@@ -3,5 +3,9 @@
  "skillKey": "character-turnaround-generator-4cbb9119e654432da6d857c2241f1627",
  "templateUuid": "879ee7f046964834a7c0dc753413572f",
  "version": "1.0.2",
- "description": "根据图片或描述生成真人七视图人设图"
+ "description": "根据图片或描述生成真人七视图人设图",
+ "cn_tc": "真人角色七檢視人設圖",
+ "desc_tc": "根據圖片或描述生成真人七檢視人設圖",
+ "cn_sc": "真人角色七视图人设图",
+ "desc_sc": "根据图片或描述生成真人七视图人设图"
 }

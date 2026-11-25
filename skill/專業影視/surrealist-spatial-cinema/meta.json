@@ -3,5 +3,9 @@
  "skillKey": "surrealist-spatial-cinema-1880886b42cc43ddb951847092928422",
  "templateUuid": "6907bccd58bc48c2b4af6da66d779688",
  "version": "1.0.0",
- "description": "一键生成充满达利式的超现实主义空间艺术风格短片"
+ "description": "一键生成充满达利式的超现实主义空间艺术风格短片",
+ "cn_tc": "超現實主義空間美學電影",
+ "desc_tc": "一鍵生成充滿達利式的超現實主義空間藝術風格短片",
+ "cn_sc": "超现实主义空间美学电影",
+ "desc_sc": "一键生成充满达利式的超现实主义空间艺术风格短片"
 }

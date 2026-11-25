@@ -3,5 +3,9 @@
  "skillKey": "action-fight-director-9d8925c591a643bbad8ca8cfbb87922c",
  "templateUuid": "ac19f3743fab4b70bde9dc9e66322bc7",
  "version": "1.0.3",
- "description": "支持人物文字描述生成真实质感打斗场面"
+ "description": "支持人物文字描述生成真实质感打斗场面",
+ "cn_tc": "動作導演全能打鬥生成",
+ "desc_tc": "支援人物文字描述生成真實質感打鬥場面",
+ "cn_sc": "动作导演全能打斗生成",
+ "desc_sc": "支持人物文字描述生成真实质感打斗场面"
 }

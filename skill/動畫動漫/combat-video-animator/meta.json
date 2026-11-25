@@ -3,5 +3,9 @@
  "skillKey": "combat-video-animator-740d3ca7a6744b08852d9568b70566cf",
  "templateUuid": "c4c4e3a6de684dd6b9f0ff9ffb45bd8a",
  "version": "1.0.3",
- "description": "输入对战设定与站位图，产出双人对战视频"
+ "description": "输入对战设定与站位图，产出双人对战视频",
+ "cn_tc": "雙人打鬥影片生成",
+ "desc_tc": "輸入對戰設定與站點陣圖，產出雙人對戰影片",
+ "cn_sc": "双人打斗视频生成",
+ "desc_sc": "输入对战设定与站位图，产出双人对战视频"
 }

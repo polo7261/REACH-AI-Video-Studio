@@ -3,5 +3,9 @@
  "skillKey": "pet-mockumentary-animator-8713372419b1455880531225678b1e8b",
  "templateUuid": "231c7a001efd4f2da523862502bbf51f",
  "version": "1.0.3",
- "description": "把宠物素材做成拟人伪纪录片搞笑短片"
+ "description": "把宠物素材做成拟人伪纪录片搞笑短片",
+ "cn_tc": "萌寵擬人短劇",
+ "desc_tc": "把寵物素材做成擬人偽紀錄片搞笑短片",
+ "cn_sc": "萌宠拟人短剧",
+ "desc_sc": "把宠物素材做成拟人伪纪录片搞笑短片"
 }

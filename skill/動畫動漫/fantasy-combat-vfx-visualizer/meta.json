@@ -3,5 +3,9 @@
  "skillKey": "fantasy-combat-vfx-visualizer-a45e942df2144ad9b2305fe3fd4d1c4a",
  "templateUuid": "21a73c73eb1648dcb5bf25f05a165746",
  "version": "1.0.4",
- "description": "打斗描述自动配氛围特效出3D国漫画面"
+ "description": "打斗描述自动配氛围特效出3D国漫画面",
+ "cn_tc": "玄幻技能氛圍特效",
+ "desc_tc": "打鬥描述自動配氛圍特效出3D國漫畫面",
+ "cn_sc": "玄幻技能氛围特效",
+ "desc_sc": "打斗描述自动配氛围特效出3D国漫画面"
 }

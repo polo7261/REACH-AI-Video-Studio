@@ -3,5 +3,9 @@
  "skillKey": "kurosawa-style-image-creator-4e08bd47793e4c2694be236e4d5baeb7",
  "templateUuid": "afa30ad5df4c44e98073c44cddb1abf8",
  "version": "1.0.8",
- "description": "把一句话变成一张黑泽明式的电影美学静帧"
+ "description": "把一句话变成一张黑泽明式的电影美学静帧",
+ "cn_tc": "黑澤明電影美學（彩色/黑白）靜幀skill",
+ "desc_tc": "把一句話變成一張黑澤明式的電影美學靜幀",
+ "cn_sc": "黑泽明电影美学（彩色/黑白）静帧skill",
+ "desc_sc": "把一句话变成一张黑泽明式的电影美学静帧"
 }

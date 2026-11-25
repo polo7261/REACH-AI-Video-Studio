@@ -3,5 +3,9 @@
  "skillKey": "absurd-urban-director-5ecee88464924d92a2968fe23977155d",
  "templateUuid": "61999cb7c2d14e9996925ffb9ef2f8f3",
  "version": "1.0.0",
- "description": "生成荒诞城市印象的skill"
+ "description": "生成荒诞城市印象的skill",
+ "cn_tc": "404城市荒誕導演",
+ "desc_tc": "生成荒誕城市印象的skill",
+ "cn_sc": "404城市荒诞导演",
+ "desc_sc": "生成荒诞城市印象的skill"
 }

@@ -3,5 +3,9 @@
  "skillKey": "image-hd-remaster-d093474cb44e4d07986b39ec037a1cab",
  "templateUuid": "5c824efa2de745d58c47817bd952eadf",
  "version": "1.0.8",
- "description": "原图一键高清重绘，双模型输出"
+ "description": "原图一键高清重绘，双模型输出",
+ "cn_tc": "洗圖高畫質重繪",
+ "desc_tc": "原圖一鍵高畫質重繪，雙模型輸出",
+ "cn_sc": "洗图高清重绘",
+ "desc_sc": "原图一键高清重绘，双模型输出"
 }

@@ -3,5 +3,9 @@
  "skillKey": "video-aspect-reframer-8202932176ac485b9572011074a9f39c",
  "templateUuid": "4f91f8c8eea440229cf10319ea430f31",
  "version": "1.0.1",
- "description": "视频比例不匹配？智能重构画幅，保留主体与视觉完整性。"
+ "description": "视频比例不匹配？智能重构画幅，保留主体与视觉完整性。",
+ "cn_tc": "AI 影片比例重構助手",
+ "desc_tc": "影片比例不匹配？智慧重構畫幅，保留主體與視覺完整性。",
+ "cn_sc": "AI 视频比例重构助手",
+ "desc_sc": "视频比例不匹配？智能重构画幅，保留主体与视觉完整性。"
 }

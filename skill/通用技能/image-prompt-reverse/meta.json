@@ -3,5 +3,9 @@
  "skillKey": "image-prompt-reverse-44b0716e9f7e4c5c9627d87a893c5212",
  "templateUuid": "5ff078acfee9463c8e62f459e27de6b7",
  "version": "1.0.2",
- "description": "将一张参考图转化为可直接用于 AI 绘图的中文提示词"
+ "description": "将一张参考图转化为可直接用于 AI 绘图的中文提示词",
+ "cn_tc": "圖片提示詞反推-玄黃-Single V1.0",
+ "desc_tc": "將一張參考圖轉化為可直接用於 AI 繪圖的中文提示詞",
+ "cn_sc": "图片提示词反推-玄黄-Single V1.0",
+ "desc_sc": "将一张参考图转化为可直接用于 AI 绘图的中文提示词"
 }

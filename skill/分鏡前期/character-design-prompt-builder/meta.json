@@ -3,5 +3,9 @@
  "skillKey": "character-design-prompt-builder-16d543a30e6a4903b9b499a7c4f3792b",
  "templateUuid": "e8ef46bd6cdb4e55a930b1e3b6c10611",
  "version": "1.0.2",
- "description": "- 需要竖屏（9:16）角色资产，适配短视频 / 竖屏成片"
+ "description": "- 需要竖屏（9:16）角色资产，适配短视频 / 竖屏成片",
+ "cn_tc": "角色設定卡（豎版 9:16 四分格）",
+ "desc_tc": "- 需要豎屏（9:16）角色資產，適配短影片 / 豎屏成片",
+ "cn_sc": "角色设定卡（竖版 9:16 四分格）",
+ "desc_sc": "- 需要竖屏（9:16）角色资产，适配短视频 / 竖屏成片"
 }

@@ -3,5 +3,9 @@
  "skillKey": "talking-head-script-writer-d711f42ff4e248abb509c1ff3bc6f644",
  "templateUuid": "24b7449208e74894bbe998955df47e1f",
  "version": "1.0.0",
- "description": "输入主题+平台+时长，输出完整口播文案"
+ "description": "输入主题+平台+时长，输出完整口播文案",
+ "cn_tc": "口播文案生成器",
+ "desc_tc": "輸入主題+平臺+時長，輸出完整口播文案",
+ "cn_sc": "口播文案生成器",
+ "desc_sc": "输入主题+平台+时长，输出完整口播文案"
 }

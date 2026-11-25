@@ -3,5 +3,9 @@
  "skillKey": "period-drama-storyboard-prompter-67faca94d6ce40208a2af73292002879",
  "templateUuid": "cb28d634cb324508bf8fbc1b83fc1db4",
  "version": "1.0.2",
- "description": "剧情短剧视频生成提示词写作规范"
+ "description": "剧情短剧视频生成提示词写作规范",
+ "cn_tc": "劇情短劇分鏡提示詞",
+ "desc_tc": "劇情短劇影片生成提示詞寫作規範",
+ "cn_sc": "剧情短剧分镜提示词",
+ "desc_sc": "剧情短剧视频生成提示词写作规范"
 }

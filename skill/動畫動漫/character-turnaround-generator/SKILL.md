@@ -1,6 +1,6 @@
 ---
 
-## name: libtv-character-sheet description: Create LibTV real-person photographic character turnaround/reference sheets from a supplied image or character description. Use when the user asks for a character sheet, turnaround, model sheet, expression/angle reference, or 人设图, especially the left-three-right-four composition with 1990s photographic film grain and no anime, cartoon, illustration, or 3D-rendered style. This skill operates inside LibTV: keep prompt assembly internal and do not expose or ask the user to approve a standalone character prompt.
+## name: libtv-character-sheet description: Create LibTV real-person photographic character turnaround/reference sheets from a supplied image or character description. Use when the user asks for a character sheet, turnaround, model sheet, expression/angle reference, or 人設圖, especially the left-three-right-four composition with 1990s photographic film grain and no anime, cartoon, illustration, or 3D-rendered style. This skill operates inside LibTV: keep prompt assembly internal and do not expose or ask the user to approve a standalone character prompt.
 
 # LibTV Character Sheet
 

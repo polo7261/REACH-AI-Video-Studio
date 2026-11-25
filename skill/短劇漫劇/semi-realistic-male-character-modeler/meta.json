@@ -3,5 +3,9 @@
  "skillKey": "semi-realistic-male-character-modeler-672ccad9a90c404ea17ab867843f43ce",
  "templateUuid": "408cb7e7febc4d7bb5adf7ec91c648ec",
  "version": "1.0.1",
- "description": "生成高精度 BJD 人偶感男角色四视图提示词"
+ "description": "生成高精度 BJD 人偶感男角色四视图提示词",
+ "cn_tc": "BJD人偶感男角色四檢視",
+ "desc_tc": "生成高精度 BJD 人偶感男角色四檢視提示詞",
+ "cn_sc": "BJD人偶感男角色四视图",
+ "desc_sc": "生成高精度 BJD 人偶感男角色四视图提示词"
 }

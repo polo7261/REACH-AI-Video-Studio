@@ -3,5 +3,9 @@
  "skillKey": "sd-video-prompt-generator-605c133411b74a8b8092650ab2a83808",
  "templateUuid": "7377c20d40f54638bf579d877729e37b",
  "version": "1.0.0",
- "description": "将创意、剧本与素材转化为SD2.5视频提示词"
+ "description": "将创意、剧本与素材转化为SD2.5视频提示词",
+ "cn_tc": "SD2.5影片提示詞助手",
+ "desc_tc": "將創意、劇本與素材轉化為SD2.5影片提示詞",
+ "cn_sc": "SD2.5视频提示词助手",
+ "desc_sc": "将创意、剧本与素材转化为SD2.5视频提示词"
 }

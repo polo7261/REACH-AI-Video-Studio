@@ -3,5 +3,9 @@
  "skillKey": "script-character-portrait-builder-8d012fbe5b224c7bab64318012900756",
  "templateUuid": "ce1406d84aa84aa88f92f5af1ac39fdc",
  "version": "1.0.5",
- "description": "短剧剧本解析，，所有对话角色全身立绘提示词批量生成"
+ "description": "短剧剧本解析，，所有对话角色全身立绘提示词批量生成",
+ "cn_tc": "劇本分析真人角色設定圖",
+ "desc_tc": "短劇劇本解析，，所有對話角色全身立繪提示詞批次生成",
+ "cn_sc": "剧本分析真人角色设定图",
+ "desc_sc": "短剧剧本解析，，所有对话角色全身立绘提示词批量生成"
 }
