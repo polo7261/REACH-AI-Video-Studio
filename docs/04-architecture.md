@@ -83,4 +83,3 @@ data/projects/<pid>.json   data/jobs/<jid>.json   data/media/<pid>/{S01-….jpg|
 | --- | --- |
 | `REACH-AI-Image`（35320） | **無關**：不共用 DB／埠／檔案；只在概念上共用「模型管理＋驗證」思路 |
 | `REACH-AI-Motion-Studio` | 方法論來源：運鏡目錄、Prompt 編譯、FFmpeg 後製規格；本專案自帶簡化版 |
-| `oiioii-研究/` | OiiOii 參考頁與實測截圖，本專案的流程藍本 |

@@ -1,9 +1,9 @@
-# 01 · 製作流程（對照 OiiOii）
+# 01 · 製作流程（對照參考平台）
 
 > 參考：<https://www.oiioii.ai/oii-tv>、<https://www.oiioii.ai/zh-Hant/how-it-works>、
 > <https://www.oiioii.ai/zh-Hant/features/canvas>
 
-## OiiOii 的七 Agent 流水線
+## 參考平台的七 Agent 流水線
 
 | Agent | 職責 | 本專案的對應 |
 | --- | --- | --- |
@@ -56,9 +56,9 @@
 - 出圖、出片各自記錄在 `shot.image` / `shot.video`，不影響其他鏡。
 - 影片任務失敗只影響該鏡（`job.state = error` + 原因）。
 
-## 與 OiiOii 的差異（刻意）
+## 與參考平台的差異（刻意）
 
-| 項目 | OiiOii | 本專案 |
+| 項目 | 參考平台 | 本專案 |
 | --- | --- | --- |
 | 執行位置 | 雲端平台、盒飯計費 | 本機控制台，直接打各家 API |
 | 模型 | 平台代挑 25+ | 你指定 Provider/模型，能力與價格看 profile |
