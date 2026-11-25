@@ -7,5 +7,6 @@
  "cn_tc": "專業運鏡指令生成器",
  "desc_tc": "場景情緒一鍵生成專業運鏡指令和分鏡方案",
  "cn_sc": "专业运镜指令生成器",
- "desc_sc": "场景情绪一键生成专业运镜指令和分镜方案"
+ "desc_sc": "场景情绪一键生成专业运镜指令和分镜方案",
+ "desc_en": "Turn scene mood into professional camera-movement prompts and shot lists in one step"
 }

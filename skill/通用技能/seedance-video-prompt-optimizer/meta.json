@@ -7,5 +7,6 @@
  "cn_tc": "Seedance 2.5官方提示詞最佳化",
  "desc_tc": "將影片想法最佳化為包含時間段、景別、動作、運鏡和接鏡狀態的提示",
  "cn_sc": "Seedance 2.5官方提示词优化",
- "desc_sc": "将视频想法优化为包含时间段、景别、动作、运镜和接镜状态的提示"
+ "desc_sc": "将视频想法优化为包含时间段、景别、动作、运镜和接镜状态的提示",
+ "desc_en": "Optimizes Seedance 2.5 video prompts, organizing multi-shot requests by time segments, shot sizes, actions, camera moves, and handoff states"
 }
