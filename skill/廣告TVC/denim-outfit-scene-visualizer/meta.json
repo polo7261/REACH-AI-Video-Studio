@@ -1,0 +1,7 @@
+{
+ "cn": "牛仔裤场景穿搭图生成",
+ "skillKey": "denim-outfit-scene-visualizer-be10eedc67c646ca9323d9dda03df799",
+ "templateUuid": "706d4e7b2b724aed9dd8ba6857f9130a",
+ "version": "1.0.2",
+ "description": "输入一条牛仔裤产品图，批量产出 ins 风场景穿搭图"
+}

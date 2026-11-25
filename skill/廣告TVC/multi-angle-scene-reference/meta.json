@@ -1,0 +1,7 @@
+{
+ "cn": "场景多视角资料卡",
+ "skillKey": "multi-angle-scene-reference-588cc5e197c24e928ad033c0b70d0d09",
+ "templateUuid": "eb08d01044db429f851dff65fee17037",
+ "version": "1.0.0",
+ "description": "统一空间与光线，生成主反打及前后左右场景资料卡"
+}

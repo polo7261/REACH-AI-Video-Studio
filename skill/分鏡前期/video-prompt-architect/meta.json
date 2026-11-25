@@ -1,0 +1,7 @@
+{
+ "cn": "小杰AIGC｜视频提示词",
+ "skillKey": "video-prompt-architect-d78b399fc68a4cb58c52b83e8de1cc68",
+ "templateUuid": "74ef8a217cc340339987f5e4d4413f39",
+ "version": "1.0.0",
+ "description": "分析创意、素材与分镜，输出4—30秒视频提示词。"
+}

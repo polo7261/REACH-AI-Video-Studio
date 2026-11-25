@@ -1,0 +1,7 @@
+{
+ "cn": "图片提示词反推-玄黄-Single V1.0",
+ "skillKey": "image-prompt-reverse-44b0716e9f7e4c5c9627d87a893c5212",
+ "templateUuid": "5ff078acfee9463c8e62f459e27de6b7",
+ "version": "1.0.2",
+ "description": "将一张参考图转化为可直接用于 AI 绘图的中文提示词"
+}

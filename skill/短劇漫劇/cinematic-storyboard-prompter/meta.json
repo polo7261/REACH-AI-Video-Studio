@@ -1,0 +1,7 @@
+{
+ "cn": "分镜提示词",
+ "skillKey": "cinematic-storyboard-prompter-64985f011cb94b84bb2d472719b985d8",
+ "templateUuid": "741b547fa7df4959888d21c2e31b3c4d",
+ "version": "1.0.0",
+ "description": "解决复杂场景问题，从剧本生成可直接用于出图的电影分镜表提示词"
+}

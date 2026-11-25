@@ -318,6 +318,10 @@
     const [hist, cv] = await Promise.all([api(`/api/projects/${pid}/director`), api(`/api/projects/${pid}/canvas`)]);
     st.messages = hist.messages || []; st.canvas = cv.canvas;
     renderMessages(); renderAssets(); renderModel(); renderMode();
+    try {
+      const pre = sessionStorage.getItem("reach.director.prefill");
+      if (pre) { sessionStorage.removeItem("reach.director.prefill"); const el = $("#dr-input"); el.value = pre; el.focus(); el.dispatchEvent(new Event("input")); }
+    } catch (_) {}
   }
   boot().catch((err) => toast(err.message, true));
 })();

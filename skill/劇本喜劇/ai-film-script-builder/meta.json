@@ -1,0 +1,7 @@
+{
+ "cn": "AI影视剧本创作",
+ "skillKey": "ai-film-script-builder-aa87a4b7936c4d008cf7eee7912bf0c2",
+ "templateUuid": "dc09c85b816b41d48e0c872a11f0376d",
+ "version": "1.0.0",
+ "description": "把用户最初想法， 逐步发展成一个经过确认、适合AI制作的剧本"
+}

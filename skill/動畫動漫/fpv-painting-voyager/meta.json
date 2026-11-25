@@ -1,0 +1,7 @@
+{
+ "cn": "FPV视角穿越名画",
+ "skillKey": "fpv-painting-voyager-aacc3f470d8b4177900495733c7b74a5",
+ "templateUuid": "3290bdc951c14bad8bcd2d6177c7046a",
+ "version": "1.0.2",
+ "description": "上传一张图，生成FPV视角的视频"
+}

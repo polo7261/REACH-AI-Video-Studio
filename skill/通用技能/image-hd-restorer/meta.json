@@ -1,0 +1,7 @@
+{
+ "cn": "图像高清修复",
+ "skillKey": "image-hd-restorer-d7ed112b9ed44092882621dd66be0788",
+ "templateUuid": "53c0657771e749d2ba20b50a6f667509",
+ "version": "1.0.0",
+ "description": "对模糊、低分辨率、有噪点或压缩损伤的图片进行高清修复与放大"
+}

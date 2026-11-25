@@ -1,0 +1,7 @@
+{
+ "cn": "libtv-参考视频复刻",
+ "skillKey": "video-reference-replicator-e005bce3d57d491fba5d1b0d5b68a048",
+ "templateUuid": "1be747b153af43988fb4e0da1b56a638",
+ "version": "1.0.4",
+ "description": "上传参考视频，自动搭建阶梯抽帧与图生视频复刻工作流。"
+}

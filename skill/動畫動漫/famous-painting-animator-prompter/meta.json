@@ -1,0 +1,7 @@
+{
+ "cn": "穿越世界名画Skill",
+ "skillKey": "famous-painting-animator-prompter-95e64063a8554776b2038eae7d0e3f4d",
+ "templateUuid": "2bd8e188f8694a7fb8a0d0cc4e25c0a0",
+ "version": "1.0.1",
+ "description": "世界名画真人化视频提示词导演，上传名画可生成视频提示词"
+}

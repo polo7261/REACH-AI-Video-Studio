@@ -1,6 +1,6 @@
 # Skill 收藏（liblib.tv/skill）
 
-共 112 個 skill，下載於 2026-11-25。來源：`api.liblib.tv`；對話轉生型經 Agent 技能管理複製取出。
+共 257 個 skill。初版 112 個下載於 2026-11-25（liblib.tv/skill，對話轉生型經 Agent 技能管理複製取出）；2026-11-25 經 OiiOii API（`api.liblib.tv/api/community/skill/template/*`）同步擴充至 257 個，依官方標籤＋內容關鍵字歸入 `skill/<分類>/`。此表僅列初版 112 個。
 
 | Skill | 分類 | 版本 | SKILL.md | 附屬檔 | 資料夾 |
 |---|---|---|---|---|---|

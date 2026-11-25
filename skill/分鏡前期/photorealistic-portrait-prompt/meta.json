@@ -1,0 +1,7 @@
+{
+ "cn": "影片级逼真人像提示词",
+ "skillKey": "photorealistic-portrait-prompt-d730d1714257982f8b74ccf8507cb437",
+ "templateUuid": "ebca2105c4d5457ea1a450cbe15c5347",
+ "version": "1.0.0",
+ "description": "年龄+性别，生成照片级真人肖像提示词，打造自然真实AI人像"
+}

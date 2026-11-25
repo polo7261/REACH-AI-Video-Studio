@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% set active = "skills" %}
+{% set main_class = "full" %}
+{% block title %}Skill 庫{% endblock %}
+{% block content %}
+<style>
+.sk { display: grid; grid-template-columns: 340px 1fr; height: calc(100vh - 64px); }
+.sk-side { border-right: 1px solid var(--line); padding: 12px; overflow-y: auto; min-width: 0; }
+.sk-main { overflow-y: auto; padding: 20px 32px; max-width: 920px; min-width: 0; }
+.sk input { width: 100%; padding: 8px 12px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--panel-2); color: var(--fg); margin-bottom: 8px; font-size: 14px; }
+.sk-lang { display: flex; gap: 6px; margin-bottom: 8px; }
+.sk-lang button { flex: 1; padding: 6px 0; border-radius: var(--radius); border: 1px solid var(--line); background: var(--panel-2); color: var(--muted); cursor: pointer; font-size: 13px; }
+.sk-lang button.on { background: var(--accent); color: var(--on-accent); border-color: var(--accent); font-weight: 700; }
+.sk-cats { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+.sk-cats button { padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel-2); color: var(--muted); cursor: pointer; font-size: 12px; }
+.sk-cats button.on { background: var(--accent); color: var(--on-accent); border-color: var(--accent); font-weight: 600; }
+.sk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.sk-it { display: flex; gap: 10px; padding: 8px; border-radius: var(--radius); cursor: pointer; align-items: center; }
+.sk-it:hover { background: var(--panel-2); }
+.sk-it.on { background: var(--panel-2); border-left: 3px solid var(--accent); }
+.sk-it img { width: 72px; height: 44px; object-fit: cover; border-radius: 6px; background: var(--thumb); flex-shrink: 0; }
+.sk-it .t { min-width: 0; }
+.sk-it b { display: block; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sk-it span { color: var(--muted); font-size: 11.5px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sk-cnt { color: var(--muted); font-size: 12px; margin: 4px 0 8px; }
+.sk-main h1 { font-size: 20px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+.sk-main h2 { font-size: 17px; margin-top: 28px; color: var(--accent); }
+.sk-main h3 { font-size: 15px; }
+.sk-desc { color: var(--muted); margin: 8px 0 16px; }
+.sk-main pre { background: var(--panel-2); padding: 12px; border-radius: var(--radius); overflow-x: auto; font-size: 12px; }
+.sk-extra h2 { color: var(--warn); }
+.sk-fmt { margin: 12px 0; padding: 8px 12px; background: var(--panel-2); border-radius: var(--radius); font-family: ui-monospace, Menlo, monospace; font-size: 12px; color: var(--muted); white-space: pre-wrap; display: none; }
+.sk-fmt.open { display: block; }
+@media (max-width: 980px) { .sk { grid-template-columns: 1fr; height: auto; } .sk-side { border-right: 0; } }
+</style>
+<div class="sk">
+  <div class="sk-side">
+    <input id="q" placeholder="搜尋 skill（名稱/描述/內文）…">
+    <div class="sk-lang">
+      <button data-l="tc" class="on">繁體</button>
+      <button data-l="sc">簡體</button>
+      <button data-l="en">English</button>
+    </div>
+    <div class="sk-cats" id="cats"></div>
+    <div class="sk-cnt" id="cnt"></div>
+    <div class="sk-grid" id="list"></div>
+  </div>
+  <div class="sk-main" id="main"><div class="sk-desc">載入中…</div></div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+let DATA=[],cur=-1,LANG='tc',CAT='';
+function buildCats(){
+  const cats=[...new Set(DATA.map(s=>s.category))];
+  const wrap=document.getElementById('cats');
+  wrap.innerHTML='';
+  const mk=(label,val)=>{
+    const b=document.createElement('button');
+    b.textContent=label;
+    if(CAT===val)b.classList.add('on');
+    b.onclick=()=>{CAT=val;buildCats();render();};
+    wrap.appendChild(b);
+  };
+  mk('全部','');
+  cats.forEach(c=>mk(c,c));
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function md(t){
+  t=esc(t);
+  t=t.replace(/```([\s\S]*?)```/g,(m,c)=>'<pre>'+c+'</pre>');
+  t=t.replace(/^####\s?(.*)$/gm,'<h4>$1</h4>').replace(/^###\s?(.*)$/gm,'<h3>$1</h3>').replace(/^##\s?(.*)$/gm,'<h2>$1</h2>').replace(/^#\s?(.*)$/gm,'<h1>$1</h1>');
+  t=t.replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>');
+  t=t.replace(/^\s*[-*]\s(.*)$/gm,'• $1');
+  t=t.replace(/\n/g,'<br>');
+  return t;
+}
+function title(s){return LANG==='en'?s.slug:(LANG==='sc'?(s.cn_sc||s.cn):s.cn)}
+function desc(s){return s.description[LANG]||s.description.tc}
+async function show(i){
+  cur=i;const s=DATA[i];
+  const main=document.getElementById('main');
+  main.innerHTML='<div class="sk-desc">載入中…</div>';
+  const r=await fetch('/api/skills/'+s.slug+'?lang='+LANG);
+  const d=await r.json();
+  let h='<h1>'+esc(title(s))+' <small style="color:var(--muted);font-size:12px">'+esc(s.category)+' · '+esc(s.slug)+' · v'+esc(s.version||'?')+' · '+s.bytes.toLocaleString()+' B</small></h1>';
+  h+='<div class="sk-desc">'+esc(desc(s))+'</div>';
+  h+='<img src="/api/skills/'+s.slug+'/cover" style="width:100%;max-height:260px;object-fit:cover;border-radius:12px;margin-bottom:16px" onerror="this.style.display=\'none\'">';
+  h+='<div class="sk-fmt" id="fm">'+esc(d.frontmatter)+'</div><div style="margin:8px 0"><a href="javascript:void(0)" onclick="document.getElementById(\'fm\').classList.toggle(\'open\')" style="color:var(--muted);font-size:12px">顯示/隱藏 frontmatter</a></div>';
+  h+='<div id="body">'+md(d.markdown)+'</div>';
+  for(const e of (s.extras||[])){
+    const er=await fetch('/api/skills/'+s.slug+'/'+e+'?lang='+LANG);
+    const ed=await er.json();
+    h+='<div class="sk-extra"><h2>附屬檔：'+esc(e)+'</h2>'+md(ed.markdown)+'</div>';
+  }
+  main.innerHTML=h; main.scrollTop=0;
+  document.querySelectorAll('.sk-it').forEach((el,j)=>el.classList.toggle('on',j===i));
+}
+function render(){
+  const q=document.getElementById('q').value.toLowerCase();
+  const list=document.getElementById('list');list.innerHTML='';
+  let n=0;
+  DATA.forEach((s,i)=>{
+    if(CAT&&s.category!==CAT)return;
+    const hay=(s.cn+' '+(s.cn_sc||'')+' '+s.slug+' '+s.category+' '+s.description.tc+' '+s.description.en+' '+s.description.sc).toLowerCase();
+    if(q&&!hay.includes(q))return;
+    n++;
+    const div=document.createElement('div');div.className='sk-it'+(i===cur?' on':'');
+    div.innerHTML='<img loading="lazy" src="/api/skills/'+s.slug+'/cover" onerror="this.style.visibility=\'hidden\'">'+
+      '<div class="t"><b>'+esc(title(s))+'</b><span>'+esc(desc(s).slice(0,60))+'</span></div>';
+    div.onclick=()=>show(i);
+    list.appendChild(div);
+  });
+  document.getElementById('cnt').textContent=n+' / '+DATA.length+' skills';
+}
+document.getElementById('q').oninput=render;
+document.querySelectorAll('.sk-lang button').forEach(b=>b.onclick=()=>{
+  LANG=b.dataset.l;
+  document.querySelectorAll('.sk-lang button').forEach(x=>x.classList.toggle('on',x===b));
+  render(); if(cur>=0) show(cur);
+});
+fetch('/api/skills').then(r=>r.json()).then(d=>{DATA=d.skills;buildCats();render();if(DATA.length)show(0);});
+</script>
+{% endblock %}

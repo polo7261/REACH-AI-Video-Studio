@@ -1,0 +1,7 @@
+{
+ "cn": "剧本人物装造提取 & 真人写实三视图生成",
+ "skillKey": "character-costume-extractor-and-realistic-orthographic-generator-8d012fbe5b224c7bab64318012900756",
+ "templateUuid": "e5d72ad9120e4f99bf0ff8724a580c85",
+ "version": "1.0.2",
+ "description": "输入剧本角色描述或角色参考图，并生成符合的真人写实角色三视图"
+}

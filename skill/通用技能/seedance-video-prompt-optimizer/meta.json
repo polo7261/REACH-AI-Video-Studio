@@ -1,0 +1,7 @@
+{
+ "cn": "Seedance 2.5官方提示词优化",
+ "skillKey": "seedance-video-prompt-optimizer-bad63981e709426081d59cba79446f22",
+ "templateUuid": "9f65cd9b894549b8a6f38efaac5b57b3",
+ "version": "1.0.0",
+ "description": "将视频想法优化为包含时间段、景别、动作、运镜和接镜状态的提示"
+}

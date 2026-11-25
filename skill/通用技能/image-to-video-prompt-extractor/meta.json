@@ -1,0 +1,7 @@
+{
+ "cn": "参考图转视频提示词",
+ "skillKey": "image-to-video-prompt-extractor-746d724e78e64de59d5fc557aa3ffc50",
+ "templateUuid": "03b1908e58fd4735a40e24c775db9b31",
+ "version": "1.0.1",
+ "description": "把参考图提炼成可用的视频生成提示词"
+}

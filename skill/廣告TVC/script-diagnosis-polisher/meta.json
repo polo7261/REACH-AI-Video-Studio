@@ -1,0 +1,7 @@
+{
+ "cn": "AI导演-剧本诊断改稿",
+ "skillKey": "script-diagnosis-polisher-a2d8eb2fd4984b249b57a71943ff8aee",
+ "templateUuid": "be4ab1ef415146ef9eeb0111c789bf42",
+ "version": "1.0.2",
+ "description": "为你的剧本进行逐场解析、导演诊断、授权修订、版本锁定"
+}

@@ -1,0 +1,7 @@
+{
+ "cn": "镜语师-C 剧情分镜九宫格",
+ "skillKey": "cinema-storyboard-grid-creator-85cc35625578417ba5ec32a732852daa",
+ "templateUuid": "1f5f30747d18456a98c358d6caf65554",
+ "version": "1.0.3",
+ "description": "按剧情文本生成 3×3 电影分镜九宫格"
+}
