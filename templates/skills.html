@@ -132,7 +132,7 @@
             <button class="skp-tb" id="tb-mode" type="button" data-tip="生成模式"></button>
           </div>
           <div class="skp-chips"><span id="pick"></span><span id="mchips" style="display:contents"></span></div>
-          <span class="skp-hint" id="t-hint" style="margin-left:auto">⌘ + Enter 送到 AI 導演</span>
+          <span class="skp-hint" id="t-hint" style="margin-left:auto">⌘ + Enter 開啟 Skill 工作台</span>
           <button class="skp-send" id="send" title="送出" disabled style="margin-left:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg></button>
         </div>
         <div class="skp-pop" id="pop-model" hidden></div>
@@ -164,9 +164,9 @@
 (()=>{
 const LMAP={'zh-Hant':'tc','zh-Hans':'sc','en':'en'};
 const I18N={
-  tc:{hero:'一個 Skill，一部作品',ph:'輸入你的創作靈感，或從下方挑選一個 Skill 開始',hint:'⌘ + Enter 送到 AI 導演',all:'全部',fav:'收藏',search:'搜尋 Skill',use:'使用此 Skill',empty:'沒有符合的 Skill',fm:'顯示／隱藏 frontmatter',extra:'附屬檔',loading:'載入中…',skill:'Skill',mdl:'選擇模型',img:'圖片',vid:'影片',st:{ok:'可用',untested:'未實測',quota:'需開通',license:'授權'},mode:'生成模式',man:'手動生成',manD:'AI 導演每次生成前詢問',aut:'自動生成',autD:'AI 導演直接呼叫模型生成',gen:'通用',mine:'我的',mineE:'尚未建立自己的 Skill',allBtn:'全部',none:'沒有可用的模型'},
-  sc:{hero:'一个 Skill，一部作品',ph:'输入你的创作灵感，或从下方挑选一个 Skill 开始',hint:'⌘ + Enter 发送到 AI 导演',all:'全部',fav:'收藏',search:'搜索 Skill',use:'使用此 Skill',empty:'没有符合的 Skill',fm:'显示／隐藏 frontmatter',extra:'附属文件',loading:'加载中…',skill:'Skill',mdl:'选择模型',img:'图片',vid:'视频',st:{ok:'可用',untested:'未实测',quota:'需开通',license:'授权'},mode:'生成模式',man:'手动生成',manD:'AI 导演每次生成前询问',aut:'自动生成',autD:'AI 导演直接调用模型生成',gen:'通用',mine:'我的',mineE:'尚未创建自己的 Skill',allBtn:'全部',none:'没有可用的模型'},
-  en:{hero:'One Skill, One Film',ph:'Describe your idea, or pick a Skill below to start',hint:'⌘ + Enter to send to AI Director',all:'All',fav:'Saved',search:'Search Skills',use:'Use this Skill',empty:'No matching Skills',fm:'Show / hide frontmatter',extra:'Attachment',loading:'Loading…',skill:'Skill',mdl:'Select model',img:'Image',vid:'Video',st:{ok:'Ready',untested:'Untested',quota:'Not enabled',license:'License'},mode:'Generation',man:'Manual',manD:'AI Director asks before each generation',aut:'Auto',autD:'AI Director generates directly',gen:'General',mine:'Mine',mineE:'No custom Skills yet',allBtn:'All',none:'No models available'}
+  tc:{hero:'一個 Skill，一部作品',ph:'輸入你的創作靈感，或從下方挑選一個 Skill 開始',hint:'⌘ + Enter 開啟 Skill 工作台',all:'全部',fav:'收藏',search:'搜尋 Skill',use:'使用此 Skill',empty:'沒有符合的 Skill',fm:'顯示／隱藏 frontmatter',extra:'附屬檔',loading:'載入中…',skill:'Skill',mdl:'選擇模型',img:'圖片',vid:'影片',st:{ok:'可用',untested:'未實測',quota:'需開通',license:'授權'},mode:'生成模式',man:'手動生成',manD:'AI 導演每次生成前詢問',aut:'自動生成',autD:'AI 導演直接呼叫模型生成',gen:'通用',mine:'我的',mineE:'尚未建立自己的 Skill',allBtn:'全部',none:'沒有可用的模型'},
+  sc:{hero:'一个 Skill，一部作品',ph:'输入你的创作灵感，或从下方挑选一个 Skill 开始',hint:'⌘ + Enter 打开 Skill 工作台',all:'全部',fav:'收藏',search:'搜索 Skill',use:'使用此 Skill',empty:'没有符合的 Skill',fm:'显示／隐藏 frontmatter',extra:'附属文件',loading:'加载中…',skill:'Skill',mdl:'选择模型',img:'图片',vid:'视频',st:{ok:'可用',untested:'未实测',quota:'需开通',license:'授权'},mode:'生成模式',man:'手动生成',manD:'AI 导演每次生成前询问',aut:'自动生成',autD:'AI 导演直接调用模型生成',gen:'通用',mine:'我的',mineE:'尚未创建自己的 Skill',allBtn:'全部',none:'没有可用的模型'},
+  en:{hero:'One Skill, One Film',ph:'Describe your idea, or pick a Skill below to start',hint:'⌘ + Enter to open Skill Workbench',all:'All',fav:'Saved',search:'Search Skills',use:'Use this Skill',empty:'No matching Skills',fm:'Show / hide frontmatter',extra:'Attachment',loading:'Loading…',skill:'Skill',mdl:'Select model',img:'Image',vid:'Video',st:{ok:'Ready',untested:'Untested',quota:'Not enabled',license:'License'},mode:'Generation',man:'Manual',manD:'AI Director asks before each generation',aut:'Auto',autD:'AI Director generates directly',gen:'General',mine:'Mine',mineE:'No custom Skills yet',allBtn:'All',none:'No models available'}
 };
 const CAT={'MV音樂':['MV音乐','Music Video'],'分鏡前期':['分镜前期','Storyboard'],'劇本喜劇':['剧本喜剧','Script & Comedy'],'動畫動漫':['动画动漫','Animation'],'廣告TVC':['广告TVC','Commercial'],'旅拍生活':['旅拍生活','Travel & Life'],'短劇漫劇':['短剧漫剧','Short Drama'],'自媒體口播':['自媒体口播','Creator Talk'],'視覺風格':['视觉风格','Visual Style'],'遊戲運動':['游戏运动','Game & Sport'],'電商帶貨':['电商带货','E-commerce'],'電影美學':['电影美学','Film Aesthetics']};
 const $=id=>document.getElementById(id);
@@ -255,10 +255,8 @@ function sendState(){$('send').disabled=!($('pin').value.trim()||PICK>=0);}
 function send(){
   if($('send').disabled)return;
   const s=PICK>=0?DATA[PICK]:null,txt=$('pin').value.trim();
-  const pre=txt;
-  try{sessionStorage.setItem('reach.director.settings',JSON.stringify({skill:s?s.slug:'',skill_name:s?s.cn:'',models:MODELS||{},gen_mode:GMODE}))}catch{}
-  try{sessionStorage.setItem('reach.director.prefill',pre)}catch{}
-  location.href='/director';
+  try{sessionStorage.setItem('reach.workbench.new',JSON.stringify({skill:s?s.slug:'',skill_name:s?s.cn:'',models:MODELS||{},gen_mode:GMODE,text:txt}))}catch{}
+  location.href='/workbench';
 }
 $('d-use').onclick=()=>{if(CUR<0)return;pick(CUR);close();$('skp').scrollTo({top:0,behavior:'smooth'});$('pin').focus();};
 /* ===== 編輯區工具：模型 / Skill / 生成模式 ===== */

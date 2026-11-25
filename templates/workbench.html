@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% set active = "workbench" %}
+{% set main_class = "full" %}
+{% block title %}Skill 工作台{% endblock %}
+{% block content %}
+<div class="wb" id="wb">
+  <section class="wb-chat">
+    <header class="wb-head">
+      <select id="wb-project" title="專案"></select>
+      <select id="wb-session" title="工作階段"></select>
+      <button class="icon-btn sm" id="wb-new" type="button" title="新工作階段">
+        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+    </header>
+    <div class="wb-sets" id="wb-sets"></div>
+    <div class="wb-msgs" id="wb-msgs"></div>
+    <div class="wb-ask" id="wb-ask" hidden></div>
+    <div class="wb-input">
+      <textarea id="wb-text" rows="3" placeholder="描述想法，或回覆 AI 的問題…（⌘+Enter 送出）"></textarea>
+      <div class="wb-input-bar">
+        <span class="muted" id="wb-model" style="font-size:11.5px"></span>
+        <button class="wb-send" id="wb-send" type="button" title="送出">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg></button>
+      </div>
+    </div>
+  </section>
+  <section class="wb-doc">
+    <header class="wb-doc-head">
+      <div class="wb-tabs" id="wb-tabs">
+        <button type="button" data-tab="script" class="on">劇本</button>
+        <button type="button" data-tab="shots">分鏡表 <em id="wb-shot-n">0</em></button>
+      </div>
+      <span style="flex:1"></span>
+      <button class="ghost small" type="button" id="wb-edit">編輯</button>
+      <button class="ghost small" type="button" id="wb-export">匯出 .md</button>
+      <button class="small" type="button" id="wb-canvas">建立分鏡到畫布</button>
+    </header>
+    <div class="wb-doc-body" id="wb-doc"></div>
+  </section>
+</div>
+{% endblock %}
+{% block scripts %}<script src="{{ asset('workbench.js') }}"></script>{% endblock %}

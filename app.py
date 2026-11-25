@@ -70,6 +70,11 @@ def page_canvas():
     return render_template("canvas.html")
 
 
+@app.get("/workbench")
+def page_workbench():
+    return render_template("workbench.html")
+
+
 @app.get("/director")
 def page_director():
     return render_template("director.html")
@@ -1440,6 +1445,228 @@ def api_director_chat(pid: str):
     state["messages"] = state["messages"][-40:]
     save_project(plan)
     return jsonify(reply=state["messages"][-1], user=state["messages"][-2], settings=settings)
+
+
+# --------------------------------------------------------------------- Skill 工作台（劇本＋分鏡）
+WB_PROTOCOL = """你在 REACH AI Video Studio 的「Skill 工作台」，目標是與使用者一起產出【劇本】與【分鏡表】。一律使用繁體中文（英文提示詞除外）。
+
+回覆規則（務必遵守格式）：
+1. 若缺少會「顯著影響結果」的關鍵資訊（交付形式、片長、風格、主角設定、要拍哪一場等），先提問，不要產出劇本：
+   用 1–2 句說明為何要問，接著輸出一個 ```ask 區塊（JSON）：
+   {"questions":[{"q":"問題","options":["選項1","選項2","選項3"]}]}
+   最多 3 題，每題 2–5 個簡短選項；使用者也能自行輸入其他答案。
+2. 資訊足夠時，產出成品：
+   ```script
+   （完整 Markdown 劇本：片名、一句話梗概、角色表、分場與對白）
+   ```
+   ```shots
+   {"shots":[{"title":"鏡頭名稱","seconds":5,"desc":"畫面描述（繁中）","camera":"景別／運鏡／光線（繁中）","prompt":"英文圖片提示詞（主體外觀、場景、構圖、光線、風格，可直接生圖）","negative":"英文負面提示詞","motion":"英文影片運動描述（鏡頭與主體動作）"}]}
+   ```
+   區塊外只寫 1–3 句重點說明，不要重複區塊內容。
+3. 使用者要求修改時，只輸出需要更新的區塊（script 或 shots），內容為完整的新版本。
+4. 每鏡 seconds 介於 4–10；同一角色在每鏡的 prompt 中外觀描述必須一致。
+   shots 欄位格式優先於 Skill 內的任何輸出格式：prompt 只寫「單張靜態畫面」的英文生圖提示詞（60–120 個英文詞，不含時間軸、不含中文、不含 Camera/Audio 分段）；
+   motion 只寫該鏡的英文鏡頭與主體動作（1–3 句）；Skill 要求的時間軸、音效等細節放進 camera 或劇本。
+5. 不要使用受版權保護的角色名稱或品牌，改用原創描述。"""
+
+_WB_ID = re.compile(r"[a-f0-9]{8}")
+
+
+def _wb(plan: dict) -> dict:
+    return plan.setdefault("workbench", {"sessions": {}})
+
+
+def _wb_summary(sid: str, ss: dict) -> dict:
+    return {"id": sid, "title": ss.get("title") or "未命名", "skill": ss.get("skill", ""),
+            "skill_name": ss.get("skill_name", ""), "updated": ss.get("updated", ""),
+            "shots": len(ss.get("shots") or []), "has_script": bool(ss.get("script"))}
+
+
+def _wb_blocks(text: str) -> dict:
+    """解析 ```ask / ```script / ```shots；容許最後一個區塊沒有收尾（被截斷）。"""
+    out: dict = {}
+    for kind in ("ask", "script", "shots"):
+        m = re.search(r"```" + kind + r"[^\n]*\n(.*?)(?:```|\Z)", text, re.S | re.I)
+        if m:
+            out[kind] = m.group(1).strip()
+    shown = re.sub(r"```(?:ask|script|shots)[^\n]*\n.*?(?:```|\Z)", "", text, flags=re.S | re.I).strip()
+    out["text"] = re.sub(r"\n{3,}", "\n\n", shown)
+    return out
+
+
+def _wb_json(raw: str):
+    raw = raw.strip()
+    try:
+        return json.loads(raw)
+    except ValueError:
+        m = re.search(r"\{.*\}", raw, re.S)
+        if m:
+            try:
+                return json.loads(m.group(0))
+            except ValueError:
+                return None
+    return None
+
+
+def _wb_clean_shots(items) -> list[dict]:
+    shots = []
+    for x in (items or [])[:40]:
+        if not isinstance(x, dict):
+            continue
+        try:
+            sec = max(4, min(10, int(float(x.get("seconds") or 5))))
+        except (TypeError, ValueError):
+            sec = 5
+        shots.append({k: str(x.get(k) or "")[:3000] for k in ("title", "desc", "camera", "prompt", "negative", "motion")}
+                     | {"seconds": sec})
+    return [s for s in shots if s["prompt"] or s["desc"]]
+
+
+@app.get("/api/projects/<pid>/workbench")
+def api_wb_list(pid: str):
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    items = [_wb_summary(k, v) for k, v in _wb(plan)["sessions"].items()]
+    items.sort(key=lambda x: x["updated"], reverse=True)
+    return jsonify(sessions=items)
+
+
+@app.post("/api/projects/<pid>/workbench")
+def api_wb_create(pid: str):
+    body = request.get_json(silent=True) or {}
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    sid = uuid.uuid4().hex[:8]
+    ss = {"title": str(body.get("title") or "")[:60], "messages": [], "script": "", "shots": [],
+          "created": time.strftime("%Y-%m-%d %H:%M:%S")}
+    _director_settings(body, ss)  # 共用：skill / models / gen_mode 檢查
+    ss.update(ss.pop("settings"))
+    info = _skill_dirs().get(ss["skill"]) if ss["skill"] else None
+    ss["skill_name"] = (info["meta"].get("cn_tc") or info["meta"].get("cn") or ss["skill"]) if info else ""
+    if not ss["title"]:
+        ss["title"] = ss["skill_name"] or "自由創作"
+    ss["updated"] = ss["created"]
+    _wb(plan)["sessions"][sid] = ss
+    save_project(plan)
+    return jsonify(session=ss | {"id": sid})
+
+
+@app.get("/api/projects/<pid>/workbench/<sid>")
+def api_wb_get(pid: str, sid: str):
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    ss = _wb(plan)["sessions"].get(sid) if _WB_ID.fullmatch(sid) else None
+    if ss is None:
+        return jsonify(error="找不到工作階段"), 404
+    return jsonify(session=ss | {"id": sid})
+
+
+@app.put("/api/projects/<pid>/workbench/<sid>")
+def api_wb_put(pid: str, sid: str):
+    """手動編輯劇本、分鏡、標題、模型與生成模式。"""
+    body = request.get_json(silent=True) or {}
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    ss = _wb(plan)["sessions"].get(sid) if _WB_ID.fullmatch(sid) else None
+    if ss is None:
+        return jsonify(error="找不到工作階段"), 404
+    if "script" in body:
+        ss["script"] = str(body["script"])[:60000]
+    if "shots" in body:
+        ss["shots"] = _wb_clean_shots(body["shots"])
+    if "title" in body:
+        ss["title"] = str(body["title"])[:60] or ss.get("title")
+    if "models" in body or "gen_mode" in body:
+        tmp = {"settings": {"skill": ss.get("skill", ""), "models": ss.get("models", {}), "gen_mode": ss.get("gen_mode", "manual")}}
+        _director_settings({k: body[k] for k in ("models", "gen_mode") if k in body}, tmp)
+        ss["models"], ss["gen_mode"] = tmp["settings"]["models"], tmp["settings"]["gen_mode"]
+    ss["updated"] = time.strftime("%Y-%m-%d %H:%M:%S")
+    save_project(plan)
+    return jsonify(session=ss | {"id": sid})
+
+
+@app.delete("/api/projects/<pid>/workbench/<sid>")
+def api_wb_delete(pid: str, sid: str):
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    _wb(plan)["sessions"].pop(sid, None)
+    save_project(plan)
+    return jsonify(ok=True)
+
+
+@app.post("/api/projects/<pid>/workbench/<sid>/chat")
+def api_wb_chat(pid: str, sid: str):
+    body = request.get_json(silent=True) or {}
+    text = str(body.get("text", "")).strip()[:8000]
+    if not text:
+        return jsonify(error="請輸入內容"), 400
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    ss = _wb(plan)["sessions"].get(sid) if _WB_ID.fullmatch(sid) else None
+    if ss is None:
+        return jsonify(error="找不到工作階段"), 404
+
+    provider, model = resolve("script", plan)
+    if "|" in str(body.get("model", "")):
+        prov, mid = body["model"].split("|", 1)
+        if valid_choice("script", prov, mid):
+            provider, model = prov, mid
+
+    system = WB_PROTOCOL
+    if ss.get("skill"):
+        system += "\n\n" + _skill_prompt(ss["skill"])
+    if ss.get("models"):
+        names = "、".join(f"{'圖片' if k == 'image' else '影片'}模型 {v.split('|', 1)[1]}" for k, v in ss["models"].items())
+        system += f"\n\n後續將使用：{names}。prompt 與 motion 請針對這些模型撰寫。"
+    if ss.get("script") or ss.get("shots"):
+        system += "\n\n【目前的劇本】\n" + (ss.get("script") or "（尚無）")[:12000]
+        system += "\n\n【目前的分鏡表 JSON】\n" + json.dumps({"shots": ss.get("shots") or []}, ensure_ascii=False)[:12000]
+    if ss.get("gen_mode") == "auto":
+        system += "\n\n使用者偏好：盡量少提問，資訊不足時用合理假設直接產出，並在說明中標註假設。"
+
+    history = [{"role": m["role"], "content": m["content"][:4000]} for m in ss["messages"][-10:]]
+    messages = [{"role": "system", "content": system}, *history, {"role": "user", "content": text}]
+    try:
+        reply = providers.chat(provider, model, messages, max_tokens=8000, timeout=300).strip()
+    except ProviderError as exc:
+        return jsonify(error=str(exc)[:300]), 502
+
+    parts = _wb_blocks(reply)
+    ask = _wb_json(parts["ask"]) if parts.get("ask") else None
+    questions = []
+    for q in (ask or {}).get("questions") or []:
+        if isinstance(q, dict) and q.get("q"):
+            questions.append({"q": str(q["q"])[:200], "options": [str(o)[:120] for o in (q.get("options") or [])[:6]]})
+    updated = []
+    if parts.get("script"):
+        ss["script"] = parts["script"][:60000]
+        updated.append("script")
+    if parts.get("shots"):
+        data = _wb_json(parts["shots"])
+        shots = _wb_clean_shots((data or {}).get("shots") if isinstance(data, dict) else data)
+        if shots:
+            ss["shots"] = shots
+            updated.append("shots")
+    now = time.strftime("%Y-%m-%d %H:%M:%S")
+    ss["messages"].append({"role": "user", "content": text, "at": now})
+    ss["messages"].append({"role": "assistant", "content": reply, "text": parts["text"], "questions": questions,
+                           "updated": updated, "at": now, "model": f"{provider}/{model}"})
+    ss["messages"] = ss["messages"][-60:]
+    ss["updated"] = now
+    save_project(plan)
+    return jsonify(session=ss | {"id": sid})
 
 
 @app.get("/api/projects/<pid>/report")

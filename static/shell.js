@@ -3,7 +3,7 @@
   const DICT = {
     "zh-Hant": {
       "nav.home": "首頁", "nav.projects": "專案", "nav.assets": "素材庫", "nav.skills": "Skill 庫", "nav.create": "創作",
-      "nav.director": "AI 導演", "nav.canvas": "無限畫布", "nav.timeline": "時間軸剪輯", "tag.soon": "即將推出",
+      "nav.workbench": "Skill 工作台", "nav.director": "AI 導演", "nav.canvas": "無限畫布", "nav.timeline": "時間軸剪輯", "tag.soon": "即將推出",
       "nav.settings": "設定", "nav.api": "API 與網址", "nav.docs": "技術文件",
       "theme.toLight": "切換為亮色", "theme.toDark": "切換為暗色",
       "home.heroTitle": "一句話，開始一部片", "home.heroPh": "例：一名少女在雨夜的霓虹街道上追逐一枚飄走的紙鶴",
@@ -18,7 +18,7 @@
     },
     "zh-Hans": {
       "nav.home": "首页", "nav.projects": "项目", "nav.assets": "素材库", "nav.skills": "Skill 库", "nav.create": "创作",
-      "nav.director": "AI 导演", "nav.canvas": "无限画布", "nav.timeline": "时间轴剪辑", "tag.soon": "即将推出",
+      "nav.workbench": "Skill 工作台", "nav.director": "AI 导演", "nav.canvas": "无限画布", "nav.timeline": "时间轴剪辑", "tag.soon": "即将推出",
       "nav.settings": "设置", "nav.api": "API 与网址", "nav.docs": "技术文档",
       "theme.toLight": "切换为亮色", "theme.toDark": "切换为暗色",
       "home.heroTitle": "一句话，开始一部片", "home.heroPh": "例：一名少女在雨夜的霓虹街道上追逐一枚飘走的纸鹤",
@@ -33,7 +33,7 @@
     },
     en: {
       "nav.home": "Home", "nav.projects": "Projects", "nav.assets": "Assets", "nav.skills": "Skills", "nav.create": "Create",
-      "nav.director": "AI Director", "nav.canvas": "Canvas", "nav.timeline": "Timeline", "tag.soon": "Soon",
+      "nav.workbench": "Skill Workbench", "nav.director": "AI Director", "nav.canvas": "Canvas", "nav.timeline": "Timeline", "tag.soon": "Soon",
       "nav.settings": "Settings", "nav.api": "APIs & Endpoints", "nav.docs": "Docs",
       "theme.toLight": "Switch to light", "theme.toDark": "Switch to dark",
       "home.heroTitle": "One sentence. One film.", "home.heroPh": "e.g. A girl chases a drifting paper crane down a neon street on a rainy night",
