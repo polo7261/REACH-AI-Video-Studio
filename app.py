@@ -601,10 +601,10 @@ def api_shot_image(pid: str, sid: str):
             prev_video = prev.get("video")
             if prev_video:
                 vpath = media_dir(pid) / prev_video
-                if vpath.is_file() and shutil.which("ffmpeg"):  # 沒裝 ffmpeg 就略過接續首幀
+                if vpath.is_file() and _ffbin("ffmpeg"):  # 沒裝 ffmpeg 就略過接續首幀
                     chain_path = media_dir(pid) / f"chain-{sid}.jpg"
                     subprocess.run(
-                        ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-sseof", "-0.15",
+                        [_ffbin("ffmpeg"), "-hide_banner", "-loglevel", "error", "-y", "-sseof", "-0.15",
                          "-i", str(vpath), "-frames:v", "1", "-q:v", "2", str(chain_path)],
                         check=False,
                     )
@@ -968,11 +968,23 @@ def _clean_params(kind: str, params: dict) -> dict:
     return out
 
 
+def _ffbin(name: str) -> str | None:
+    """找 ffmpeg/ffprobe：PATH 找不到時，再找 Homebrew 常見路徑（Finder／背景啟動時 PATH 常不完整）。"""
+    hit = shutil.which(name)
+    if hit:
+        return hit
+    for d in ("/usr/local/bin", "/opt/homebrew/bin", str(Path.home() / ".homebrew/bin"), "/usr/bin"):
+        p = Path(d) / name
+        if p.is_file():
+            return str(p)
+    return None
+
+
 def _ffprobe(path: Path) -> tuple[float, bool, tuple[int, int]]:
     """回傳（秒數, 是否有音軌, (寬, 高)）。"""
     import subprocess as _sp
 
-    r = _sp.run(["ffprobe", "-v", "error", "-show_entries", "stream=codec_type,width,height",
+    r = _sp.run([_ffbin("ffprobe") or "ffprobe", "-v", "error", "-show_entries", "stream=codec_type,width,height",
                  "-show_entries", "format=duration", "-of", "json", str(path)],
                 capture_output=True, text=True, timeout=30)
     info = json.loads(r.stdout or "{}")
@@ -1003,8 +1015,9 @@ def _compose_clips(canvas: dict, node: dict) -> list[dict]:
 def _compose_run(pid: str, canvas: dict, node: dict) -> dict:
     import subprocess as _sp
 
-    if not shutil.which("ffmpeg"):
-        raise RuntimeError("伺服器沒有安裝 ffmpeg（brew install ffmpeg）")
+    ffmpeg = _ffbin("ffmpeg")
+    if not ffmpeg or not _ffbin("ffprobe"):
+        raise RuntimeError("伺服器找不到 ffmpeg／ffprobe（brew install ffmpeg）")
     clips = [c for c in _compose_clips(canvas, node) if c["on"]]
     if not clips:
         raise RuntimeError("請把已生成完成的影片節點連到這個合成節點")
@@ -1025,7 +1038,7 @@ def _compose_run(pid: str, canvas: dict, node: dict) -> dict:
     W, H = W - W % 2, H - H % 2
     if trans != "cut" and len(items) > 1:
         tdur = min(tdur, min(it["d"] for it in items) / 2)
-    args = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y"]
+    args = [ffmpeg, "-hide_banner", "-loglevel", "error", "-y"]
     for it in items:
         args += ["-i", str(it["path"])]
     for it in items:  # 沒音軌的片段補靜音
