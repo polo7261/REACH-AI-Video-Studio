@@ -1,36 +1,26 @@
-<!doctype html>
-<html lang="zh-Hant">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>REACH AI · API 與網址</title>
-<link rel="stylesheet" href="/static/app.css">
-</head>
-<body>
-<div class="layout">
-  <aside>
-    <div class="brand">REACH AI<small>VIDIO STUDIO</small></div>
-    <nav>
-      <a href="/">▣ 影片工作室</a>
-      <a href="/skills/">◆ Skill 庫</a>
-      <a href="/api-page" class="active">⚙ API 與網址</a>
-      <a href="/docs/">▤ 技術文件</a>
-    </nav>
-    <div style="margin-top:auto" class="muted mono">金鑰僅存在本機 .env</div>
-  </aside>
-
-  <main>
-    <h1>API 與網址</h1>
+{% extends "base.html" %}
+{% set active = "api" %}
+{% block title %}API 與網址{% endblock %}
+{% block content %}
+    <h1 data-i18n="api.title">API 與網址</h1>
     <div class="sub">
-      三家 Provider 的端點、模型與實測狀態（2026-11-21 探測）。金鑰一律遮蔽顯示，不會出現在此頁或日誌。
+      各 Provider 的端點、模型與實測狀態（2026-11-21 探測）。金鑰一律遮蔽顯示，不會出現在此頁或日誌。
     </div>
 
+    <section class="card">
+      <h3>製作流程 × 模型對應 <span class="muted" style="font-weight:400;font-size:12px">（全域預設；專案內可另行覆寫）</span></h3>
+      <div id="flow" class="flow">載入中…</div>
+    </section>
+
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-tab="cloud">雲端</button>
+      <button class="tab" data-tab="local">地端</button>
+    </div>
     <div id="providers" class="grid three"></div>
 
-    <h2>原始設定（遮蔽後）</h2>
-    <pre class="doc mono" id="raw">載入中…</pre>
-  </main>
-</div>
-<script src="/static/api.js"></script>
-</body>
-</html>
+    <details style="margin-top:22px">
+      <summary class="muted" style="cursor:pointer">原始設定（遮蔽後）</summary>
+      <pre class="doc mono" id="raw" style="margin-top:10px">載入中…</pre>
+    </details>
+{% endblock %}
+{% block scripts %}<script src="{{ asset('api.js') }}"></script>{% endblock %}

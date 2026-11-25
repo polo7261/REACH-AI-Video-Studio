@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon %}
+{% set active = "home" %}
+{% block title %}首頁{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1 class="hero-title" data-i18n="home.heroTitle">一句話，開始一部片</h1>
+  <div class="hero-box">
+    <textarea id="hero-idea" rows="2" data-i18n-ph="home.heroPh" placeholder="例：一名少女在雨夜的霓虹街道上追逐一枚飄走的紙鶴"></textarea>
+    <button id="hero-start" class="hero-btn">{{ icon("plus", 18) }}<span data-i18n="home.start">開始創作</span></button>
+  </div>
+</section>
+
+<h2 class="sec" data-i18n="home.tools">創作工具</h2>
+<div class="tiles">
+  {% for key, ic in [("script","script"),("character","character"),("keyframe","keyframe"),("video","video"),("tts","tts"),("edit","edit")] %}
+  <a class="tile {{ 'soon' if key == 'edit' }}" href="{{ '#' if key == 'edit' else '/studio' }}" data-tool="{{ key }}">
+    <span class="tile-ico">{{ icon(ic, 24) }}</span>
+    <span data-i18n="tool.{{ key }}"></span>
+    {% if key == "edit" %}<span class="tag" data-i18n="tag.soon">即將推出</span>{% endif %}
+  </a>
+  {% endfor %}
+</div>
+
+<div class="sec-row"><h2 class="sec" data-i18n="home.models">目前使用模型</h2><a href="/api-page" class="more"><span data-i18n="home.edit">調整</span> {{ icon("arrow", 14) }}</a></div>
+<div class="model-strip" id="model-strip"><div class="muted">…</div></div>
+
+<div class="sec-row"><h2 class="sec" data-i18n="home.recent">最近專案</h2><a href="/studio" class="more"><span data-i18n="home.viewAll">查看全部</span> {{ icon("arrow", 14) }}</a></div>
+<div class="recent" id="recent"><div class="muted">…</div></div>
+{% endblock %}
+{% block scripts %}<script src="{{ asset('home.js') }}"></script>{% endblock %}

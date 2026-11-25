@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% set active = "assets" %}
+{% block title %}素材庫{% endblock %}
+{% block content %}
+<h1 data-i18n="assets.title">素材庫</h1>
+<div class="sub" data-i18n="assets.sub">所有專案產生與上傳的圖片、影片、音訊。</div>
+<div class="tabs" id="asset-tabs">
+  <button class="tab active" data-f="all" data-i18n="assets.all">全部</button>
+  <button class="tab" data-f="image" data-i18n="assets.image">圖片</button>
+  <button class="tab" data-f="video" data-i18n="assets.video">影片</button>
+  <button class="tab" data-f="audio" data-i18n="assets.audio">音訊</button>
+</div>
+<div class="asset-grid" id="assets"><div class="muted">…</div></div>
+{% endblock %}
+{% block scripts %}<script src="{{ asset('assets.js') }}"></script>{% endblock %}

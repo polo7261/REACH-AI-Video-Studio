@@ -1,14 +1,14 @@
 #!/bin/bash
 # 打包安裝檔（不含任何 API Key）：.venv / .env / data / exports 一律不入包。
 # 用法：scripts/build_installer.sh [版本]
-#   → dist/REACH-AI-Vidio-Studio-<版本>-<日期>.zip     （macOS）
-#   → dist/REACH-AI-Vidio-Studio-<版本>-<日期>.tar.gz  （Ubuntu／Debian，內容相同）
+#   → dist/REACH-AI-Video-Studio-<版本>-<日期>.zip     （macOS）
+#   → dist/REACH-AI-Video-Studio-<版本>-<日期>.tar.gz  （Ubuntu／Debian，內容相同）
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
 VERSION="${1:-v0.3}"
-NAME="REACH-AI-Vidio-Studio"
+NAME="REACH-AI-Video-Studio"
 OUT_DIR="$ROOT/dist"
 STAMP="${NAME}-${VERSION}-$(date +%Y%m%d)"
 ZIP="$OUT_DIR/${STAMP}.zip"

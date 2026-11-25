@@ -1,4 +1,4 @@
-# REACH AI Vidio Studio
+# REACH AI Video Studio
 
 一句話 → 分鏡 → 關鍵影格 → 影片 → 配音。本機影片工作室，獨立於 `REACH-AI-Image`。
 
@@ -10,7 +10,7 @@
 ## 啟動
 
 ```bash
-cd ~/REACH-AI-Vidio-Studio
+cd ~/REACH-AI-Video-Studio
 .venv/bin/python app.py
 ```
 

@@ -67,7 +67,7 @@ Base：`https://api.minimaxi.com/v1`
 
 ## 地端 LTXV 2B（192.168.0.219:35332）
 
-服務：`server_ltx.py`（`~/reach-image-gguf/`，Flask + waitress；由 `REACH-AI-Vidio-Studio/deploy/server_ltx.py` 部署）；啟動前須設定環境變數 `REACH_LTX_KEY`（與本機 `.env` 同值）
+服務：`server_ltx.py`（`~/reach-image-gguf/`，Flask + waitress；由 `REACH-AI-Video-Studio/deploy/server_ltx.py` 部署）；啟動前須設定環境變數 `REACH_LTX_KEY`（與本機 `.env` 同值）
 模型：**LTXV 2B**（`Lightricks/LTX-Video` diffusers 格式，transformer 28 層 / hidden 2048）
 設定：24 fps｜步數預設 20（可由 `steps` 覆寫 4–40）｜guidance 3.0｜解析度 704×400（16:9）
 行為：lazy load、每支後卸載；API 形狀**與 Wan 服務相同**（`/v1/videos/generations`、`/health`、`/files/videos/…`）

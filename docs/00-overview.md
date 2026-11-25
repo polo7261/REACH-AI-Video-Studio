@@ -1,6 +1,6 @@
 # 00 · 總覽
 
-REACH AI Vidio Studio — 本機影片工作室。把「一句話」變成可追蹤的影片專案：
+REACH AI Video Studio — 本機影片工作室。把「一句話」變成可追蹤的影片專案：
 **分鏡 → 關鍵影格 → 影片片段 → 配音 → 後製**。
 
 - 網址：<http://127.0.0.1:35350/>
@@ -33,7 +33,7 @@ REACH AI Vidio Studio — 本機影片工作室。把「一句話」變成可追
 ## 檔案結構
 
 ```text
-REACH-AI-Vidio-Studio/
+REACH-AI-Video-Studio/
 ├─ app.py                  # Flask（127.0.0.1:35350）
 ├─ reach_video/
 │  ├─ config.py            # .env 載入、Provider/模型註冊表（含實測狀態）
@@ -49,7 +49,7 @@ REACH-AI-Vidio-Studio/
 ## 啟動
 
 ```bash
-cd ~/REACH-AI-Vidio-Studio
+cd ~/REACH-AI-Video-Studio
 .venv/bin/python app.py          # http://127.0.0.1:35350/
 .venv/bin/python scripts/probe.py  # 重新探測三家能力
 ```

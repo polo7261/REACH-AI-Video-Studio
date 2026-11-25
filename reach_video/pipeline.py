@@ -84,7 +84,7 @@ def make_plan(
             }
         )
     return {
-        "schema": "reach-vidio/plan@1",
+        "schema": "reach-video/plan@1",
         "id": _slug(title + idea + str(time.time())),
         "title": title.strip() or "未命名影片",
         "idea": idea.strip(),

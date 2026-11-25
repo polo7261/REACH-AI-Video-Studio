@@ -1,5 +1,5 @@
 #!/bin/bash
-# REACH AI Vidio Studio — 安裝（macOS／Ubuntu 共用）
+# REACH AI Video Studio — 安裝（macOS／Ubuntu 共用）
 #   macOS：Finder 雙擊，或終端機 ./install.command
 #   Ubuntu／Debian：終端機 ./install.command（或 bash install.command）
 # 只建立 .venv 與 .env 範本；不含任何 API Key，金鑰請自行填入 .env。

@@ -1,6 +1,7 @@
 (() => {
   const $ = (sel) => document.querySelector(sel);
-  const state = { pid: null, plan: null, polls: new Set() };
+  const state = { pid: null, plan: null, polls: new Set(), cfg: null };
+  const PROJECT_STEPS = ["script", "character", "keyframe", "tts"];
 
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -47,6 +48,8 @@
   function renderJobs(jobs) {
     const box = $("#jobs");
     if (!box) return;
+    const cnt = document.getElementById("jobs-count");
+    if (cnt) cnt.textContent = jobs.length ? `（${jobs.length}）` : "";
     if (!jobs.length) { box.innerHTML = '<div class="muted">—</div>'; return; }
     box.innerHTML = `<table class="map"><tr><th>任務</th><th>鏡頭</th><th>模型</th><th>狀態</th></tr>` +
       jobs.map((j) => `<tr><td class="mono">${esc(j.id)}</td><td>${esc(j.shot_id)}</td><td class="mono">${esc(j.model)}</td>
@@ -86,10 +89,49 @@
       renderDetail(data.plan, data.timeline);
       document.querySelectorAll("#projects .pitem").forEach((el) => el.classList.toggle("active", el.dataset.pid === pid));
       $("#detail").style.display = "";
+      $("#st-empty").hidden = true;
       $("#narration-text").value = data.plan.narration || "";
       renderUploads();
       renderFlow(data.plan);
+      renderModelBar(data.plan);
     } catch (err) { toast(err.message, true); }
+  }
+
+  // ------------------------------------------------------------- 專案模型選擇
+  async function renderModelBar(plan) {
+    const box = $("#model-bar");
+    try {
+      if (!state.cfg) state.cfg = await api("/api/config");
+    } catch (err) { box.innerHTML = `<div class="muted">模型清單讀取失敗：${esc(err.message)}</div>`; return; }
+    const cfg = state.cfg;
+    const own = plan.models || {};
+    const scopeName = { cloud: "雲端", local: "地端" };
+    box.innerHTML = cfg.steps.filter((s) => PROJECT_STEPS.includes(s.id)).map((s) => {
+      const g = cfg.routing[s.id];
+      const cur = own[s.id] ? `${own[s.id].provider}|${own[s.id].model}` : "";
+      const groups = ["cloud", "local"].map((scope) => {
+        const opts = cfg.providers.filter((p) => p.scope === scope).flatMap((p) =>
+          p.models.filter((m) => m.kind === s.kind && m.status !== "license").map((m) => {
+            const v = `${p.id}|${m.id}`;
+            const mark = m.status === "ok" ? "✓ " : m.status === "quota" ? "⚠ " : "· ";
+            return `<option value="${esc(v)}" ${v === cur ? "selected" : ""}>${mark}${esc(m.id)}（${esc(p.name)}）</option>`;
+          }));
+        return opts.length ? `<optgroup label="${scopeName[scope]}">${opts.join("")}</optgroup>` : "";
+      }).join("");
+      return `<div><label>${esc(s.label)}</label>
+        <select data-model-step="${esc(s.id)}">
+          <option value="" ${cur ? "" : "selected"}>沿用全域（${esc(g.model)}）</option>${groups}
+        </select></div>`;
+    }).join("");
+    box.querySelectorAll("[data-model-step]").forEach((sel) => sel.addEventListener("change", async () => {
+      const [provider = "", model = ""] = sel.value ? sel.value.split("|") : [];
+      try {
+        const res = await api(`/api/projects/${plan.id}/models`, { method: "PUT",
+          body: JSON.stringify({ step: sel.dataset.modelStep, provider, model }) });
+        plan.models = res.models;
+        toast(model ? `本專案改用：${model}` : "已改回沿用全域設定");
+      } catch (err) { toast(err.message, true); }
+    }));
   }
 
   async function renderFlow(plan) {
@@ -276,17 +318,32 @@
     const box = $("#uploads");
     try {
       const data = await api(`/api/projects/${state.pid}/uploads`);
+      const cnt = document.getElementById("uploads-count");
+      if (cnt) cnt.textContent = data.uploads.length ? `（${data.uploads.length}）` : "";
       if (!data.uploads.length) { box.innerHTML = '<div class="muted">尚無上傳</div>'; return; }
-      box.innerHTML = data.uploads.map((u) => `
-        <div style="margin:6px 0">
-          <a href="${u.url}" target="_blank">${u.name}</a>
-          <span class="muted" style="font-size:11px"> ${(u.size / 1048576).toFixed(1)} MB</span>
-          ${u.name.endsWith(".mp4") ? `<video src="${u.url}" controls muted style="display:block;max-width:320px;margin-top:4px"></video>` : ""}
-        </div>`).join("");
+      box.innerHTML = data.uploads.map((u) => {
+        const ext = u.name.split(".").pop().toLowerCase();
+        const media = ["mp4", "mov", "webm"].includes(ext) ? `<video src="${esc(u.url)}" muted preload="metadata"></video>`
+          : ["png", "jpg", "jpeg", "webp"].includes(ext) ? `<img src="${esc(u.url)}" loading="lazy" alt="">`
+          : '<span class="muted">♪ 音訊</span>';
+        return `<a class="up-item" href="${esc(u.url)}" target="_blank" title="${esc(u.name)}">
+          <span class="up-thumb">${media}</span>
+          <span class="up-name">${esc(u.name)}</span><span class="muted up-size">${(u.size / 1048576).toFixed(1)} MB</span></a>`;
+      }).join("");
     } catch { box.innerHTML = '<div class="muted">讀取失敗</div>'; }
   }
 
   $("#btn-create").addEventListener("click", createProject);
+  $("#btn-new-toggle").addEventListener("click", () => {
+    const f = $("#st-new"); f.hidden = !f.hidden;
+    $("#btn-new-toggle").textContent = f.hidden ? "＋ 新專案" : "收合";
+    if (!f.hidden) $("#f-idea").focus();
+  });
+  $("#st-tabs").addEventListener("click", (e) => {
+    const b = e.target.closest("[data-pane]"); if (!b) return;
+    document.querySelectorAll("#st-tabs .tab").forEach((x) => x.classList.toggle("active", x === b));
+    document.querySelectorAll(".st-pane").forEach((p) => { p.hidden = p.dataset.pane !== b.dataset.pane; });
+  });
   $("#btn-upload").addEventListener("click", uploadFiles);
   $("#btn-char").addEventListener("click", addCharacter);
   $("#btn-script").addEventListener("click", expandScript);
@@ -295,6 +352,8 @@
   loadProjects()
     .then(async () => {
       // 自動打開最新專案，避免只看到表單
+      const want = new URLSearchParams(location.search).get("pid");
+      if (want) { await openProject(want); return; }
       if (!state.pid) {
         const first = document.querySelector("#projects .pitem");
         if (first) await openProject(first.dataset.pid);

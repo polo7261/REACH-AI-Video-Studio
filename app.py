@@ -1,4 +1,4 @@
-"""REACH AI Vidio Studio — 本機影片工作室（Flask）。
+"""REACH AI Video Studio — 本機影片工作室（Flask）。
 
 啟動：.venv/bin/python app.py（預設 127.0.0.1:35350）
 不影響既有 REACH-AI-Image（35320）與其他服務。
@@ -18,7 +18,7 @@ from pathlib import Path
 from flask import Flask, abort, jsonify, render_template, request, send_from_directory
 
 from reach_video import pipeline, providers
-from reach_video.config import DATA, PROJECTS, public_config
+from reach_video.config import DATA, PROJECTS, load_routing, public_config, resolve, save_routing, valid_choice
 from reach_video.providers import ProviderError
 from reach_video.store import (
     list_jobs,
@@ -36,12 +36,43 @@ SKILLS = ROOT / "libtv-skills"
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 512 * 1024 * 1024  # 512 MB（影片上傳）
+app.config["TEMPLATES_AUTO_RELOAD"] = True  # 改模板不必重啟
+
+
+@app.context_processor
+def _asset_helper():
+    """/static 檔案加上修改時間當版本號，避免瀏覽器快取舊檔。"""
+    def asset(name: str) -> str:
+        f = ROOT / "static" / name
+        v = int(f.stat().st_mtime) if f.is_file() else 0
+        return f"/static/{name}?v={v}"
+    return {"asset": asset}
 
 
 # --------------------------------------------------------------------- pages
 @app.get("/")
+def page_home():
+    return render_template("home.html")
+
+
+@app.get("/studio")
 def page_studio():
     return render_template("studio.html")
+
+
+@app.get("/assets")
+def page_assets():
+    return render_template("assets.html")
+
+
+@app.get("/canvas")
+def page_canvas():
+    return render_template("canvas.html")
+
+
+@app.get("/director")
+def page_director():
+    return render_template("director.html")
 
 
 @app.get("/api-page")
@@ -182,6 +213,41 @@ def api_config():
     return jsonify(public_config())
 
 
+@app.get("/api/routing")
+def api_routing_get():
+    return jsonify(routing=load_routing())
+
+
+@app.put("/api/routing")
+def api_routing_put():
+    body = request.get_json(silent=True) or {}
+    try:
+        routing = save_routing(str(body.get("step", "")), str(body.get("provider", "")), str(body.get("model", "")))
+    except ValueError as exc:
+        return jsonify(error=str(exc)), 400
+    return jsonify(routing=routing)
+
+
+@app.put("/api/projects/<pid>/models")
+def api_project_models(pid: str):
+    """專案層級模型覆寫；provider/model 留空 = 沿用全域設定。"""
+    body = request.get_json(silent=True) or {}
+    step = str(body.get("step", ""))
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    models = plan.setdefault("models", {})
+    if not body.get("provider") and not body.get("model"):
+        models.pop(step, None)
+    elif valid_choice(step, str(body.get("provider")), str(body.get("model"))):
+        models[step] = {"provider": body["provider"], "model": body["model"]}
+    else:
+        return jsonify(error="模型類型與步驟不符或不可用"), 400
+    save_project(plan)
+    return jsonify(models=models)
+
+
 @app.post("/api/config/test")
 def api_config_test():
     body = request.get_json(silent=True) or {}
@@ -294,8 +360,7 @@ def api_character_add(pid: str):
         "character design sheet, full body, front / three-quarter / side / back views on a neutral grey background, "
         f"consistent proportions, {desc}, {plan.get('style', '')}, clean lighting, no text"
     )
-    provider = body.get("provider", "volcano-plan")
-    model = body.get("model", "doubao-seedream-5.5")
+    provider, model = resolve("character", plan, body)
     try:
         data, url = _image_bytes(provider, model, prompt)
     except ProviderError as exc:
@@ -372,8 +437,7 @@ def api_script_expand(pid: str):
         f"輸出格式：{{\"beats\":[{{\"beat\":\"建立\",\"description\":\"...\"}}],\"shots\":[{{\"beat\":\"建立\",\"framing\":\"...\",\"camera\":\"locked|pan|tilt|dolly_in|dolly_out|tracking|crane|orbit_180|orbit_360|dolly_zoom|whip_pan|pov|handheld|drone\",\"action\":\"...\",\"lighting\":\"...\",\"positive_prompt\":\"英文提示詞，含角色外觀與運鏡\",\"character_ids\":[\"C1\"]}}]}}\n"
         f"鏡頭數 {n}，每鏡 4-8 秒，故事要完整（起承轉合）。positive_prompt 用英文，描述具體可拍。"
     )
-    provider = body.get("provider", "aliyun")
-    model = body.get("model", "qwen3.7-plus")
+    provider, model = resolve("script", plan, body)
     try:
         text = providers.chat(provider, model, [{"role": "user", "content": prompt}], max_tokens=2000)
         clean = re.sub(r"```(?:json)?|```", "", text).strip()
@@ -401,7 +465,7 @@ def api_script_expand(pid: str):
             "character_ids": item.get("character_ids") or [],
             "positive_prompt": str(item.get("positive_prompt") or item.get("action") or "")[:2000],
             "negative_prompt": "blurry, distorted hands, extra limbs, watermark, text overlay",
-            "image": None, "video": None, "video_job": None, "video_provider": "minimax",
+            "image": None, "video": None, "video_job": None, "video_provider": resolve("video", plan)[0],
             "status": "planned",
         })
     plan["shots"] = shots
@@ -415,12 +479,11 @@ def api_script_expand(pid: str):
 def api_project_script(pid: str):
     """用 LLM 重寫分鏡（六鏡），失敗時原樣保留。"""
     body = request.get_json(silent=True) or {}
-    provider = body.get("provider", "aliyun")
-    model = body.get("model", "qwen3.7-plus")
     try:
         plan = load_project(pid)
     except (FileNotFoundError, ValueError):
         return jsonify(error="找不到專案"), 404
+    provider, model = resolve("script", plan, body)
     idea = plan["idea"]
     style = plan["style"]
     prompt = (
@@ -480,12 +543,11 @@ def _ext_from_bytes(data: bytes, url: str = "") -> str:
 @app.post("/api/projects/<pid>/shots/<sid>/image")
 def api_shot_image(pid: str, sid: str):
     body = request.get_json(silent=True) or {}
-    provider = body.get("provider", "volcano")
-    model = body.get("model", "doubao-seedream-5-5-261028")
     try:
         plan = load_project(pid)
     except (FileNotFoundError, ValueError):
         return jsonify(error="找不到專案"), 404
+    provider, model = resolve("keyframe", plan, body)
     shot = next((s for s in plan["shots"] if s["id"] == sid), None)
     if not shot:
         return jsonify(error="找不到鏡頭"), 404
@@ -610,8 +672,9 @@ def api_shot_video(pid: str, sid: str):
     if not shot:
         return jsonify(error="找不到鏡頭"), 404
 
-    provider = provider or shot.get("video_provider") or "volcano"
-    model = body.get("model") or {
+    route_provider, route_model = resolve("video", plan)
+    provider = provider or shot.get("video_provider") or route_provider
+    model = body.get("model") or (route_model if provider == route_provider else None) or {
         "volcano": "doubao-seedance-2-5-flash-261115",
         "volcano-plan": "doubao-seedance-2.5",
         "minimax": "MiniMax-H3",
@@ -711,6 +774,8 @@ def api_job_status(jid: str):
         job["state"] = "error"
         job["message"] = str(exc)[:300]
         save_job(job)
+        if job.get("node_id"):
+            _canvas_job_finish(job)
         return jsonify(job=job)
 
     if state["state"] == "succeeded":
@@ -718,12 +783,16 @@ def api_job_status(jid: str):
         if not url:
             job.update(state="error", message="模型回報成功但沒有 URL")
             save_job(job)
+            if job.get("node_id"):
+                _canvas_job_finish(job)
             return jsonify(job=job)
         try:
             data = providers.download(url, timeout=300)
         except ProviderError as exc:
             job.update(state="error", message=str(exc)[:300])
             save_job(job)
+            if job.get("node_id"):
+                _canvas_job_finish(job)
             return jsonify(job=job)
         name = f"{job['shot_id']}-{uuid.uuid4().hex[:6]}.mp4"
         (media_dir(job["project_id"]) / name).write_bytes(data)
@@ -755,19 +824,20 @@ def api_job_status(jid: str):
         if state.get("message"):
             job["message"] = str(state["message"])[:300]
     save_job(job)
+    if job.get("node_id"):
+        _canvas_job_finish(job)
     return jsonify(job=job)
 
 
 @app.post("/api/projects/<pid>/tts")
 def api_project_tts(pid: str):
     body = request.get_json(silent=True) or {}
-    provider = body.get("provider", "minimax")
-    model = body.get("model", "speech-2.5-hd-preview")
     voice = body.get("voice", "male-qn-qingse")
     try:
         plan = load_project(pid)
     except (FileNotFoundError, ValueError):
         return jsonify(error="找不到專案"), 404
+    provider, model = resolve("tts", plan, body)
     text = str(body.get("text") or plan.get("narration") or "").strip()
     if not text:
         text = plan["idea"]
@@ -832,6 +902,342 @@ def api_uploads_list(pid: str):
     items = sorted(({"name": p.name, "url": f"/media/{pid}/{p.name}", "size": p.stat().st_size}
                     for p in d.glob("upload-*")), key=lambda x: x["name"], reverse=True)
     return jsonify(uploads=items)
+
+
+ASSET_TYPES = {".png": "image", ".jpg": "image", ".jpeg": "image", ".webp": "image",
+               ".mp4": "video", ".mov": "video", ".webm": "video",
+               ".mp3": "audio", ".wav": "audio", ".m4a": "audio"}
+
+
+@app.get("/api/assets")
+def api_assets():
+    """素材庫：彙整所有專案 media 目錄下的圖片／影片／音訊（新到舊）。"""
+    items = []
+    for proj in list_projects():
+        d = media_dir(proj["id"])
+        for f in d.iterdir():
+            kind = ASSET_TYPES.get(f.suffix.lower())
+            if not kind or not f.is_file():
+                continue
+            st = f.stat()
+            items.append({"name": f.name, "type": kind, "size": st.st_size, "mtime": st.st_mtime,
+                          "url": f"/media/{proj['id']}/{f.name}",
+                          "project_id": proj["id"], "project_title": proj.get("title") or proj["id"]})
+    items.sort(key=lambda x: x["mtime"], reverse=True)
+    return jsonify(assets=items[:500])
+
+
+# --------------------------------------------------------------------- canvas（節點工作流）
+CANVAS_KINDS = {"text": "script", "image": "keyframe", "video": "video", "audio": "tts"}
+CANVAS_RATIOS = {"16:9": "1280x720", "9:16": "720x1280", "1:1": "1024x1024", "4:3": "1024x768",
+                 "3:4": "768x1024", "21:9": "1512x648"}
+_NODE_ID = re.compile(r"N\d{1,5}")
+_MEDIA_NAME = re.compile(r"[A-Za-z0-9._-]{1,80}")
+
+
+def _default_canvas() -> dict:
+    return {"nodes": [{"id": "N1", "kind": "video", "title": "影片節點 1", "x": 0, "y": 0,
+                       "prompt": "", "model": "", "mode": "t2v",
+                       "params": {"ratio": "16:9", "duration": 5, "resolution": "768P"},
+                       "output": None, "status": "idle"}],
+            "edges": [], "viewport": {"x": 0, "y": 0, "k": 1}}
+
+
+def _clean_canvas(raw: dict, old: dict) -> dict:
+    """只接受版面與設定；生成結果（output/status/job）以伺服器既有資料為準。"""
+    old_nodes = {n["id"]: n for n in (old or {}).get("nodes") or []}
+    nodes = []
+    for n in (raw.get("nodes") or [])[:200]:
+        nid = str(n.get("id", ""))
+        kind = n.get("kind")
+        if not _NODE_ID.fullmatch(nid) or kind not in CANVAS_KINDS:
+            continue
+        prev = old_nodes.get(nid, {})
+        params = n.get("params") if isinstance(n.get("params"), dict) else {}
+        nodes.append({
+            "id": nid, "kind": kind,
+            "title": str(n.get("title", ""))[:60],
+            "x": float(n.get("x") or 0), "y": float(n.get("y") or 0),
+            "prompt": str(n.get("prompt", ""))[:4000],
+            "model": str(n.get("model", ""))[:120],
+            "mode": str(n.get("mode", ""))[:20],
+            "params": {k: params[k] for k in ("ratio", "duration", "resolution", "voice") if k in params},
+            "output": prev.get("output"), "status": prev.get("status", "idle"),
+            "message": prev.get("message"), "job_id": prev.get("job_id"),
+        })
+    ids = {n["id"] for n in nodes}
+    edges, seen = [], set()
+    for e in (raw.get("edges") or [])[:400]:
+        a, b = str(e.get("from", "")), str(e.get("to", ""))
+        if a in ids and b in ids and a != b and (a, b) not in seen:
+            seen.add((a, b)); edges.append({"from": a, "to": b})
+    vp = raw.get("viewport") if isinstance(raw.get("viewport"), dict) else {}
+    viewport = {"x": float(vp.get("x") or 0), "y": float(vp.get("y") or 0),
+                "k": max(0.2, min(2.5, float(vp.get("k") or 1)))}
+    return {"nodes": nodes, "edges": edges, "viewport": viewport}
+
+
+@app.get("/api/projects/<pid>/canvas")
+def api_canvas_get(pid: str):
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    return jsonify(canvas=plan.get("canvas") or _default_canvas(), title=plan.get("title"))
+
+
+@app.put("/api/projects/<pid>/canvas")
+def api_canvas_put(pid: str):
+    body = request.get_json(silent=True) or {}
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    plan["canvas"] = _clean_canvas(body, plan.get("canvas") or {})
+    save_project(plan)
+    return jsonify(canvas=plan["canvas"])
+
+
+def _canvas_upstream(canvas: dict, nid: str) -> tuple[list[str], list[str]]:
+    """回傳上游節點的 (文字輸出, 圖片檔名)。"""
+    by_id = {n["id"]: n for n in canvas.get("nodes") or []}
+    texts, images = [], []
+    for e in canvas.get("edges") or []:
+        if e["to"] != nid:
+            continue
+        out = (by_id.get(e["from"]) or {}).get("output") or {}
+        if out.get("type") == "text" and out.get("text"):
+            texts.append(out["text"])
+        elif out.get("type") == "image" and _MEDIA_NAME.fullmatch(out.get("file") or ""):
+            images.append(out["file"])
+    return texts, images
+
+
+def _canvas_model(node: dict, plan: dict) -> tuple[str, str]:
+    step = CANVAS_KINDS[node["kind"]]
+    if "|" in (node.get("model") or ""):
+        prov, model = node["model"].split("|", 1)
+        if valid_choice(step, prov, model):
+            return prov, model
+    return resolve(step, plan)
+
+
+def _data_uri(path: Path) -> str:
+    import base64 as _b64c
+
+    ext = path.suffix.lower().lstrip(".") or "png"
+    mime = "jpeg" if ext in ("jpg", "jpeg") else ext
+    return f"data:image/{mime};base64,{_b64c.b64encode(path.read_bytes()).decode()}"
+
+
+@app.post("/api/projects/<pid>/canvas/run")
+def api_canvas_run(pid: str):
+    """執行單一節點：文字／圖片／配音同步完成；影片建立任務後用 /api/jobs/<id> 輪詢。"""
+    body = request.get_json(silent=True) or {}
+    nid = str(body.get("node_id", ""))
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    canvas = plan.get("canvas") or {}
+    node = next((n for n in canvas.get("nodes") or [] if n["id"] == nid), None)
+    if not node:
+        return jsonify(error="找不到節點（請先儲存畫布）"), 404
+
+    texts, images = _canvas_upstream(canvas, nid)
+    prompt = "\n".join([*texts, node.get("prompt", "")]).strip()
+    if not prompt and node["kind"] != "video":
+        return jsonify(error="請輸入提示詞，或連接上游文字節點"), 400
+    provider, model = _canvas_model(node, plan)
+    params = node.get("params") or {}
+    ratio = params.get("ratio") if params.get("ratio") in CANVAS_RATIOS else "16:9"
+
+    def done(output: dict):
+        node.update(output=output, status="done", message=None, job_id=None,
+                    ran={"provider": provider, "model": model, "at": time.strftime("%Y-%m-%d %H:%M:%S")})
+        save_project(plan)
+        return jsonify(node=node)
+
+    try:
+        if node["kind"] == "text":
+            system = "你是影片編劇與提示詞工程師。依需求直接輸出內容，不要多餘說明。"
+            text = providers.chat(provider, model, [{"role": "system", "content": system},
+                                                    {"role": "user", "content": prompt}], max_tokens=1500)
+            return done({"type": "text", "text": text.strip()})
+
+        if node["kind"] == "image":
+            refs = [_data_uri(media_dir(pid) / f) for f in images[:4]] if provider in ("volcano", "volcano-plan") else None
+            result = providers.image(provider, model, prompt, size=CANVAS_RATIOS[ratio], references=refs)
+            url = result.get("url") or ""
+            if result.get("b64"):
+                import base64 as _b64img
+
+                data = _b64img.b64decode(result["b64"])
+            elif url:
+                data = providers.download(url)
+            else:
+                raise ProviderError(provider, "回應沒有圖片")
+            name = _save_generated_image(pid, data, url, f"canvas-{nid}")
+            return done({"type": "image", "file": name, "url": f"/media/{pid}/{name}"})
+
+        if node["kind"] == "audio":
+            audio = providers.tts(provider, model, prompt[:2000], params.get("voice") or "male-qn-qingse")
+            name = f"canvas-{nid}-{uuid.uuid4().hex[:6]}.mp3"
+            (media_dir(pid) / name).write_bytes(audio)
+            return done({"type": "audio", "file": name, "url": f"/media/{pid}/{name}"})
+
+        # video
+        if provider in ("local-wan", "local-ltx"):
+            return jsonify(error="地端影片目前請在專案工作室使用，畫布暫只支援雲端影片模型"), 400
+        if not prompt:
+            return jsonify(error="請輸入提示詞，或連接上游文字節點"), 400
+        duration = int(params.get("duration") or 5)
+        resolution = str(params.get("resolution") or "768P")
+        first_frame = None
+        if node.get("mode") == "i2v":
+            if not images:
+                return jsonify(error="首幀模式需要連接上游的圖片節點（並已生成圖片）"), 400
+            if not (provider == "minimax" and model.startswith("MiniMax-H3")):
+                return jsonify(error="目前只有 MiniMax-H3 支援首幀生成影片"), 400
+            first_frame = _data_uri(media_dir(pid) / images[0])
+        if provider == "minimax":
+            duration = max(4, min(15, duration)) if model.startswith("MiniMax-H3") else (10 if duration > 6 else 6)
+        created = providers.video_create(provider, model, prompt, duration=max(1, min(15, duration)),
+                                         resolution=resolution, ratio=ratio, first_frame_data_uri=first_frame)
+    except ProviderError as exc:
+        node.update(status="error", message=str(exc)[:300])
+        save_project(plan)
+        return jsonify(error=str(exc)[:300], node=node), 502
+    except (KeyError, ValueError, OSError) as exc:
+        return jsonify(error=f"執行失敗：{exc}"[:300]), 500
+
+    job = {"id": uuid.uuid4().hex[:12], "kind": "video", "provider": provider, "model": model,
+           "project_id": pid, "shot_id": nid, "node_id": nid, "task_id": created["task_id"],
+           "state": "queued", "created_at": time.strftime("%Y-%m-%d %H:%M:%S"), "duration": duration}
+    save_job(job)
+    node.update(status="running", message=None, job_id=job["id"])
+    save_project(plan)
+    return jsonify(node=node, job=job)
+
+
+def _canvas_job_finish(job: dict) -> None:
+    """影片任務結束時，把結果寫回畫布節點。"""
+    try:
+        plan = load_project(job["project_id"])
+    except (FileNotFoundError, ValueError):
+        return
+    node = next((n for n in (plan.get("canvas") or {}).get("nodes") or [] if n["id"] == job["node_id"]), None)
+    if not node:
+        return
+    if job.get("state") == "succeeded":
+        node.update(status="done", message=None,
+                    output={"type": "video", "file": job["video"], "url": job["video_url"]})
+    elif job.get("state") in ("error", "failed"):
+        node.update(status="error", message=job.get("message"))
+    else:
+        return
+    save_project(plan)
+
+
+# --------------------------------------------------------------------- AI 導演（對話）
+DIRECTOR_MODES = {
+    "original": (
+        "你是資深影視編劇，擅長短劇與電影劇本原創。依使用者的題材與設定，產出：一句話梗概、角色表（姓名／外觀／性格）、"
+        "分集或分場大綱、第一場的完整劇本（場景、動作、對白）。用繁體中文，結構清楚，使用 Markdown 標題與條列。"
+    ),
+    "adapt": (
+        "你是影視改編編劇。使用者會提供故事或劇本原文，請保留核心情節與人物，改編成適合短影片／短劇拍攝的版本："
+        "改編策略、角色表、分場大綱、關鍵場次劇本。指出刪減或合併了什麼。用繁體中文，使用 Markdown。"
+    ),
+    "direct": (
+        "你是電影導演兼分鏡師。把使用者的故事或劇本拆成可拍攝的分鏡，每鏡寫：景別、運鏡、畫面動作、光線、時長。"
+        "最後必須附上一個 ```json 區塊，格式為 {\"shots\":[{\"title\":\"鏡頭名稱\",\"prompt\":\"英文畫面提示詞（含主體外觀、場景、運鏡、光線、風格）\",\"seconds\":5}]}，"
+        "3 到 8 鏡。其餘說明用繁體中文。"
+    ),
+}
+
+
+def _director_state(plan: dict) -> dict:
+    return plan.setdefault("director", {"messages": []})
+
+
+def _canvas_brief(plan: dict) -> str:
+    nodes = (plan.get("canvas") or {}).get("nodes") or []
+    if not nodes:
+        return "（畫布目前沒有節點）"
+    lines = []
+    for n in nodes[:30]:
+        out = n.get("output") or {}
+        result = out.get("text", "")[:200] if out.get("type") == "text" else (out.get("type") or "未生成")
+        lines.append(f"- {n['id']} {n.get('title')}（{n['kind']}）提示詞：{(n.get('prompt') or '')[:160]}｜結果：{result}")
+    return "\n".join(lines)
+
+
+@app.get("/api/projects/<pid>/director")
+def api_director_get(pid: str):
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    return jsonify(messages=_director_state(plan)["messages"], title=plan.get("title"))
+
+
+@app.delete("/api/projects/<pid>/director")
+def api_director_reset(pid: str):
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    plan["director"] = {"messages": []}
+    save_project(plan)
+    return jsonify(ok=True)
+
+
+@app.post("/api/projects/<pid>/director/chat")
+def api_director_chat(pid: str):
+    body = request.get_json(silent=True) or {}
+    text = str(body.get("text", "")).strip()[:8000]
+    mode = body.get("mode") if body.get("mode") in DIRECTOR_MODES else "original"
+    attachment = str(body.get("attachment", ""))[:60000]
+    att_name = str(body.get("attachment_name", ""))[:120]
+    if not text and not attachment:
+        return jsonify(error="請輸入內容"), 400
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    state = _director_state(plan)
+
+    provider, model = resolve("script", plan)
+    if "|" in str(body.get("model", "")):
+        prov, mid = body["model"].split("|", 1)
+        if valid_choice("script", prov, mid):
+            provider, model = prov, mid
+
+    system = DIRECTOR_MODES[mode]
+    if body.get("use_canvas"):
+        system += "\n\n目前畫布節點：\n" + _canvas_brief(plan)
+    user_content = text or "請依附件內容進行。"
+    if attachment:
+        user_content += f"\n\n【附件：{att_name or '故事原文'}】\n{attachment}"
+
+    history = [{"role": m["role"], "content": m["content"][:6000]} for m in state["messages"][-12:]]
+    messages = [{"role": "system", "content": system}, *history, {"role": "user", "content": user_content}]
+    try:
+        reply = providers.chat(provider, model, messages, max_tokens=2500).strip()
+    except ProviderError as exc:
+        return jsonify(error=str(exc)[:300]), 502
+
+    now = time.strftime("%Y-%m-%d %H:%M:%S")
+    shown = text or f"（上傳：{att_name or '故事原文'}）"
+    if attachment:
+        shown += f"\n📎 {att_name or '附件'}（{len(attachment)} 字）"
+    state["messages"].append({"role": "user", "content": user_content, "display": shown, "mode": mode, "at": now})
+    state["messages"].append({"role": "assistant", "content": reply, "mode": mode, "at": now,
+                              "model": f"{provider}/{model}"})
+    state["messages"] = state["messages"][-40:]
+    save_project(plan)
+    return jsonify(reply=state["messages"][-1], user=state["messages"][-2])
 
 
 @app.get("/api/projects/<pid>/report")
@@ -907,5 +1313,5 @@ def api_doc(slug: str):
 if __name__ == "__main__":
     import waitress
 
-    print("REACH AI Vidio Studio → http://0.0.0.0:35350/ (LAN)", flush=True)
+    print("REACH AI Video Studio → http://0.0.0.0:35350/ (LAN)", flush=True)
     waitress.serve(app, host="0.0.0.0", port=35350, threads=8)
