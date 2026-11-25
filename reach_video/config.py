@@ -118,7 +118,7 @@ PROVIDERS: dict[str, dict] = {
             {"id": "doubao-seedance-2.5", "kind": "video", "status": "quota", "note": "UnsupportedModel：影片需 Large(¥500/月)/Max 套餐"},
             {"id": "doubao-seedance-2.5-flash", "kind": "video", "status": "quota", "note": "同上"},
             {"id": "doubao-seedance-2.0", "kind": "video", "status": "quota", "note": "同上"},
-            {"id": "doubao-seed-2.1-pro", "kind": "text", "status": "license", "note": "僅供 Agent 工具使用；條款不允許一般 API 呼叫"},
+            {"id": "doubao-seed-2.1-pro", "kind": "text", "status": "ok", "note": "實測 200（plan 端點，帳號 ark-6332…）；一般 ark 同名需開通"},
         ],
     },
     "volcano": {
