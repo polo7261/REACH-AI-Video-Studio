@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% set active = "director" %}
+{% set main_class = "full" %}
+{% block title %}AI 導演{% endblock %}
+{% block content %}
+<div class="dr">
+  <aside class="dr-side">
+    <div class="dr-side-head">
+      <select id="dr-project" title="專案"></select>
+      <a class="icon-btn sm" id="dr-open-canvas" href="/canvas" title="開啟畫布">
+        <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M12 8.5v7M8.5 12h7"/></svg></a>
+    </div>
+    <div class="dr-side-title">專案素材 <span class="muted" id="dr-asset-count"></span></div>
+    <div class="dr-assets" id="dr-assets"><div class="muted">…</div></div>
+  </aside>
+
+  <section class="dr-main">
+    <div class="dr-top">
+      <b>AI 導演</b><span class="chip">BETA</span>
+      <span style="flex:1"></span>
+      <button class="ghost small" id="dr-new" type="button">＋ 新對話</button>
+    </div>
+
+    <div class="dr-scroll" id="dr-scroll">
+      <div class="dr-welcome" id="dr-welcome">
+        <div class="dr-avatar" aria-hidden="true">
+          <svg width="76" height="76" viewBox="0 0 76 76"><defs><linearGradient id="dg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--ok)"/></linearGradient></defs>
+            <circle cx="38" cy="38" r="36" fill="url(#dg)" opacity=".9"/>
+            <rect x="20" y="30" width="36" height="24" rx="4" fill="var(--panel)"/>
+            <path d="M20 30l6-9h30l-6 9z" fill="var(--panel)" opacity=".85"/><path d="M28 21l-3 9M38 21l-3 9M48 21l-3 9" stroke="url(#dg)" stroke-width="3"/>
+            <path d="M34 37v10l9-5z" fill="url(#dg)"/></svg>
+        </div>
+        <h2>讓 AI 導演協助你的無限創意</h2>
+        <div class="dr-starts">
+          <button type="button" data-start="canvas"><span>感知畫布開始創作</span><small>讀取目前畫布節點，建議下一步</small></button>
+          <button type="button" data-start="preset"><span>從熱門題材開始劇本原創</span><small>選題材、受眾、畫風與集數</small></button>
+          <button type="button" data-start="upload"><span>上傳故事來改編</span><small>支援 .txt / .md / .fountain</small></button>
+          <button type="button" data-start="oneline"><span>一句話生成分鏡</span><small>產出分鏡並可一鍵建立到畫布</small></button>
+          <button type="button" data-start="optimize"><span>批次優化提示詞</span><small>逐一改寫畫布節點的提示詞</small></button>
+        </div>
+      </div>
+      <div class="dr-msgs" id="dr-msgs"></div>
+    </div>
+
+    <div class="dr-compose">
+      <div class="dr-modes" id="dr-modes">
+        <button type="button" data-mode="original" class="on">劇本原創</button>
+        <button type="button" data-mode="adapt">劇本改編</button>
+        <button type="button" data-mode="direct">導演執導</button>
+      </div>
+      <div class="dr-box">
+        <div class="dr-attach" id="dr-attach" hidden></div>
+        <textarea id="dr-input" rows="3" placeholder="開始你的創作，或輸入 @ 引用畫布節點、切換模型"></textarea>
+        <div class="dr-box-bar">
+          <button class="icon-btn sm" type="button" id="dr-upload" title="上傳故事／劇本（.txt .md .fountain）">
+            <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button class="icon-btn sm" type="button" id="dr-preset" title="劇本設定器">
+            <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+          <label class="dr-canvas-toggle" title="把畫布節點當作對話背景"><input type="checkbox" id="dr-use-canvas"> 感知畫布</label>
+          <button type="button" class="cvp-btn" id="dr-model"><span>模型</span></button>
+          <span style="flex:1"></span>
+          <button type="button" class="dr-send" id="dr-send" title="送出（⌘+Enter）">
+            <svg class="ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
+        </div>
+        <input type="file" id="dr-file" accept=".txt,.md,.markdown,.fountain,text/plain" hidden>
+      </div>
+    </div>
+    <div class="cv-pop" id="dr-pop" hidden></div>
+  </section>
+</div>
+
+<div class="dr-modal" id="dr-modal" hidden>
+  <div class="dr-modal-inner">
+    <section class="dr-hot" id="dr-hot">
+      <h3>熱門題材 Top 8</h3>
+      <div id="dr-hot-list"></div>
+    </section>
+    <section class="dr-setter">
+      <div class="dr-setter-head"><h3>劇本設定器</h3><button class="icon-btn sm" type="button" data-close title="關閉">✕</button></div>
+      <div class="dr-pick">
+        <div class="dr-genres" id="dr-genres"></div>
+        <div class="dr-orb">
+          <div class="dr-orb-main" id="dr-orb-main"></div>
+          <button type="button" class="dr-orb-fuse" id="dr-orb-fuse"></button>
+        </div>
+      </div>
+      <div class="dr-opts" id="dr-opts"></div>
+      <div class="dr-setter-foot">
+        <label class="dr-switch"><input type="checkbox" id="dr-show-hot" checked><span></span> 展示熱門題材</label>
+        <span style="flex:1"></span>
+        <button class="ghost" type="button" data-close>取消</button>
+        <button type="button" id="dr-confirm">確認</button>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/director.js"></script>{% endblock %}

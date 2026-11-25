@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% set active = "canvas" %}
+{% set main_class = "full" %}
+{% block title %}無限畫布{% endblock %}
+{% block content %}
+<div class="cv" id="cv" tabindex="0">
+  <div class="cv-bar">
+    <select id="cv-project" title="專案"></select>
+    <button class="ghost small" id="cv-run-all" type="button">
+      <svg class="ico" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg> 執行整條流程</button>
+    <span class="muted cv-save" id="cv-save">—</span>
+  </div>
+  <div class="cv-world" id="cv-world">
+    <svg class="cv-edges" id="cv-edges" width="1" height="1"></svg>
+    <div id="cv-nodes"></div>
+  </div>
+
+  <div class="cv-panel" id="cv-panel" hidden></div>
+  <div class="cv-pop" id="cv-pop" hidden></div>
+
+  <div class="cv-foot-left">
+    <button class="icon-btn sm" id="cv-fit" type="button" title="置中全部節點">
+      <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg></button>
+    <span class="mono muted" id="cv-zoom">100%</span>
+  </div>
+  <div class="cv-dock">
+    <button class="cv-dock-add" id="cv-add" type="button" title="新增節點">
+      <svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+    <span class="muted cv-hint">拖曳空白處平移 · 觸控板捏合／⌘+滾輪縮放 · 從右側 + 拖到另一張卡片即可連線 · Delete 刪除</span>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}<script src="/static/canvas.js"></script>{% endblock %}
