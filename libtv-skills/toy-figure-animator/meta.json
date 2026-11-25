@@ -1,0 +1,13 @@
+{
+ "cn": "手办动画",
+ "skillKey": "toy-figure-animator-3fdf06a4c10a4f96b98f779e197578c8",
+ "version": "1.0.11",
+ "description": "无需建模，轻松生成日式特摄、潮玩、毛毡定格三种动画风格短片。",
+ "templateUuid": "a4b5386b5c7c410f83a49099028f44d0",
+ "cn_tc": "手辦動畫",
+ "cn_sc": "手办动画",
+ "desc_tc": "無需建模，輕鬆生成日式特攝、潮玩、毛氈定格三種動畫風格短片。",
+ "desc_sc": "无需建模，轻松生成日式特摄、潮玩、毛毡定格三种动画风格短片。",
+ "cover": "cover.png",
+ "desc_en": "Toy figure animation: no modeling needed—easily generate shorts in three styles: Japanese tokusatsu, art toys, and felt stop-motion."
+}

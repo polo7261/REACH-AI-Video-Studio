@@ -1,0 +1,13 @@
+{
+ "cn": "截图转宣传片",
+ "skillKey": "promo-video-0",
+ "version": "1.0.1",
+ "description": "UI截图生成宣传短片",
+ "templateUuid": "c1cd937150ed424e8de1f1074c8e7d0e",
+ "cn_tc": "截圖轉宣傳片",
+ "cn_sc": "截图转宣传片",
+ "desc_tc": "UI截圖生成宣傳短片",
+ "desc_sc": "UI截图生成宣传短片",
+ "cover": "cover.png",
+ "desc_en": "Screenshot to promo video: generate promotional short films from UI screenshots"
+}

@@ -1,0 +1,13 @@
+{
+ "cn": "剧本结构化拆解-漫剧",
+ "skillKey": "script-structural-decomposer-0bfcda928d704e8da3d20977029a31b8",
+ "version": "1.0.2",
+ "description": "对剧本进行精准拆分，转化为可直接用于漫剧、短剧制作的拍摄底稿",
+ "templateUuid": "3ba745285b774235a0a3fb703e6d96e1",
+ "cn_tc": "劇本結構化拆解-漫劇",
+ "cn_sc": "剧本结构化拆解-漫剧",
+ "desc_tc": "對劇本進行精準拆分，轉化為可直接用於漫劇、短劇製作的拍攝底稿",
+ "desc_sc": "对剧本进行精准拆分，转化为可直接用于漫剧、短剧制作的拍摄底稿",
+ "cover": "cover.png",
+ "desc_en": "Script structural decomposer for comic drama: precisely break down scripts into shooting drafts ready for comic drama and short drama production."
+}

@@ -1,0 +1,13 @@
+{
+ "cn": "影视打斗特效skill",
+ "skillKey": "cinematic-vfx-creator-9d8925c591a643bbad8ca8cfbb87922c",
+ "version": "1.0.8",
+ "description": "一句话生成角色人物影视特效支持文字参考图/视频",
+ "templateUuid": "e34caf9cbad3423fafde536334a91f03",
+ "cn_tc": "影視打鬥特效skill",
+ "cn_sc": "影视打斗特效skill",
+ "desc_tc": "一句話生成角色人物影視特效支援文字參考圖/影片",
+ "desc_sc": "一句话生成角色人物影视特效支持文字参考图/视频",
+ "cover": "cover.png",
+ "desc_en": "Cinematic fight VFX skill: generate character film VFX from one sentence; supports text, reference images, or video"
+}

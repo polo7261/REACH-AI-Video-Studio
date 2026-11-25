@@ -1,0 +1,13 @@
+{
+ "cn": "高颜值时尚 MV 生成",
+ "skillKey": "fashion-visual-mv-creator-8f1dabacbf094425b9d28edcda999dff",
+ "version": "1.0.1",
+ "description": "用于音乐 MV、视觉专辑、女团风舞台片、时尚影像、概念短片等",
+ "templateUuid": "a988a754fbbd4957b494be6e54df66ff",
+ "cn_tc": "高顏值時尚 MV 生成",
+ "cn_sc": "高颜值时尚 MV 生成",
+ "desc_tc": "用於音樂 MV、視覺專輯、女團風舞臺片、時尚影像、概念短片等",
+ "desc_sc": "用于音乐 MV、视觉专辑、女团风舞台片、时尚影像、概念短片等",
+ "cover": "cover.png",
+ "desc_en": "High-style fashion MV generation: for music videos, visual albums, girl-group stage films, fashion imagery, and concept shorts"
+}

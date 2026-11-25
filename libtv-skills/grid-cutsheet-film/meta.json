@@ -1,0 +1,13 @@
+{
+ "cn": "多宫格拼版导演",
+ "skillKey": "grid-cutsheet-film-71a5fc5f6ae546d58b0b8d75abc87608",
+ "version": "1.0.0",
+ "description": "拼版索引控场，长镜头分镜不再乱",
+ "templateUuid": "894121f6bbfd4dfa8a5f4200711e8594",
+ "cn_tc": "多宮格拼版導演",
+ "cn_sc": "多宫格拼版导演",
+ "desc_tc": "拼版索引控場，長鏡頭分鏡不再亂",
+ "desc_sc": "拼版索引控场，长镜头分镜不再乱",
+ "cover": "cover.png",
+ "desc_en": "Multi-grid contact sheet director: grid-indexed shot control keeps long-take storyboards organized"
+}

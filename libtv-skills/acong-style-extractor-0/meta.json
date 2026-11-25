@@ -1,0 +1,13 @@
+{
+ "cn": "主体风格提取",
+ "skillKey": "acong-style-extractor-0",
+ "version": "1.0.1",
+ "description": "参考图提取可迁移风格",
+ "templateUuid": "2bdcd03886ba4e95adf6a11da5ec1087",
+ "cn_tc": "主體風格提取",
+ "cn_sc": "主体风格提取",
+ "desc_tc": "參考圖提取可遷移風格",
+ "desc_sc": "参考图提取可迁移风格",
+ "cover": "cover.png",
+ "desc_en": "Subject style extraction: extract a transferable style from a reference image"
+}

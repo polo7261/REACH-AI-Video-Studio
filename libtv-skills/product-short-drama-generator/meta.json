@@ -1,0 +1,13 @@
+{
+ "cn": "带货爆款短剧",
+ "skillKey": "product-short-drama-generator-020b92eb952140af9a99e594358a115b",
+ "version": "1.0.0",
+ "description": "把一张商品图转化为一条 3 分镜、约 15 秒的带货短剧成片",
+ "templateUuid": "de24190352784d4798302e9e915bf6f0",
+ "cn_tc": "帶貨爆款短劇",
+ "cn_sc": "带货爆款短剧",
+ "desc_tc": "把一張商品圖轉化為一條 3 分鏡、約 15 秒的帶貨短劇成片",
+ "desc_sc": "把一张商品图转化为一条 3 分镜、约 15 秒的带货短剧成片",
+ "cover": "cover.png",
+ "desc_en": "Viral product short drama: turn a single product photo into a finished ~15-second, 3-shot shoppable drama video"
+}

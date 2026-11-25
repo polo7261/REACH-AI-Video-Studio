@@ -1,0 +1,13 @@
+{
+ "cn": "韩系杂志风女装时尚广告",
+ "skillKey": "wander-fashion-lookbook-ad-5e17f63c20b64ca1a5571efe67cc2d04",
+ "version": "1.0.5",
+ "description": "只需上传服装图，自动生成模特和场景，输出真实摄影质感女装广告",
+ "templateUuid": "ff8759a422214c7c8a9c5ba1c9fc6f26",
+ "cn_tc": "韓系雜誌風女裝時尚廣告",
+ "cn_sc": "韩系杂志风女装时尚广告",
+ "desc_tc": "只需上傳服裝圖，自動生成模特和場景，輸出真實攝影質感女裝廣告",
+ "desc_sc": "只需上传服装图，自动生成模特和场景，输出真实摄影质感女装广告",
+ "cover": "cover.png",
+ "desc_en": "Korean magazine-style womenswear ad: upload garment photos and it auto-generates models and scenes, delivering photographic-quality fashion ads."
+}

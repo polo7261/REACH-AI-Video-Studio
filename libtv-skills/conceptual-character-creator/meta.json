@@ -1,0 +1,13 @@
+{
+ "cn": "概念角色SSS级技能展示",
+ "skillKey": "conceptual-character-creator-e1a8d149cb6c445b91a5f4926f0a0483",
+ "version": "1.0.1",
+ "description": "输入一个角色想法，自动生成原创概念角色、角色板和15秒视频",
+ "templateUuid": "5b7e6dc66a0a496d92b166a29125546c",
+ "cn_tc": "概念角色SSS級技能展示",
+ "cn_sc": "概念角色SSS级技能展示",
+ "desc_tc": "輸入一個角色想法，自動生成原創概念角色、角色板和15秒影片",
+ "desc_sc": "输入一个角色想法，自动生成原创概念角色、角色板和15秒视频",
+ "cover": "cover.png",
+ "desc_en": "SSS-tier conceptual character showcase: input a character idea to auto-generate an original concept character, character sheet, and 15-second video"
+}

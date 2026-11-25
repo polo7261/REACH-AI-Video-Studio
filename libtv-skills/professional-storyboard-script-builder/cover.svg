@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#f5a623"/><stop offset="1" stop-color="#1b3a6b"/></linearGradient></defs>
+<rect width="640" height="360" fill="url(#g)"/>
+<text x="40" y="180" font-family="PingFang TC, sans-serif" font-size="34" fill="#fff" font-weight="700">yukioliam影视顶</text>
+<text x="40" y="216" font-family="sans-serif" font-size="18" fill="#ffffffcc">分镜脚本 · 文本技能</text>
+</svg>

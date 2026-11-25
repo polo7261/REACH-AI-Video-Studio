@@ -1,0 +1,13 @@
+{
+ "cn": "微表情情绪精控",
+ "skillKey": "micro-expression-analyst-71a5fc5f6ae546d58b0b8d75abc87608",
+ "version": "1.0.2",
+ "description": "告别瘫脸尬演，精准拿捏微表情",
+ "templateUuid": "0df8fc3871fd4210824f75fc1473ed16",
+ "cn_tc": "微表情情緒精控",
+ "cn_sc": "微表情情绪精控",
+ "desc_tc": "告別癱臉尬演，精準拿捏微表情",
+ "desc_sc": "告别瘫脸尬演，精准拿捏微表情",
+ "cover": "cover.png",
+ "desc_en": "Micro-expression emotion control: say goodbye to stiff, awkward acting with precise micro-expression mastery"
+}
