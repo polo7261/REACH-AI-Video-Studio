@@ -937,11 +937,133 @@ def api_assets():
 
 
 # --------------------------------------------------------------------- canvas（節點工作流）
-CANVAS_KINDS = {"text": "script", "image": "keyframe", "video": "video", "audio": "tts"}
+CANVAS_KINDS = {"text": "script", "image": "keyframe", "video": "video", "audio": "tts", "compose": ""}
+COMPOSE_TRANSITIONS = {"cut", "fade", "fadeblack", "dissolve"}
 CANVAS_RATIOS = {"16:9": "1280x720", "9:16": "720x1280", "1:1": "1024x1024", "4:3": "1024x768",
                  "3:4": "768x1024", "21:9": "1512x648"}
 _NODE_ID = re.compile(r"N\d{1,5}")
 _MEDIA_NAME = re.compile(r"[A-Za-z0-9._-]{1,80}")
+
+
+def _clean_params(kind: str, params: dict) -> dict:
+    out = {k: params[k] for k in ("ratio", "duration", "resolution", "voice") if k in params}
+    if kind == "compose":
+        out = {"transition": params.get("transition") if params.get("transition") in COMPOSE_TRANSITIONS else "cut"}
+        try:
+            out["tdur"] = max(0.2, min(2.0, float(params.get("tdur") or 0.5)))
+        except (TypeError, ValueError):
+            out["tdur"] = 0.5
+        clips = []
+        for c in (params.get("clips") or [])[:60]:
+            if not isinstance(c, dict) or not _NODE_ID.fullmatch(str(c.get("id", ""))):
+                continue
+            def num(v):
+                try:
+                    return max(0.0, float(v or 0))
+                except (TypeError, ValueError):
+                    return 0.0
+            clips.append({"id": str(c["id"]), "on": c.get("on", True) is not False,
+                          "cut_in": num(c.get("cut_in")), "cut_out": num(c.get("cut_out"))})
+        out["clips"] = clips
+    return out
+
+
+def _ffprobe(path: Path) -> tuple[float, bool, tuple[int, int]]:
+    """回傳（秒數, 是否有音軌, (寬, 高)）。"""
+    import subprocess as _sp
+
+    r = _sp.run(["ffprobe", "-v", "error", "-show_entries", "stream=codec_type,width,height",
+                 "-show_entries", "format=duration", "-of", "json", str(path)],
+                capture_output=True, text=True, timeout=30)
+    info = json.loads(r.stdout or "{}")
+    streams = info.get("streams") or []
+    v = next((x for x in streams if x.get("codec_type") == "video"), {})
+    return (float((info.get("format") or {}).get("duration") or 0),
+            any(x.get("codec_type") == "audio" for x in streams),
+            (int(v.get("width") or 1280), int(v.get("height") or 720)))
+
+
+def _compose_clips(canvas: dict, node: dict) -> list[dict]:
+    """上游影片節點，依面板排序；沒排過的依「分鏡 N」號碼、再依位置。"""
+    by_id = {n["id"]: n for n in canvas.get("nodes") or []}
+    ups = [by_id[e["from"]] for e in canvas.get("edges") or [] if e["to"] == node["id"] and e["from"] in by_id]
+    ups = [n for n in ups if n["kind"] == "video" and (n.get("output") or {}).get("type") == "video"]
+    def natural(n):
+        m = re.search(r"分鏡\s*(\d+)", n.get("title") or "")
+        return (int(m.group(1)) if m else 9999, n.get("y", 0), n.get("x", 0))
+    saved = {c["id"]: (i, c) for i, c in enumerate((node.get("params") or {}).get("clips") or [])}
+    ups.sort(key=lambda n: (saved[n["id"]][0] if n["id"] in saved else 10_000, natural(n)))
+    out = []
+    for n in ups:
+        c = saved.get(n["id"], (0, {}))[1]
+        out.append({"node": n, "on": c.get("on", True), "cut_in": c.get("cut_in", 0.0), "cut_out": c.get("cut_out", 0.0)})
+    return out
+
+
+def _compose_run(pid: str, canvas: dict, node: dict) -> dict:
+    import subprocess as _sp
+
+    if not shutil.which("ffmpeg"):
+        raise RuntimeError("伺服器沒有安裝 ffmpeg（brew install ffmpeg）")
+    clips = [c for c in _compose_clips(canvas, node) if c["on"]]
+    if not clips:
+        raise RuntimeError("請把已生成完成的影片節點連到這個合成節點")
+    params = node.get("params") or {}
+    trans, tdur = params.get("transition", "cut"), float(params.get("tdur") or 0.5)
+    mdir = media_dir(pid)
+    items = []
+    for c in clips:
+        f = (c["node"]["output"] or {}).get("file") or ""
+        path = mdir / f
+        if not _MEDIA_NAME.fullmatch(f) or not path.is_file():
+            raise RuntimeError(f"{c['node'].get('title')} 的影片檔不存在")
+        dur, has_a, size = _ffprobe(path)
+        a = min(c["cut_in"], max(0.0, dur - 0.5))
+        b = max(a + 0.5, dur - c["cut_out"])
+        items.append({"path": path, "a": a, "b": b, "d": b - a, "audio": has_a, "size": size})
+    W, H = items[0]["size"]
+    W, H = W - W % 2, H - H % 2
+    if trans != "cut" and len(items) > 1:
+        tdur = min(tdur, min(it["d"] for it in items) / 2)
+    args = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y"]
+    for it in items:
+        args += ["-i", str(it["path"])]
+    for it in items:  # 沒音軌的片段補靜音
+        if not it["audio"]:
+            args += ["-f", "lavfi", "-t", f"{it['d']:.3f}", "-i", "anullsrc=r=44100:cl=stereo"]
+    fc, silent_idx = [], len(items)
+    for i, it in enumerate(items):
+        fc.append(f"[{i}:v]trim=start={it['a']:.3f}:end={it['b']:.3f},setpts=PTS-STARTPTS,"
+                  f"scale={W}:{H}:force_original_aspect_ratio=decrease,pad={W}:{H}:(ow-iw)/2:(oh-ih)/2,"
+                  f"setsar=1,fps=24,format=yuv420p[v{i}]")
+        if it["audio"]:
+            fc.append(f"[{i}:a]atrim=start={it['a']:.3f}:end={it['b']:.3f},asetpts=PTS-STARTPTS,"
+                      f"aresample=44100,aformat=channel_layouts=stereo[a{i}]")
+        else:
+            fc.append(f"[{silent_idx}:a]aresample=44100,aformat=channel_layouts=stereo[a{i}]")
+            silent_idx += 1
+    n = len(items)
+    if trans == "cut" or n == 1:
+        fc.append("".join(f"[v{i}][a{i}]" for i in range(n)) + f"concat=n={n}:v=1:a=1[vo][ao]")
+    else:
+        xf = {"fade": "fade", "fadeblack": "fadeblack", "dissolve": "dissolve"}[trans]
+        prev_v, prev_a, offset = "v0", "a0", 0.0
+        for i in range(1, n):
+            offset += items[i - 1]["d"] - tdur
+            ov, oa = ("vo", "ao") if i == n - 1 else (f"vx{i}", f"ax{i}")
+            fc.append(f"[{prev_v}][v{i}]xfade=transition={xf}:duration={tdur:.3f}:offset={offset:.3f}[{ov}]")
+            fc.append(f"[{prev_a}][a{i}]acrossfade=d={tdur:.3f}[{oa}]")
+            prev_v, prev_a = ov, oa
+    name = f"compose-{node['id']}-{uuid.uuid4().hex[:6]}.mp4"
+    args += ["-filter_complex", ";".join(fc), "-map", "[vo]", "-map", "[ao]",
+             "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-pix_fmt", "yuv420p",
+             "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", str(mdir / name)]
+    r = _sp.run(args, capture_output=True, text=True, timeout=900)
+    if r.returncode != 0:
+        raise RuntimeError("ffmpeg 合成失敗：" + (r.stderr or "")[-240:])
+    total, _, _ = _ffprobe(mdir / name)
+    return {"type": "video", "file": name, "url": f"/media/{pid}/{name}",
+            "duration": round(total, 2), "clips": len(items), "transition": trans}
 
 
 def _default_canvas() -> dict:
@@ -970,7 +1092,7 @@ def _clean_canvas(raw: dict, old: dict) -> dict:
             "prompt": str(n.get("prompt", ""))[:4000],
             "model": str(n.get("model", ""))[:120],
             "mode": str(n.get("mode", ""))[:20],
-            "params": {k: params[k] for k in ("ratio", "duration", "resolution", "voice") if k in params},
+            "params": _clean_params(kind, params),
             "output": prev.get("output"), "status": prev.get("status", "idle"),
             "message": prev.get("message"), "job_id": prev.get("job_id"),
         })
@@ -1053,6 +1175,18 @@ def api_canvas_run(pid: str):
     if not node:
         return jsonify(error="找不到節點（請先儲存畫布）"), 404
 
+    if node["kind"] == "compose":
+        try:
+            out = _compose_run(pid, canvas, node)
+        except (RuntimeError, OSError, ValueError) as exc:
+            node.update(status="error", message=str(exc)[:300])
+            save_project(plan)
+            return jsonify(error=str(exc)[:300], node=node), 400
+        node.update(output=out, status="done", message=None, job_id=None,
+                    ran={"provider": "ffmpeg", "model": out["transition"], "at": time.strftime("%Y-%m-%d %H:%M:%S")})
+        save_project(plan)
+        return jsonify(node=node)
+
     texts, images = _canvas_upstream(canvas, nid)
     prompt = "\n".join([*texts, node.get("prompt", "")]).strip()
     if not prompt and node["kind"] != "video":
@@ -1103,9 +1237,11 @@ def api_canvas_run(pid: str):
         duration = int(params.get("duration") or 5)
         resolution = str(params.get("resolution") or "768P")
         first_frame = None
-        if node.get("mode") == "i2v":
-            if not images:
+        if node.get("mode") == "i2v" and not images:
+            if not prompt:
                 return jsonify(error="首幀模式需要連接上游的圖片節點（並已生成圖片）"), 400
+            node["mode"] = "t2v"  # 上游沒有圖片：自動改用文字生成影片
+        if node.get("mode") == "i2v":
             if not (provider == "minimax" and model.startswith("MiniMax-H3")):
                 return jsonify(error="目前只有 MiniMax-H3 支援首幀生成影片"), 400
             first_frame = _data_uri(media_dir(pid) / images[0])
@@ -1170,6 +1306,39 @@ def _director_state(plan: dict) -> dict:
     return plan.setdefault("director", {"messages": []})
 
 
+def _director_settings(body: dict, state: dict) -> dict:
+    """Skill 庫帶來的設定：skill / models(image,video) / gen_mode；存在專案裡。"""
+    old = state.get("settings") or {}
+    st = {
+        "skill": str(body.get("skill", old.get("skill", "")))[:80],
+        "models": {},
+        "gen_mode": "auto" if body.get("gen_mode", old.get("gen_mode")) == "auto" else "manual",
+    }
+    models = body.get("models", old.get("models")) or {}
+    for k in ("image", "video"):
+        v = str(models.get(k) or "")
+        if "|" in v and len(v) < 160:
+            st["models"][k] = v
+    if st["skill"] and (not re.fullmatch(r"[a-z0-9\-]+", st["skill"]) or st["skill"] not in _skill_dirs()):
+        st["skill"] = ""
+    state["settings"] = st
+    return st
+
+
+def _skill_prompt(slug: str) -> str:
+    info = _skill_dirs().get(slug)
+    if not info:
+        return ""
+    path = info["dir"] / "SKILL.md"
+    if not path.is_file():
+        return ""
+    text = path.read_text(encoding="utf-8")
+    m = re.match(r"^---\n(.*?)\n---\n\n", text, re.S)
+    body = text[m.end():] if m else text
+    name = info["meta"].get("cn_tc") or info["meta"].get("cn") or slug
+    return f"【本次指定 Skill：{name}（/{slug}）】以下是此 Skill 的完整工作規範，請嚴格遵循其流程、格式與風格要求：\n\n{body[:24000]}"
+
+
 def _canvas_brief(plan: dict) -> str:
     nodes = (plan.get("canvas") or {}).get("nodes") or []
     if not nodes:
@@ -1188,7 +1357,8 @@ def api_director_get(pid: str):
         plan = load_project(pid)
     except (FileNotFoundError, ValueError):
         return jsonify(error="找不到專案"), 404
-    return jsonify(messages=_director_state(plan)["messages"], title=plan.get("title"))
+    state = _director_state(plan)
+    return jsonify(messages=state["messages"], title=plan.get("title"), settings=state.get("settings") or {})
 
 
 @app.delete("/api/projects/<pid>/director")
@@ -1223,7 +1393,17 @@ def api_director_chat(pid: str):
         if valid_choice("script", prov, mid):
             provider, model = prov, mid
 
+    settings = _director_settings(body, state)
     system = DIRECTOR_MODES[mode]
+    if settings["skill"]:
+        system += "\n\n" + _skill_prompt(settings["skill"])
+    if settings["models"]:
+        names = "、".join(f"{'圖片' if k == 'image' else '影片'}模型 {v.split('|', 1)[1]}" for k, v in settings["models"].items())
+        system += f"\n\n後續將使用：{names}。畫面提示詞請針對這些模型撰寫（英文、具體、可直接生成）。"
+    if settings["gen_mode"] == "auto":
+        system += "\n\n生成模式：自動。不要反問使用者，直接產出完整可執行的結果。"
+    else:
+        system += "\n\n生成模式：手動。若關鍵資訊不足，可先列出假設並在結尾詢問是否進入生成。"
     if body.get("use_canvas"):
         system += "\n\n目前畫布節點：\n" + _canvas_brief(plan)
     user_content = text or "請依附件內容進行。"
@@ -1233,7 +1413,7 @@ def api_director_chat(pid: str):
     history = [{"role": m["role"], "content": m["content"][:6000]} for m in state["messages"][-12:]]
     messages = [{"role": "system", "content": system}, *history, {"role": "user", "content": user_content}]
     try:
-        reply = providers.chat(provider, model, messages, max_tokens=2500).strip()
+        reply = providers.chat(provider, model, messages, max_tokens=8000, timeout=300).strip()
     except ProviderError as exc:
         return jsonify(error=str(exc)[:300]), 502
 
@@ -1246,7 +1426,7 @@ def api_director_chat(pid: str):
                               "model": f"{provider}/{model}"})
     state["messages"] = state["messages"][-40:]
     save_project(plan)
-    return jsonify(reply=state["messages"][-1], user=state["messages"][-2])
+    return jsonify(reply=state["messages"][-1], user=state["messages"][-2], settings=settings)
 
 
 @app.get("/api/projects/<pid>/report")

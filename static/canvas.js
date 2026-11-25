@@ -13,6 +13,8 @@
     play: '<path d="M8 5.5v13l11-6.5z"/>', layers: '<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>',
     spark: '<path d="M12 3.5 13.8 9l5.7 1.5-5.7 1.6L12 17.5l-1.8-5.4-5.7-1.6L10.2 9z"/>',
     sliders: '<path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/>',
+    compose: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"/>',
+    up: '<path d="m6 15 6-6 6 6"/>', down: '<path d="m6 9 6 6 6-6"/>', dl: '<path d="M12 4v11m-5-4 5 5 5-5M5 20h14"/>',
     chev: '<path d="m6 9 6 6 6-6"/>', ratio: '<rect x="3" y="7" width="18" height="10" rx="2"/>',
   };
   const KIND = {
@@ -20,14 +22,16 @@
     image: { name: "圖片", step: "keyframe", modelKind: "image" },
     video: { name: "影片", step: "video", modelKind: "video" },
     audio: { name: "配音", step: "tts", modelKind: "tts" },
+    compose: { name: "影片合成", step: "", modelKind: "" },
   };
+  const TRANS = [["cut", "硬切"], ["fade", "交叉淡化"], ["fadeblack", "黑場淡入淡出"], ["dissolve", "溶接"]];
   const MODES = {
     video: [["t2v", "文生影片"], ["i2v", "首幀生成影片"], ["flf", "首尾幀生成影片", true]],
     image: [["t2i", "文生圖"], ["i2i", "參考圖生圖"]],
   };
   const RATIOS = ["16:9", "4:3", "1:1", "3:4", "9:16", "21:9"];
   const VOICES = ["male-qn-qingse", "female-shaonv", "female-yujie", "male-qn-jingying"];
-  const DEFAULT_PARAMS = { video: { ratio: "16:9", duration: 5, resolution: "768P" }, image: { ratio: "16:9" }, audio: { voice: "male-qn-qingse" }, text: {} };
+  const DEFAULT_PARAMS = { video: { ratio: "16:9", duration: 5, resolution: "768P" }, image: { ratio: "16:9" }, audio: { voice: "male-qn-qingse" }, text: {}, compose: { transition: "cut", tdur: 0.5, clips: [] } };
 
   const state = { pid: null, cfg: null, canvas: null, sel: null, selEdge: null, polls: new Set(), saveTimer: null };
   const cv = $("#cv"), world = $("#cv-world"), nodesEl = $("#cv-nodes"), edgesEl = $("#cv-edges");
@@ -106,8 +110,10 @@
     const tries = {
       video: [["i2v", IC.layers, "首幀生成影片"], ["text", IC.spark, "文字生成影片"]],
       image: [["text", IC.spark, "由文字生成圖片"]],
-      text: [], audio: [["text", IC.spark, "由文字生成配音"]],
+      text: [], audio: [["text", IC.spark, "由文字生成配音"]], compose: [],
     }[n.kind];
+    if (n.kind === "compose") return `<div class="cv-empty"><span class="cv-big">${svg(IC.compose, 40)}</span>
+      <span class="muted cv-tip">${upstream(n).filter((u) => u.kind === "video").length ? "點選卡片，在下方排序並按「合成」" : "把影片節點連到這裡（從影片卡右側 + 拖過來）"}</span></div>`;
     return `<div class="cv-empty">
       <span class="cv-big">${svg(n.kind === "video" ? IC.play : IC[n.kind], 40, n.kind === "video" ? "currentColor" : "none")}</span>
       ${tries.length ? `<div class="cv-try"><span class="muted">嘗試：</span>${tries.map(([k, ic, label]) => `<button type="button" data-try="${k}">${svg(ic, 14)} ${label}</button>`).join("")}</div>`
@@ -127,6 +133,7 @@
     el.innerHTML = `
       <div class="cv-label">${svg(IC[n.kind], 13)}<span>${esc(n.title)}</span>
         ${n.status === "done" ? '<span class="chip ok">完成</span>' : n.status === "error" ? '<span class="chip err">失敗</span>' : ""}
+        ${n.kind === "compose" && n.output && n.output.duration ? `<span class="chip">${n.output.clips} 段 · ${n.output.duration}s</span>` : ""}
         <button class="cv-del" type="button" data-del title="刪除節點">${svg(IC.x, 13)}</button></div>
       <div class="cv-card">${preview(n)}${n.status === "error" && n.message ? `<div class="cv-msg">${esc(n.message)}</div>` : ""}</div>
       <button class="cv-port in" type="button" data-port="in" title="新增上游節點">${svg(IC.plus, 15)}</button>
@@ -221,10 +228,79 @@
     if (n.kind === "audio") return p.voice || VOICES[0];
     return "";
   }
+  // ---------------------------------------------------------------- 影片合成面板
+  const natNo = (t) => { const m = String(t || "").match(/分鏡\s*(\d+)/); return m ? +m[1] : 9999; };
+  function composeClips(n) {
+    const ups = upstream(n).filter((u) => u.kind === "video");
+    const p = n.params || (n.params = { ...DEFAULT_PARAMS.compose });
+    const saved = p.clips || [];
+    const idx = (id) => { const i = saved.findIndex((c) => c.id === id); return i < 0 ? 1e4 : i; };
+    ups.sort((a, b) => idx(a.id) - idx(b.id) || natNo(a.title) - natNo(b.title) || a.y - b.y || a.x - b.x);
+    p.clips = ups.map((u) => { const c = saved.find((x) => x.id === u.id) || {}; return { id: u.id, on: c.on !== false, cut_in: +c.cut_in || 0, cut_out: +c.cut_out || 0 }; });
+    return ups;
+  }
+  function renderComposePanel(n) {
+    const ups = composeClips(n), p = n.params;
+    const ready = ups.filter((u) => u.output && u.output.type === "video");
+    const o = n.output && n.output.type === "video" ? n.output : null;
+    panel.innerHTML = `
+      <div class="cvp-top">
+        <span class="muted">${svg(IC.compose, 14)} ${esc(n.title)}</span>
+        <span class="muted" style="font-size:11.5px">${ups.length ? `${ready.length} / ${ups.length} 段已生成` : "尚未連接影片節點"}</span>
+        ${o ? `<a class="cvp-btn" style="margin-left:auto;text-decoration:none" href="${esc(o.url)}" download>${svg(IC.dl, 14)}<span>下載成片 · ${o.duration || ""}s</span></a>` : ""}
+      </div>
+      <div class="cmp-list">${ups.length ? ups.map((u, i) => {
+        const c = p.clips[i], ok = u.output && u.output.type === "video";
+        return `<div class="cmp-row ${c.on && ok ? "" : "off"}" data-i="${i}">
+          <span class="cmp-no">${i + 1}</span>
+          <span class="cmp-th">${ok ? `<video src="${esc(u.output.url)}#t=0.5" muted preload="metadata"></video>` : svg(IC.video, 18)}</span>
+          <span class="cmp-t"><b>${esc(u.title)}</b><small>${ok ? `<span data-dur="${i}">—</span>` : "尚未生成（會略過）"}</small></span>
+          <label class="cmp-trim" title="剪掉開頭秒數">頭 <input type="number" min="0" step="0.1" value="${c.cut_in}" data-k="cut_in"></label>
+          <label class="cmp-trim" title="剪掉結尾秒數">尾 <input type="number" min="0" step="0.1" value="${c.cut_out}" data-k="cut_out"></label>
+          <label class="cmp-on" title="是否納入成片"><input type="checkbox" ${c.on ? "checked" : ""} data-k="on"></label>
+          <button type="button" class="cmp-mv" data-mv="-1" ${i ? "" : "disabled"} title="上移">${svg(IC.up, 14)}</button>
+          <button type="button" class="cmp-mv" data-mv="1" ${i < ups.length - 1 ? "" : "disabled"} title="下移">${svg(IC.down, 14)}</button>
+        </div>`; }).join("") : '<div class="muted" style="padding:14px 4px;font-size:12.5px">從影片節點右側的 + 拖一條線到這張卡片；也可以按上方工具列的「合成分鏡」自動連好全部分鏡。</div>'}</div>
+      <div class="cvp-bar">
+        <button type="button" class="cvp-btn" id="cmp-trans">${svg(IC.layers, 14)}<span>${esc((TRANS.find((t) => t[0] === p.transition) || TRANS[0])[1])}${p.transition !== "cut" ? ` · ${p.tdur}s` : ""}</span>${svg(IC.chev, 12)}</button>
+        <span class="muted" style="font-size:11.5px" id="cmp-total"></span>
+        <span style="flex:1"></span>
+        <button type="button" class="cvp-go" id="cvp-run" ${n.status === "running" || !ready.length ? "disabled" : ""}>${svg(IC.compose, 13)} ${n.status === "running" ? "合成中…" : "合成"}</button>
+      </div>`;
+    // 讀片長
+    const durs = {};
+    const total = () => {
+      let t = 0, k = 0;
+      ups.forEach((u, i) => { const c = p.clips[i]; if (c.on && durs[i] != null) { t += Math.max(0.5, durs[i] - c.cut_in - c.cut_out); k++; } });
+      if (p.transition !== "cut" && k > 1) t -= (k - 1) * p.tdur;
+      $("#cmp-total").textContent = k ? `預估 ${t.toFixed(1)} 秒` : "";
+    };
+    panel.querySelectorAll(".cmp-th video").forEach((v) => {
+      const i = +v.closest(".cmp-row").dataset.i;
+      v.addEventListener("loadedmetadata", () => { durs[i] = v.duration; const el = panel.querySelector(`[data-dur="${i}"]`); if (el) el.textContent = `${v.duration.toFixed(1)}s`; total(); });
+    });
+    panel.querySelectorAll(".cmp-row input").forEach((inp) => inp.addEventListener("change", () => {
+      const c = p.clips[+inp.closest(".cmp-row").dataset.i];
+      if (inp.dataset.k === "on") c.on = inp.checked; else c[inp.dataset.k] = Math.max(0, +inp.value || 0);
+      inp.closest(".cmp-row").classList.toggle("off", !c.on); total(); save();
+    }));
+    panel.querySelectorAll("[data-mv]").forEach((b) => b.addEventListener("click", () => {
+      const i = +b.closest(".cmp-row").dataset.i, j = i + +b.dataset.mv;
+      [p.clips[i], p.clips[j]] = [p.clips[j], p.clips[i]]; save(); renderPanel();
+    }));
+    $("#cvp-run").addEventListener("click", () => runNode(n.id).catch(() => {}));
+    $("#cmp-trans").addEventListener("click", (e) => {
+      e.stopPropagation();
+      const html = '<div class="pop-title">鏡頭轉場</div>' + TRANS.map(([v, l]) => `<button type="button" data-v="${v}" class="${p.transition === v ? "on" : ""}">${svg(IC.layers, 15)}<span>${l}</span></button>`).join("")
+        + '<div class="pop-title">轉場長度</div>' + [0.3, 0.5, 0.8, 1.2].map((d) => `<button type="button" data-v="d${d}" class="${p.tdur === d ? "on" : ""}"><span>${d} 秒</span></button>`).join("");
+      openPop(e.currentTarget, html, (v) => { if (v[0] === "d") p.tdur = +v.slice(1); else p.transition = v; closePop(); save(); renderPanel(); });
+    });
+  }
   function renderPanel() {
     const n = state.sel && node(state.sel);
     if (!n || !state.cfg) { panel.hidden = true; return; }
     panel.hidden = false;
+    if (n.kind === "compose") { renderComposePanel(n); return; }
     const mv = currentModel(n), mi = modelsFor(n.kind).find((x) => x.v === mv);
     const modes = MODES[n.kind];
     const ups = upstream(n);
@@ -292,13 +368,18 @@
   // ---------------------------------------------------------------- 執行
   async function runNode(id) {
     const n = node(id);
+    if (n.kind === "video" && n.mode === "i2v") {
+      const hasImg = state.canvas.edges.some((e) => e.to === id && (node(e.from) || {}).kind === "image" && ((node(e.from) || {}).output || {}).type === "image");
+      const hasText = state.canvas.edges.some((e) => e.to === id && ((node(e.from) || {}).output || {}).type === "text") || (n.prompt || "").trim();
+      if (!hasImg && hasText) { n.mode = "t2v"; toast("上游沒有圖片，已改用「文字生成影片」"); if (state.sel === id) renderPanel(); }
+    }
     await save(true);
     n.status = "running"; n.message = null; renderNode(n); renderEdges(); if (state.sel === id) renderPanel();
     try {
       const res = await api(`/api/projects/${state.pid}/canvas/run`, { method: "POST", body: JSON.stringify({ node_id: id }) });
       Object.assign(n, res.node); renderNode(n); renderEdges(); if (state.sel === id) renderPanel();
       if (res.job) { toast(`影片任務已送出（${res.job.model}）`); await pollJob(res.job.id, id); }
-      else toast(`${n.title} 完成`);
+      else toast(n.kind === "compose" ? `合成完成：${(n.output || {}).duration || "?"} 秒` : `${n.title} 完成`);
     } catch (err) {
       Object.assign(n, err.body && err.body.node ? err.body.node : { status: "error", message: err.message });
       renderNode(n); renderEdges(); if (state.sel === id) renderPanel();
@@ -428,6 +509,24 @@
   document.addEventListener("pointerdown", (e) => { if (!pop.hidden && !e.target.closest(".cv-pop, .cvp-btn, [data-port]")) closePop(); });
   $("#cv-fit").addEventListener("click", fit);
   $("#cv-run-all").addEventListener("click", runAll);
+  // 一鍵：把所有影片節點接到一個合成節點（優先「分鏡 N」）
+  $("#cv-compose").addEventListener("click", () => {
+    const vids = state.canvas.nodes.filter((n) => n.kind === "video");
+    const shots = vids.filter((n) => natNo(n.title) < 9999);
+    const pick = (shots.length ? shots : vids).sort((a, b) => natNo(a.title) - natNo(b.title) || a.y - b.y);
+    if (!pick.length) { toast("畫布上還沒有影片節點", true); return; }
+    let c = state.canvas.nodes.find((n) => n.kind === "compose");
+    if (!c) {
+      const x = Math.max(...pick.map((n) => n.x)) + W + GAP * 2;
+      const ys = pick.map((n) => n.y), y = (Math.min(...ys) + Math.max(...ys)) / 2;
+      c = addNode("compose", x, freeY(x, y)); c.title = "影片合成";
+      renderNode(c);
+    }
+    pick.forEach((v) => connect(v.id, c.id));
+    select(c.id); save();
+    const done = pick.filter((v) => v.output && v.output.type === "video").length;
+    toast(`已連接 ${pick.length} 段影片（${done} 段已生成），在下方排序後按「合成」`);
+  });
   $("#cv-add").addEventListener("click", (e) => {
     e.stopPropagation();
     openPop(e.currentTarget, kindMenu("新增節點"), (k) => {

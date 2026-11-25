@@ -255,12 +255,8 @@ function sendState(){$('send').disabled=!($('pin').value.trim()||PICK>=0);}
 function send(){
   if($('send').disabled)return;
   const s=PICK>=0?DATA[PICK]:null,txt=$('pin').value.trim();
-  const mm=k=>MODELS[k]?MODELS[k].split('|')[1]+'（'+MODELS[k].split('|')[0]+'）':'';
-  const head=[s?'【使用 Skill：'+s.cn+'（'+s.slug+'）】':'',
-    MODELS.image?'【圖片模型：'+mm('image')+'】':'', MODELS.video?'【影片模型：'+mm('video')+'】':'',
-    '【生成模式：'+(GMODE==='auto'?'自動生成':'手動生成，每次生成前先詢問')+'】'].filter(Boolean).join('\n');
-  const pre=head+'\n'+txt;
-  try{sessionStorage.setItem('reach.director.settings',JSON.stringify({skill:s?s.slug:'',models:MODELS,gen_mode:GMODE}))}catch{}
+  const pre=txt;
+  try{sessionStorage.setItem('reach.director.settings',JSON.stringify({skill:s?s.slug:'',skill_name:s?s.cn:'',models:MODELS||{},gen_mode:GMODE}))}catch{}
   try{sessionStorage.setItem('reach.director.prefill',pre)}catch{}
   location.href='/director';
 }

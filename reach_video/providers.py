@@ -112,16 +112,16 @@ def _minimax_ok(provider: str, body: dict) -> dict:
 
 
 # ---------------------------------------------------------------- text
-def chat(provider: str, model: str, messages: list[dict], max_tokens: int = 800) -> str:
+def chat(provider: str, model: str, messages: list[dict], max_tokens: int = 800, timeout: int = TIMEOUT) -> str:
     if provider == "minimax":
-        body = _post(provider, "/text/chatcompletion_v2", {"model": model, "messages": messages, "max_tokens": max_tokens})
+        body = _post(provider, "/text/chatcompletion_v2", {"model": model, "messages": messages, "max_tokens": max_tokens}, timeout=timeout)
         body = _minimax_ok(provider, body)
         choices = body.get("choices") or []
         if not choices:
             raise ProviderError(provider, f"無 choices：{str(body)[:160]}")
         msg = choices[0].get("message") or {}
         return (msg.get("content") or "").strip()
-    body = _post(provider, "/chat/completions", {"model": model, "messages": messages, "max_tokens": max_tokens})
+    body = _post(provider, "/chat/completions", {"model": model, "messages": messages, "max_tokens": max_tokens}, timeout=timeout)
     choices = body.get("choices") or []
     if not choices:
         raise ProviderError(provider, f"無 choices：{str(body)[:160]}")

@@ -38,7 +38,7 @@
   ];
   const MODE_NAME = { original: "劇本原創", adapt: "劇本改編", direct: "導演執導" };
 
-  const st = { pid: null, cfg: null, mode: "original", model: "", attach: null, messages: [], canvas: null, busy: false,
+  const st = { pid: null, cfg: null, mode: "original", model: "", attach: null, settings: { skill: "", skill_name: "", models: {}, gen_mode: "manual" }, messages: [], canvas: null, busy: false,
     preset: { genre: "玄幻修仙", fuse: null, custom: "", audience: "自動", character: "自動", era: "自動", hook: "自動", style: "自動", episodes: "20 集" } };
 
   function toast(msg, isErr = false) {
@@ -73,8 +73,35 @@
   }
   function extractShots(text) {
     const m = String(text).match(/```json\s*([\s\S]*?)```/i);
-    if (!m) return null;
-    try { const d = JSON.parse(m[1]); return Array.isArray(d.shots) && d.shots.length ? d.shots.slice(0, 12) : null; } catch { return null; }
+    if (m) { try { const d = JSON.parse(m[1]); if (Array.isArray(d.shots) && d.shots.length) return d.shots.slice(0, 12); } catch { /* 改用 Markdown 解析 */ } }
+    return extractMdShots(text);
+  }
+  // 解析「分鏡 N：標題 (00s - 10s)」＋ 畫面描述／運鏡與光線／圖片 Prompt／Negative Prompt
+  function extractMdShots(text) {
+    const clean = String(text).replace(/\r/g, "");
+    const re = /^[#>\s*-]*\**\s*分鏡\s*(\d+)\s*[：:]\s*(.*)$/gm;
+    const heads = [...clean.matchAll(re)];
+    if (heads.length < 2) return null;
+    const field = (sec, label) => {
+      const r = new RegExp(`${label}[^：:\\n]*[：:]\\**\\s*([\\s\\S]*?)(?=\\n\\s*[*-]?\\s*\\**\\s*(?:畫面描述|運鏡與光線|運鏡|配樂情緒|配樂|圖片\\s*Prompt|Negative\\s*Prompt|負面)|$)`, "i");
+      const x = sec.match(r);
+      return x ? x[1].replace(/^\s*>\s?/gm, "").replace(/\*\*/g, "").replace(/\s+/g, " ").trim() : "";
+    };
+    const shots = heads.map((h, i) => {
+      const sec = clean.slice(h.index + h[0].length, i + 1 < heads.length ? heads[i + 1].index : undefined);
+      const rawTitle = h[2].replace(/\*\*/g, "").trim();
+      const t = rawTitle.match(/\((\d+)\s*s?\s*[-–~]\s*(\d+)\s*s\)/i);
+      const img = field(sec, "圖片\\s*Prompt"), desc = field(sec, "畫面描述");
+      return {
+        title: rawTitle.replace(/\s*\(.*?\)\s*$/, "") || `分鏡 ${h[1]}`,
+        prompt: img || desc, hasImg: !!img,
+        negative: field(sec, "(?:Negative\\s*Prompt|負面)"),
+        motion: field(sec, "運鏡"),
+        seconds: t ? Math.max(1, +t[2] - +t[1]) : 5,
+      };
+    }).filter((x) => x.prompt);
+    const full = shots.some((x) => x.hasImg) ? shots.filter((x) => x.hasImg) : shots;  // 有圖片 Prompt 時略過被截斷的分鏡
+    return full.length ? full.slice(0, 12) : null;
   }
 
   // ---------------------------------------------------------------- 渲染
@@ -109,6 +136,22 @@
     $("#dr-model").innerHTML = `${svg(IC.text, 14)}<span>${esc(hit ? hit.id : cur.split("|")[1] || "模型")}</span>`;
   }
   function renderMode() { document.querySelectorAll("#dr-modes button").forEach((b) => b.classList.toggle("on", b.dataset.mode === st.mode)); }
+  function renderSets() {
+    const s = st.settings, el = $("#dr-sets"), chips = [];
+    if (s.skill) chips.push(["skill", "Skill", s.skill_name || s.skill]);
+    if (s.models.image) chips.push(["image", "圖片", s.models.image.split("|")[1]]);
+    if (s.models.video) chips.push(["video", "影片", s.models.video.split("|")[1]]);
+    if (s.skill || s.models.image || s.models.video || s.gen_mode === "auto") chips.push(["mode", "模式", s.gen_mode === "auto" ? "自動生成" : "手動生成"]);
+    el.hidden = !chips.length;
+    el.innerHTML = chips.map(([k, l, v]) => `<span class="dr-set"><i>${l}</i>${esc(v)}<button type="button" data-k="${k}" title="${k === "mode" ? "切換" : "移除"}">${k === "mode" ? "⇄" : "✕"}</button></span>`).join("");
+    el.querySelectorAll("button").forEach((b) => b.onclick = () => {
+      const k = b.dataset.k;
+      if (k === "skill") { s.skill = ""; s.skill_name = ""; }
+      else if (k === "mode") s.gen_mode = s.gen_mode === "auto" ? "manual" : "auto";
+      else delete s.models[k];
+      renderSets();
+    });
+  }
   function renderAttach() {
     const a = $("#dr-attach");
     if (!st.attach) { a.hidden = true; return; }
@@ -136,7 +179,8 @@
     text = (text ?? $("#dr-input").value).trim();
     if (!text && !st.attach) { $("#dr-input").focus(); return; }
     const mode = opts.mode || st.mode;
-    const payload = { text, mode, model: st.model, use_canvas: opts.useCanvas ?? $("#dr-use-canvas").checked };
+    const payload = { text, mode, model: st.model, use_canvas: opts.useCanvas ?? $("#dr-use-canvas").checked,
+      skill: st.settings.skill, models: st.settings.models, gen_mode: st.settings.gen_mode };
     if (st.attach) { payload.attachment = st.attach.text; payload.attachment_name = st.attach.name; }
     st.busy = true;
     st.messages.push({ role: "user", display: text || `（上傳：${st.attach.name}）`, mode });
@@ -156,25 +200,51 @@
     const baseY = canvas.nodes.length ? Math.max(...canvas.nodes.map((n) => n.y)) + 320 : 0;
     let next = maxId;
     const mk = (kind, title, prompt, x, y, extra = {}) => {
-      const n = { id: `N${++next}`, kind, title, x, y, prompt, model: "", mode: kind === "video" ? "t2v" : kind === "image" ? "t2i" : "",
+      const n = { id: `N${++next}`, kind, title, x, y, prompt, model: (kind === "image" || kind === "video") ? (st.settings.models[kind] || "") : "", mode: kind === "video" ? "t2v" : kind === "image" ? "t2i" : "",
         params: kind === "video" ? { ratio: "16:9", duration: 5, resolution: "768P" } : kind === "image" ? { ratio: "16:9" } : {}, ...extra };
       canvas.nodes.push(n); return n;
     };
+    const before = next;
     build(canvas, mk, baseY);
     const res = await api(`/api/projects/${st.pid}/canvas`, { method: "PUT", body: JSON.stringify(canvas) });
     st.canvas = res.canvas; renderAssets();
+    return canvas.nodes.filter((n) => +n.id.slice(1) > before);
+  }
+  // 自動生成：先跑全部圖片節點，再跑影片節點（影片以上游圖片為首影格）
+  async function autoRun(nodes) {
+    const run = async (n) => {
+      try {
+        const r = await api(`/api/projects/${st.pid}/canvas/run`, { method: "POST", body: JSON.stringify({ node_id: n.id }) });
+        if (r.job) toast(`${n.title}：影片任務已送出（${r.job.model}）`); else toast(`${n.title} 完成`);
+        return true;
+      } catch (err) { toast(`${n.title}：${err.message}`, true); return false; }
+    };
+    const imgs = nodes.filter((n) => n.kind === "image"), vids = nodes.filter((n) => n.kind === "video");
+    toast(`自動生成開始：${imgs.length} 張圖片 → ${vids.length} 支影片`);
+    const ok = new Set();
+    for (const n of imgs) if (await run(n)) ok.add(n.id);
+    const edges = (st.canvas && st.canvas.edges) || [];
+    for (const v of vids) {
+      const up = edges.filter((e) => e.to === v.id).map((e) => e.from);
+      if (up.length && !up.some((id) => ok.has(id))) { toast(`${v.title}：上游圖片失敗，略過`, true); continue; }
+      await run(v);
+    }
+    const cv = await api(`/api/projects/${st.pid}/canvas`); st.canvas = cv.canvas; renderAssets();
+    toast("自動生成已送出，影片進度請到畫布查看");
   }
   async function shotsToCanvas(shots) {
-    await pushToCanvas((canvas, mk, y0) => {
+    const created = await pushToCanvas((canvas, mk, y0) => {
       shots.forEach((s, i) => {
         const y = y0 + i * 300;
-        const img = mk("image", `分鏡 ${i + 1}・畫面`, String(s.prompt || ""), 0, y);
-        const vid = mk("video", `分鏡 ${i + 1}・${String(s.title || "影片").slice(0, 20)}`, String(s.prompt || ""), 460, y,
-          { mode: "i2v", params: { ratio: "16:9", duration: Math.max(4, Math.min(10, +s.seconds || 5)), resolution: "768P" } });
+        const img = mk("image", `分鏡 ${i + 1}・畫面`, String(s.prompt || ""), 0, y, s.negative ? { negative: String(s.negative) } : {});
+        const vprompt = s.motion ? `${s.motion}\n${s.prompt || ""}` : String(s.prompt || "");
+        const vid = mk("video", `分鏡 ${i + 1}・${String(s.title || "影片").slice(0, 20)}`, vprompt, 460, y,
+          { mode: /\|MiniMax-H3/.test(st.settings.models.video || "") ? "i2v" : "t2v", params: { ratio: "16:9", duration: Math.max(4, Math.min(10, +s.seconds || 5)), resolution: "768P" } });
         canvas.edges.push({ from: img.id, to: vid.id });
       });
     });
     toast(`已建立 ${shots.length} 組「圖片 → 影片」節點`);
+    if (st.settings.gen_mode === "auto") autoRun(created);
   }
 
   // ---------------------------------------------------------------- 劇本設定器
@@ -317,6 +387,16 @@
     $("#dr-open-canvas").href = `/canvas?pid=${pid}`;
     const [hist, cv] = await Promise.all([api(`/api/projects/${pid}/director`), api(`/api/projects/${pid}/canvas`)]);
     st.messages = hist.messages || []; st.canvas = cv.canvas;
+    const hs = hist.settings || {};
+    st.settings = { skill: hs.skill || "", skill_name: "", models: hs.models || {}, gen_mode: hs.gen_mode === "auto" ? "auto" : "manual" };
+    try {
+      const inc = JSON.parse(sessionStorage.getItem("reach.director.settings") || "null");
+      if (inc) { sessionStorage.removeItem("reach.director.settings"); st.settings = { skill: inc.skill || "", skill_name: inc.skill_name || "", models: inc.models || {}, gen_mode: inc.gen_mode === "auto" ? "auto" : "manual" }; }
+    } catch (_) {}
+    if (st.settings.skill && !st.settings.skill_name) {
+      api("/api/skills").then((d) => { const k = (d.skills || []).find((x) => x.slug === st.settings.skill); if (k) { st.settings.skill_name = k.cn; renderSets(); } }).catch(() => {});
+    }
+    renderSets();
     renderMessages(); renderAssets(); renderModel(); renderMode();
     try {
       const pre = sessionStorage.getItem("reach.director.prefill");
