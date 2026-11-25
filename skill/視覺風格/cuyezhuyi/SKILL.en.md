@@ -6,7 +6,7 @@ description: "Soviet Brutalism: deeply builds raw Soviet aesthetics, one-click g
 # Soviet Brutalist Style Skill
 
 SKILL: Soviet Brutalist Cinematic Short Film
-Skill ID: libtv-industry/brutalist-film
+Skill ID: reach-industry/brutalist-film
 Version: 3.1
 Use case: generation of Soviet brutalist-style cinematic short films, guaranteeing character consistency, style stability, and cinematic aesthetic value.
 

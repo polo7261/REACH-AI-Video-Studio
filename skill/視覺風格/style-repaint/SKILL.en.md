@@ -5,7 +5,7 @@ description: "Style repaint: convert live-action footage to anime, 2D, or 3D sty
 
 ---
 name: style-repaint
-namespace: libtv-industry
+namespace: reach-industry
 title: "Style Repaint"
 description: "Use this skill when existing content (live-action footage / image assets / rendered storyboards) needs an art-style conversion—live-action to anime, photorealistic to 2D, to cartoon-rendered 3D (e.g., Pixar style), to photorealistic 3D, between different animation/comic styles, or to live-action photorealism. For video input, first run analyze_video multimodal analysis + edit_video to slice by time points into per-shot source clips, then judge the repaint strategy shot by shot across four dimensions (subject count / motion magnitude / shot scale / high-risk elements): single-frame / multi-frame / multi-character coordinated anchoring / high-risk element reinforcement. Generation has two modes (source-footage input gives strong fidelity at roughly 2x the cost / pure text + style-anchor regeneration is cheaper but less faithful); the mode must be clarified before analysis and slicing. Cartoon-rendered 3D has concrete reference techniques; photorealistic 3D remains the highest-risk category with no mature solution; live-action/photorealistic styles have no preset vocabulary. The industry's hardest problem, temporal consistency, becomes even more severe under per-shot independent regeneration; 'lock the style bible + character anchors first, then batch' is a mandatory prerequisite step. Not responsible for: aspect ratio conversion (go to aspect-reframe); translation and dubbing (go to video-translate-dub); designing characters/storyboards from scratch (go to storyboard-related skills)."
 version: 6

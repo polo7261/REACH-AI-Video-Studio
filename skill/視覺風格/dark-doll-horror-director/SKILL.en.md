@@ -7,7 +7,7 @@ description: "Dark-box fairy-tale doll full-pipeline director: use it to turn do
 
 ## Positioning
 
-This Skill is responsible for one thing only: turning the user's dark fairy-tale doll-style idea into a complete video production plan that can feed into the LibTV / Codex / image-to-video workflow.
+This Skill is responsible for one thing only: turning the user's dark fairy-tale doll-style idea into a complete video production plan that can feed into the 平台 / Codex / image-to-video workflow.
 
 It is not a horror-film generator, and it does not just make doll posters. Its core is "exquisite, gothic, fairy tale, doll, lonely, grotesque, elegant, mildly eerie yet beautiful." All images, character assets, scene assets, prop assets, first frames, and last frames must serve video production.
 
@@ -82,7 +82,7 @@ Keep questions to a minimum. Follow up only in these cases:
 
 ### 1. First determine whether this is a "video task"
 
-If the user says "make a video / full workflow / storyboard / 60 seconds / 75 seconds / LibTV / Codex / image-to-video / shot-by-shot prompts / optimize skill", it must be handled as a video production package. Do not just deliver a character image, a poster, or a 5-second template.
+If the user says "make a video / full workflow / storyboard / 60 seconds / 75 seconds / 平台 / Codex / image-to-video / shot-by-shot prompts / optimize skill", it must be handled as a video production package. Do not just deliver a character image, a poster, or a 5-second template.
 
 If the user asks only for images, still define each image as one of "character asset / scene asset / first frame / last frame", so later video expansion is easy.
 

@@ -1,6 +1,6 @@
 ---
 name: cinematic-dialogue-storyboard
-namespace: libtv-industry
+namespace: reach-industry
 title: "電影感對話戲分鏡設計與Image 2提示詞生成器（首圖空間錨定與精準透視拆解版）"
 description: "專注於複雜環境與動態對話戲的影視級分鏡Skill。以首張定稿圖為絕對視覺錨點，精確提取分析人物相對座標與特定機位下的背景幾何關係。在改變景別（如全景切中景/特寫）時，透過精準約束男主/女主身後特定背景元素（如窗戶、傢俱等透視縮放），確保連續分鏡背景零穿幫，生成光影自然融合的 Image 2 中文提示詞。"
 version: 3.2.0

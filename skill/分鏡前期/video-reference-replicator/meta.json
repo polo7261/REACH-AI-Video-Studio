@@ -8,5 +8,5 @@
  "desc_tc": "上傳參考影片，自動搭建階梯抽幀與圖生影片復刻工作流。",
  "cn_sc": "参考视频复刻",
  "desc_sc": "上传参考视频，自动搭建阶梯抽帧与图生视频复刻工作流。",
- "desc_en": "Builds a LibTV frame-sampling and image-to-video workflow that replicates a reference video"
+ "desc_en": "Builds a platform frame-sampling and image-to-video workflow that replicates a reference video"
 }

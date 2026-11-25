@@ -5,7 +5,7 @@ description: "Viral product short drama: turn a single product photo into a fini
 
 ---
 name: product-short-drama
-namespace: libtv-industry
+namespace: reach-industry
 title: "Shoppable Short Drama"
 description: "Upload one product image, produce a shoppable short-drama video"
 version: 4

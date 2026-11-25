@@ -3,7 +3,7 @@ name: toy-figure-animator
 description: "无需建模，轻松生成日式特摄、潮玩、毛毡定格三种动画风格短片。"
 ---
 
-# 手办动画短视频生成 Skill（LibTV 版）
+# 手办动画短视频生成 Skill（Generic 版）
  
 ## ⚠️ 最高优先级输出规则
  

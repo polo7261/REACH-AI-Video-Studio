@@ -4,7 +4,7 @@ description: "High-tech fashion accessory ad: upload images of glasses, watches,
 ---
 
 name: wander-high-energy-fashion-ad
-namespace: libtv-industry
+namespace: reach-industry
 title: "Wander High-Energy Fashion Accessory Ad"
 description: "Create high-energy ads for fashion accessories such as eyewear, watches, necklaces, rings, and earrings. The opening first introduces the function and only asks the user to upload a product image; after viewing the image, the Agent automatically determines the product type, image quality, and white-background restoration needs, then uses one round of project confirmation to select the human-worn or pure product rendering path, style, aspect ratio, and duration. The human-appearance path must first create a storyboard to control visuals and pacing, while the pure product path is produced as a standalone film; mixing is prohibited. Defaults to a single complete 720P 15-second video node with built-in BGM."
 version: 1

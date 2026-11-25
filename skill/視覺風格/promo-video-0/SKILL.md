@@ -13,7 +13,7 @@ description: "UI截圖生成宣傳短片"
 
 ## 前置條件
 
-- `LIBTV_ACCESS_KEY` 已設定（base-skill 前置）。
+- 畫布平台金鑰已設定（base-skill 前置，由 base-skill 環境提供）。
 - 使用者已提供本地圖片路徑（`.jpg` / `.png` / `.webp` 等），大小 < 200MB。
 - base-skill 的指令碼存在於 `../base-skill/scripts/`（同一專案下）。若不在同一專案，需要用絕對路徑找到 base-skill 的 scripts 目錄。
 

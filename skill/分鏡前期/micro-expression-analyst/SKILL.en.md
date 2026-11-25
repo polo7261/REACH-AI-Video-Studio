@@ -5,7 +5,7 @@ description: "Micro-expression emotion control: say goodbye to stiff, awkward ac
 
 ---
 name: micro-expression-control
-namespace: libtv-industry
+namespace: reach-industry
 title: "Fine-Grained Control of Micro-Expressions and Emotional Acting"
 description: "Use for fine-grained control of an actor/character's facial expressions, micro-expressions, and emotional transitions—a Chinese emotion→micro-expression action library (sadness/shock/suppressed crying/restrained anger/remorse/guilt/shame/shyness/restrained love/jealousy/disappointment/relief, etc.), long-take single-expression evolution timeline templates, micro-expression time-anchoring tiers, emotion-blending/subtext-leakage writing techniques, an advanced FACS/AU coding precision layer, genuine-vs-fake smile determination, gaze/shot acting vocabulary, cross-shot emotional continuity, division of labor with lip-sync, and restrained-acting self-checks. Distinct from cinematic-motion-realism (full-body motion realism) and talking-head-director (script/voiceover pacing)—this skill specializes in the face. Used for the visual content field of generate_video_v3."
 version: 4

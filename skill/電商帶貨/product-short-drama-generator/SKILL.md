@@ -6,7 +6,7 @@ description: "把一張商品圖轉化為一條 3 分鏡、約 15 秒的帶貨�
 ```Markdown
 ---
 name: product-short-drama
-namespace: libtv-industry
+namespace: reach-industry
 title: "帶貨短劇"
 description: "上傳一張商品圖，生產短劇帶貨影片"
 version: 4

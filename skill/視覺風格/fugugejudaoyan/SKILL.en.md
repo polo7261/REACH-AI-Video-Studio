@@ -13,7 +13,7 @@ Short videos, concept films, trailers, and MV-style mashup edits with the feel o
 30-second, 60-second, 75-second, and 90-second retro sci-fi concept videos;
 The full pipeline from a one-sentence idea to script, assets, storyboards, image prompts, video prompts, editing, and review;
 Asset planning for characters, ships, planets, ruins, props, space backdrops, first frames, last frames, title cards, transition cards, etc.;
-Executable prompts and production checklists for LibTV / Agent / Codex workflows.
+Executable prompts and production checklists for the platform / Agent / Codex workflows.
 It does not handle:
 Writing long-running episodic series or complex dialogue-driven dramas;
 Real aerospace science communication, NASA documentaries, or modern hard sci-fi realistic promos;
@@ -110,7 +110,7 @@ Suits a snappy teaser:
 20-26s: Visual climax—light beam, star gate, ship flyby.
 26-30s: Last-frame poster freeze.
 60-second full video
-Suits LibTV assignments and competition demos:
+Suits Generic assignments and competition demos:
 0-5s: Opening hook. A giant planet, flickering signal, ruin shadows, or ship debris grabs the eye first.
 5-12s: World-building. Show alien terrain, nebulae, twin suns, and distant ships.
 12-20s: The protagonist appears. Heroic silhouette, helmet reflections, slowly looking up or walking into frame.

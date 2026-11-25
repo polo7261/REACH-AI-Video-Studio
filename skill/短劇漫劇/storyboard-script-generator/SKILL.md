@@ -1,6 +1,6 @@
 ---
 name: 分鏡腳本生成器
-namespace: libtv-industry
+namespace: reach-industry
 title: "AIGC短影片分鏡腳本生成器"
 description: "輸入主題+時長+風格，輸出逐秒分鏡腳本"
 version: 1.0

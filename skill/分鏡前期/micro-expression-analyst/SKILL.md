@@ -6,7 +6,7 @@ description: "告別癱臉尬演，精準拿捏微表情"
 ```markdown
 ---
 name: micro-expression-control
-namespace: libtv-industry
+namespace: reach-industry
 title: "微表情與情緒表演精控"
 description: "對演員/角色的面部表情、微表情、情緒轉換做精細控制時用——中文情緒→微表情動作庫(悲傷/震驚/隱忍哭泣/憤怒剋制/悔恨/愧疚/羞恥/羞怯/愛意剋制/嫉妒/失望/釋然等)、長鏡頭單表情演化時間線模板、微表情時間錨定分檔、情緒混合/潛臺詞洩露寫法、FACS/AU 編碼進階精控層、真笑假笑判定、眼神/鏡頭表演語彙、跨鏡情緒連續性、與對口型/lip-sync 的分工協同、剋製表演自檢。區別於 cinematic-motion-realism（全身運動寫實）與 talking-head-director（指令碼/口播節奏）——本 skill 專攻臉。用於 generate_video_v3 的視覺內容欄位。"
 version: 4

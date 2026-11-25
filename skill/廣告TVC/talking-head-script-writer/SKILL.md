@@ -1,6 +1,6 @@
 ---
 name: 口播文案生成器
-namespace: libtv-industry
+namespace: reach-industry
 title: "短影片口播文案生成器"
 description: "輸入主題+平臺+時長，輸出完整口播文案"
 version: 1.0

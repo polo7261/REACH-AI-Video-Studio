@@ -1,18 +1,18 @@
 ---
 name: character-sheet
-description: "Create LibTV real-person photographic character turnaround/reference sheets from a supplied image or character description. Use when the user asks for a character sheet, turnaround, model sheet, expression/angle reference, or 人設圖, especially the left-three-right-four composition with 1990s photographic film grain and no anime, cartoon, illustration, or 3D-rendered style. This skill operates inside the platform: keep prompt assembly internal and do not expose or ask the user to approve a standalone character prompt."
+description: "Create platform real-person photographic character turnaround/reference sheets from a supplied image or character description. Use when the user asks for a character sheet, turnaround, model sheet, expression/angle reference, or 人設圖, especially the left-three-right-four composition with 1990s photographic film grain and no anime, cartoon, illustration, or 3D-rendered style. This skill operates inside the platform: keep prompt assembly internal and do not expose or ask the user to approve a standalone character prompt."
 ---
 
-# LibTV Character Sheet
+# Character Sheet
 
-Build a production-style character model sheet for LibTV, not a poster, portrait collage, or cinematic still. Treat the user's reference image as the authority for both character identity and, when supplied, the target sheet's visual organization. Complete only information that is not visible, and keep any completion conservative.
+Build a production-style character model sheet for the platform, not a poster, portrait collage, or cinematic still. Treat the user's reference image as the authority for both character identity and, when supplied, the target sheet's visual organization. Complete only information that is not visible, and keep any completion conservative.
 
 ## Runtime behavior
 
 1. Accept the user's reference image(s), description, or both. Do not require a separate prompt-writing step.
 2. Extract stable identity facts internally: face/head shape, eyes, brows, nose, mouth, jaw, ears, skin tone/texture, hair, age impression, body proportions, clothing silhouette/colors/materials, and shoes.
-3. Compose the internal LibTV generation instruction using the locked layout and style below.
-4. Generate the image directly through the LibTV image workflow. Do not print the assembled prompt, prompt fragments, or a confirmation question.
+3. Compose the internal platform generation instruction using the locked layout and style below.
+4. Generate the image directly through the Generic image workflow. Do not print the assembled prompt, prompt fragments, or a confirmation question.
 5. After generation, inspect the result against the validation checklist. If a hard layout or identity rule fails, revise and regenerate internally; expose only the final image and a short result note.
 
 ## Locked composition
@@ -50,7 +50,7 @@ Internally reject or revise results containing: poster layout, freeform collage,
 
 ## Final response contract
 
-Return the generated character sheet (or the LibTV result object) and at most a concise note describing completion or any unavoidable limitation. Never include the internal English/Chinese prompt, a negative prompt, a prompt template, or a pre-generation approval request.
+Return the generated character sheet (or the Generic result object) and at most a concise note describing completion or any unavoidable limitation. Never include the internal English/Chinese prompt, a negative prompt, a prompt template, or a pre-generation approval request.
 
 ## Validation checklist
 

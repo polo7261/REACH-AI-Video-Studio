@@ -6,7 +6,7 @@ description: "真人轉動漫/2D/3D風格轉換"
 ```markdown
 ---
 name: style-repaint
-namespace: libtv-industry
+namespace: reach-industry
 title: "風格轉繪"
 description: "已有內容（真人成片/影象素材/已渲染分鏡）需要轉換畫風時用本 skill——真人轉動漫、寫實轉 2D、轉卡通渲染 3D（如皮克斯風）、轉寫實 3D、不同動畫/漫畫風格互轉、轉真人寫實。影片輸入先用 analyze_video 多模態分析+edit_video 按時間點切片得到逐 shot 原片段，再按主體數量/運動幅度/景別/高風險元素四維度逐 shot 判定轉繪策略（單幀/多幀/多角色協同錨定/高風險元素強化）。生成有兩種模式（原片入參強保真但約 2 倍成本 / 純文字+風格錨重生成更省但保真度較低），模式必須在分析切片之前問清楚。轉卡通渲染 3D 有具體參考技法，轉寫實 3D 仍是風險最高、無成熟方案的類別；轉真人/寫實風格不預置詞庫。全行業最難的時序一致性問題在逐鏡獨立重生成下更嚴峻，'先鎖風格聖經+角色錨再批次'是強制前置步驟。不負責：畫幅轉換（轉 aspect-reframe）；翻譯配音（轉 video-translate-dub）；從零設計角色/分鏡（轉 storyboard 相關 skill）。"
 version: 6

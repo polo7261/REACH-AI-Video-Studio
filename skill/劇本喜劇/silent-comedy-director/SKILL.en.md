@@ -7,7 +7,7 @@ description: "Black-and-white silent comedy full-process director: turn comedy i
 
 ## Positioning
 
-This Skill does only one thing: turn the user's black-and-white silent film comedy idea into a complete video production plan ready to enter the LibTV / Codex / image-to-video workflow.
+This Skill does only one thing: turn the user's black-and-white silent film comedy idea into a complete video production plan ready to enter the 平台 / Codex / image-to-video workflow.
 
 It is not a "black-and-white style prompt collection," nor does it only make character images or posters. Image assets, first frames, title cards, and prop images must all serve the video; the final goal is to produce a black-and-white silent film comedy video whose gags can be understood, and that can be edited, reviewed, and revised.
 
@@ -78,7 +78,7 @@ Ask as few questions as possible. Only follow up in these cases:
 
 ### 1. First determine whether this is a "video task"
 
-If the user says "make a skill / optimize a skill / make a video / make 60 seconds / make the full workflow / LibTV / Codex / storyboard / video prompts," it must be handled as a video production package. Do not output only image prompts or a poster plan.
+If the user says "make a skill / optimize a skill / make a video / make 60 seconds / make the full workflow / 平台 / Codex / storyboard / video prompts," it must be handled as a video production package. Do not output only image prompts or a poster plan.
 
 If the user only says "make an image," still remind them by default: this image can serve as a first frame or a character asset, and expand further when a video is needed. Unless the user explicitly wants only an image, do not drop the video capability.
 

@@ -3,7 +3,7 @@ name: cuyezhuyi
 description: "深構蘇聯粗糲美學，一鍵生成紀念碑式視覺大片"
 ---
 
-蘇聯粗野主義風格Skill SKILL: Soviet Brutalist Cinematic Short Film Skill ID: libtv-industry/brutalist-film Version: 3.1 適用場景: 蘇聯粗野主義風格電影短片生成，保證人物一致性、風格穩定性與電影美學價值。
+蘇聯粗野主義風格Skill SKILL: Soviet Brutalist Cinematic Short Film Skill ID: reach-industry/brutalist-film Version: 3.1 適用場景: 蘇聯粗野主義風格電影短片生成，保證人物一致性、風格穩定性與電影美學價值。
 一、Skill 定位與目標 本 Skill 用於生成具備以下特徵的粗野主義風格短片：
 🏗️ 風格錨定：Base Prompt + 色調規範 + 禁止項鎖死（不可動的風格核心） 🌊 最大發散：主題、故事、場景、角色、氛圍、敘事結構、道具、對白、音效、轉場全部由AI即興創作，不設固定素材庫 🧍 人物一致：主角形象透過 Lib Image 生成並鎖定，全鏡複用 🖼️ 環境定調：MJ V8.1 生成3張環境氛圍參考圖，鎖定全片場景基調和色調，後續分鏡以參考圖為錨 🎬 景別豐富：強制多景別分佈，禁止連續相同景別 💬 人物對白：每鏡可生成人物對白/獨白，支援中文/英文/俄語選擇 🎞️ 高密度分鏡：預設2.5秒/鏡快切換，Beat拆分微鏡頭，強化故事張力 🔊 音效契合：根據故事氛圍生成匹配的電影級環境音效（無背景音樂） 📦 流程可複用：6步標準流程，任何人按步驟均可生成高質量成片 二、風格核心錨點（全片必含，禁止隨機化） 這是唯一不可動的部分。錨點之外的一切由AI即興創作。
 Base Prompt——每鏡必須包含 Soviet brutalist architecture, raw concrete texture, colossal geometric structures, monumental scale, cold grey atmosphere, volumetric fog, cinematic lighting, 8k resolution, photorealistic

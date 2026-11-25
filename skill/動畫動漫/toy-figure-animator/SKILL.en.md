@@ -3,7 +3,7 @@ name: toy-figure-animator
 description: "Toy figure animation: no modeling needed—easily generate shorts in three styles: Japanese tokusatsu, art toys, and felt stop-motion."
 ---
 
-# Figure Animation Short Video Generation Skill (LibTV Edition)
+# Figure Animation Short Video Generation Skill (Generic Edition)
  
 ## ⚠️ Highest-Priority Output Rules
  

@@ -13,7 +13,7 @@ Unlike base skill's "pure messenger" positioning, this skill **does allow local 
 
 ## Prerequisites
 
-- `LIBTV_ACCESS_KEY` is set (a base skill prerequisite).
+- The canvas platform access key is configured (provided by the base-skill environment).
 - The user has provided a local image path (`.jpg` / `.png` / `.webp` etc.), size < 200MB.
 - base skill's scripts exist at `../base skill/scripts/` (same project). If not in the same project, you need to locate base skill's scripts directory using an absolute path.
 

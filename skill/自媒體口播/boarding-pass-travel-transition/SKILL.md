@@ -1,6 +1,6 @@
 ---
 name: wander-boarding-pass-fashion-transition
-namespace: libtv-industry
+namespace: reach-industry
 title: "Wander 登機牌旅行換裝短片"
 description: "Use when 使用者想把一張角色卡做成純白攝影棚中連續走路、登機牌滑入、四站旅行換裝的寫實時尚廣告短片。"
 version: 1

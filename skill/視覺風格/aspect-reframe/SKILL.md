@@ -6,7 +6,7 @@ description: "16:9與9:16智慧畫幅重構"
 ```markdown
 ---
 name: aspect-reframe
-namespace: libtv-industry
+namespace: reach-industry
 title: "橫豎屏智慧轉換"
 description: "已有內容（成片影片/分鏡表/影象素材）需要在 16:9 與 9:16 間轉換畫幅時用本 skill。核心不是裁切或拉伸，是按每個 fine-shot 判定構圖策略（智慧重構——一次 image-to-image 裡讓模型自行判斷裁切收窄還是補背景擴充套件/拆分多鏡/letterbox 兜底三選一，agent 自行判定不用停下來問使用者）。影片輸入先用 analyze_video 做多模態分析取得分段結構，再用 edit_video（clip 操作，按 start_sec/end_sec）機械切出對應片段。生成的最小單元是粗段（~15 秒），不是逐 fine-shot 單獨生成——粗段的真實原始音訊被整段提取出來作為該段音訊真值和生成時長依據，fine-shot 精細分析服務於內容理解和關鍵幀提取，不再各自獨立生成一條影片。生成新畫幅時有兩種模式供使用者選（原片入參強保真但約 2 倍成本 / 純文字+影象重生成更省但保真度較低、且效果無法完全保證），模式必須在分析切片之前問清楚。產出豎版通用構圖規範，供其他 skill 引用避免各自重複寫。不負責：從零設計分鏡（轉 storyboard 相關 skill）；僅有文字劇本、尚無畫面時的分鏡轉影片（轉 ai-short-drama-flow / script-to-shots-async）。"
 version: 7

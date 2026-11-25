@@ -1,6 +1,6 @@
 ---
 name: Prompt最佳化器
-namespace: libtv-industry
+namespace: reach-industry
 title: "AI繪圖Prompt最佳化器"
 description: "輸入中文大白話，輸出專業MJ/即夢英文Prompt"
 version: 1.0
