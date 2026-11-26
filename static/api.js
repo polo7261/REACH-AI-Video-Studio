@@ -90,6 +90,17 @@
       ? `<span class="muted" style="font-size:11px">可用於：${can.map((s) => esc(s.label)).join("、")}</span>` : "—";
   }
 
+  const expanded = new Set(), editing = new Set();
+  const statusOf = (p) => {
+    const sts = p.models.map((m) => m.status);
+    if (sts.includes("quota")) return ["warn", "額度上限"];
+    if (sts.includes("ok")) return ["ok", "已連線"];
+    if (p.key_editable && p.key_state === "missing") return ["warn", "未設金鑰"];
+    if (sts.length && sts.every((s) => s === "license")) return ["err", "條款限制"];
+    return ["", "未測試"];
+  };
+  const CHEV = '<path d="m6 9 6 6 6-6"/>';
+
   function renderProviders() {
     const list = cfg.providers.filter((p) => p.scope === tab);
     document.querySelectorAll("#tabs .tab").forEach((b) => {
@@ -97,41 +108,63 @@
       b.classList.toggle("active", b.dataset.tab === tab);
       b.innerHTML = `${svg(ICON[b.dataset.tab], 16)} ${b.dataset.tab === "cloud" ? "雲端" : "地端"}（${n}）`;
     });
-    document.getElementById("providers").innerHTML = list.map((p) => `
-      <section class="card">
-        <h3 class="prov-head"><span class="prov-ico ${p.scope}">${svg(ICON[p.scope] || ICON.cloud, 20)}</span>${esc(p.name)}</h3>
-        ${p.note ? `<div class="muted" style="font-size:11.5px;margin-top:-4px">${esc(p.note)}</div>` : ""}
-        ${p.editable
-          ? `<div class="actions" style="margin:0;gap:6px"><input class="mono" data-url="${esc(p.id)}" value="${esc(p.base_url)}" placeholder="服務網址" style="flex:1;font-size:12px">
-             <button class="ghost small" data-save="${esc(p.id)}">儲存</button></div>
-             ${p.key_editable ? `<div class="actions" style="margin:6px 0 0;gap:6px"><input class="mono" data-key="${esc(p.id)}" type="password" autocomplete="off"
-               placeholder="${p.key_state === "configured" ? "金鑰已設定（留空＝不更換）" : "貼上 API 金鑰"}" style="flex:1;font-size:12px"></div>` : ""}`
-          : `<div class="muted mono" style="font-size:11.5px;word-break:break-all">${esc(p.base_url)}</div>`}
-        ${p.extra && p.extra.anthropic ? `<div class="muted" style="font-size:11.5px;margin-top:4px">Anthropic 相容：<span class="mono">${esc(p.extra.anthropic)}</span></div>` : ""}
-        <div style="margin:10px 0"><span class="chip ${p.key_state === "missing" ? "err" : "ok"}">金鑰 ${{ configured: "已設定", optional: "免金鑰", missing: "未設定" }[p.key_state] || "未設定"}</span>
-        <span class="mono muted" style="font-size:11.5px">${esc(p.key_mask)}</span></div>
-        <table class="map"><tr><th>模型</th><th>類型</th><th>狀態</th><th>對應步驟</th></tr>
-          ${!p.models.length && p.kind === "comfyui" ? `<tr><td colspan="4" class="muted" style="font-size:12px">尚未匯入 workflow。ComfyUI 的模型要搭配 workflow 才能生成，請由下方匯入。</td></tr>` : ""}
-          ${p.models.map((m) => `<tr><td class="mono">${esc(m.id)}</td><td class="kind">${kindIcon(m.kind)} ${esc(KIND[m.kind] || m.kind)}</td>
-            <td>${badge(m.status)}${m.note ? `<div class="muted" style="font-size:11px;margin-top:2px">${esc(m.note)}</div>` : ""}</td>
-            <td>${stepChips(p.id, m)}</td></tr>`).join("")}
-        </table>
-        ${p.kind === "comfyui" ? `
-        <details data-installed style="margin-top:10px"><summary class="muted" style="cursor:pointer;font-size:12px">ComfyUI 已安裝模型（載入中…）</summary><div class="mono" style="font-size:11px;margin-top:6px"></div></details>
-        <form data-import style="margin-top:12px;display:grid;gap:6px">
-          <div class="muted" style="font-size:11.5px">匯入 workflow：ComfyUI 選單 Workflow → Export (API) 的 JSON</div>
-          <input type="file" name="file" accept=".json" required>
-          <div class="actions" style="margin:0;gap:6px">
-            <input name="id" placeholder="模型 ID，例 flux-dev" required style="flex:1">
-            <select name="kind"><option value="image">圖片</option><option value="video">影片</option></select>
-            <button class="small">匯入</button>
+    document.getElementById("providers").innerHTML = list.map((p) => {
+      const open = expanded.has(p.id);
+      const st = statusOf(p);
+      return `
+      <section class="card" style="${open ? "grid-column:1/-1" : ""}">
+        <div data-toggle="${esc(p.id)}" style="display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none">
+          <span class="prov-ico ${p.scope}">${svg(ICON[p.scope] || ICON.cloud, 20)}</span>
+          <div style="flex:1;min-width:0">
+            <b style="font-size:14px">${esc(p.name)}</b>
+            ${p.note ? `<div class="muted" style="font-size:11.5px">${esc(p.note)}</div>` : ""}
           </div>
-          <input name="note" placeholder="備註（選填）">
-        </form>` : ""}
-        <div class="actions"><button class="ghost small" data-test="${esc(p.id)}">${p.scope === "local" ? "測試服務連線" : "測試文字連線"}</button>
-          ${p.custom ? `<button class="ghost small" data-del="${esc(p.id)}" style="color:var(--error,#c0392b)">刪除</button>` : ""}</div>
-        <div class="muted mono" id="t-${esc(p.id)}" style="margin-top:8px;font-size:11.5px;white-space:pre-wrap"></div>
-      </section>`).join("") || '<div class="muted">此分類沒有 Provider</div>';
+          <span class="chip ${st[0]}">${st[1]}</span>
+          <span class="muted" style="flex:none;transform:rotate(${open ? 0 : -90}deg);transition:transform .15s">${svg(CHEV, 16)}</span>
+        </div>
+        ${!open ? "" : `
+        <div style="margin-top:12px;border-top:1px solid var(--line);padding-top:12px;display:grid;gap:10px">
+          <div class="actions" style="margin:0;gap:6px">
+            ${p.editable ? `<button class="ghost small" data-edit="${esc(p.id)}">${editing.has(p.id) ? "收起編輯" : "編輯"}</button>` : ""}
+            <button class="ghost small" data-test="${esc(p.id)}">${p.scope === "local" ? "測試服務連線" : "測試文字連線"}</button>
+            ${p.custom ? `<button class="ghost small" data-del="${esc(p.id)}" style="color:var(--error,#c0392b)">刪除</button>` : ""}
+          </div>
+          ${p.editable && editing.has(p.id) ? `
+          <div style="display:grid;gap:6px">
+            <input class="mono" data-url="${esc(p.id)}" value="${esc(p.base_url)}" placeholder="請求位址" style="font-size:12px">
+            ${p.key_editable ? `<input class="mono" data-key="${esc(p.id)}" type="password" autocomplete="off"
+              placeholder="${p.key_state === "configured" ? "金鑰已設定（留空＝不更換）" : "貼上 API 金鑰"}" style="font-size:12px">` : ""}
+            <div class="actions" style="margin:0;gap:6px">
+              <button class="small" data-save="${esc(p.id)}">儲存</button>
+              <button class="ghost small" data-edit="${esc(p.id)}">取消</button>
+            </div>
+          </div>` : ""}
+          ${p.extra && p.extra.anthropic ? `<div class="muted mono" style="font-size:11.5px;word-break:break-all">Anthropic 相容：${esc(p.extra.anthropic)}</div>` : ""}
+          ${p.editable && !editing.has(p.id) ? `<div class="muted mono" style="font-size:11.5px;word-break:break-all">${esc(p.base_url)}</div>` : ""}
+          <div><span class="chip ${p.key_state === "missing" ? "err" : "ok"}">金鑰 ${{ configured: "已設定", optional: "免金鑰", missing: "未設定" }[p.key_state] || "未設定"}</span>
+          <span class="mono muted" style="font-size:11.5px">${esc(p.key_mask)}</span></div>
+          <table class="map"><tr><th>模型</th><th>類型</th><th>狀態</th><th>對應步驟</th></tr>
+            ${!p.models.length && p.kind === "comfyui" ? `<tr><td colspan="4" class="muted" style="font-size:12px">尚未匯入 workflow。ComfyUI 的模型要搭配 workflow 才能生成，請由下方匯入。</td></tr>` : ""}
+            ${p.models.map((m) => `<tr><td class="mono">${esc(m.id)}</td><td class="kind">${kindIcon(m.kind)} ${esc(KIND[m.kind] || m.kind)}</td>
+              <td>${badge(m.status)}${m.note ? `<div class="muted" style="font-size:11px;margin-top:2px">${esc(m.note)}</div>` : ""}</td>
+              <td>${stepChips(p.id, m)}</td></tr>`).join("")}
+          </table>
+          ${p.kind === "comfyui" ? `
+          <details data-installed style="margin-top:0"><summary class="muted" style="cursor:pointer;font-size:12px">ComfyUI 已安裝模型（載入中…）</summary><div class="mono" style="font-size:11px;margin-top:6px"></div></details>
+          <form data-import style="display:grid;gap:6px">
+            <div class="muted" style="font-size:11.5px">匯入 workflow：ComfyUI 選單 Workflow → Export (API) 的 JSON</div>
+            <input type="file" name="file" accept=".json" required>
+            <div class="actions" style="margin:0;gap:6px">
+              <input name="id" placeholder="模型 ID，例 flux-dev" required style="flex:1">
+              <select name="kind"><option value="image">圖片</option><option value="video">影片</option></select>
+              <button class="small">匯入</button>
+            </div>
+            <input name="note" placeholder="備註（選填）">
+          </form>` : ""}
+          <div class="muted mono" id="t-${esc(p.id)}" style="font-size:11.5px;white-space:pre-wrap"></div>
+        </div>`}
+      </section>`;
+    }).join("") || '<div class="muted">此分類沒有 Provider</div>';
 
     const reload = async () => { cfg = await (await fetch("/api/config")).json(); render(); };
     const runTest = async (pid) => {
@@ -153,6 +186,16 @@
       } catch (err) { if (out) out.textContent = `✗ ${err.message}`; return false; }
       finally { if (btn) btn.disabled = false; }
     };
+    document.querySelectorAll("[data-toggle]").forEach((el) => el.addEventListener("click", () => {
+      const pid = el.dataset.toggle;
+      expanded.has(pid) ? expanded.delete(pid) : expanded.add(pid);
+      renderProviders();
+    }));
+    document.querySelectorAll("[data-edit]").forEach((btn) => btn.addEventListener("click", () => {
+      const pid = btn.dataset.edit;
+      editing.has(pid) ? editing.delete(pid) : editing.add(pid);
+      renderProviders();
+    }));
     document.querySelectorAll("[data-save]").forEach((btn) => btn.addEventListener("click", async () => {
       const pid = btn.dataset.save;
       const out = document.getElementById(`t-${pid}`);
@@ -199,23 +242,6 @@
         body.innerHTML = groups.map(([f, v]) => `<div style="margin-top:6px"><b>${esc(f)}</b>（${v.length}）${v.map((x) => `<div class="muted">· ${esc(x)}</div>`).join("")}</div>`).join("");
       } catch (err) { sum.textContent = `ComfyUI 已安裝模型（✗ ${err.message}）`; }
     });
-
-    document.querySelectorAll("[data-test]").forEach((btn) => btn.addEventListener("click", async () => {
-      const pid = btn.dataset.test;
-      const out = document.getElementById(`t-${pid}`);
-      btn.disabled = true; out.textContent = "測試中…";
-      try {
-        const res = await (await fetch("/api/config/test", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "X-Requested-With": "fetch" },
-          body: JSON.stringify({ provider: pid }),
-        })).json();
-        out.textContent = res.ok
-          ? `✓ ${res.model} 回覆「${res.reply ?? "ok"}」於 ${res.seconds ?? "—"}s`
-          : `✗ ${res.error || "失敗"}`;
-      } catch (err) { out.textContent = `✗ ${err.message}`; }
-      finally { btn.disabled = false; }
-    }));
   }
 
   function render() {
