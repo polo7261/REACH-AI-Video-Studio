@@ -443,6 +443,22 @@ def probe(provider: str) -> dict:
         return {"ok": health["ok"], "model": "ltxv-2b" if provider == "local-ltx" else "wan2.2-ti2v-5b",
                 "reply": json.dumps(health.get("state") or {}, ensure_ascii=False)[:120],
                 "error": health.get("error"), "seconds": round(time.time() - started, 2)}
+    p = PROVIDERS.get(provider) or {}
+    if p.get("custom"):
+        base = p["base_url"].rstrip("/")
+        try:
+            r = requests.get(base + "/models", headers={"Authorization": f"Bearer {key_for(provider)}"}, timeout=15)
+            if r.ok:
+                ids = [m.get("id", "?") for m in (r.json().get("data") or [])][:10]
+                return {"ok": True, "model": "/models", "reply": ", ".join(ids) or "（空清單）",
+                        "seconds": round(time.time() - started, 2)}
+            model = next((m["id"] for m in p["models"] if m["kind"] == "text"), None)
+            if model:
+                text = chat(provider, model, [{"role": "user", "content": "回覆兩個字：READY"}], max_tokens=8)
+                return {"ok": True, "model": model, "reply": text[:40], "seconds": round(time.time() - started, 2)}
+            return {"ok": False, "model": "/models", "error": f"HTTP {r.status_code}"}
+        except (ProviderError, requests.RequestException, ValueError) as exc:
+            return {"ok": False, "model": "/models", "error": str(exc)[:200]}
     if provider == "volcano-plan":
         try:
             res = image(provider, "doubao-seedream-5.5", "a small red dot on white background")
@@ -513,3 +529,31 @@ def local_wan_health(provider: str = "local-wan") -> dict:
         return {"ok": True, "state": body}
     except ProviderError as exc:
         return {"ok": False, "error": str(exc)[:200]}
+
+
+# ---------------------------------------------------------------- 自訂 Provider
+def custom_add(name: str, base_url: str, api_key: str, scope: str = "cloud") -> dict:
+    """新增自訂 Provider：驗證連通（GET /models，失敗 fallback chat READY）→ 存 json＋.env。"""
+    from reach_video.config import add_custom_entry, set_provider_config
+
+    base = base_url.strip().rstrip("/")
+    if not base.startswith("http"):
+        raise ProviderError("custom", "網址格式錯誤，例：https://api.deepseek.com/v1")
+    name = name.strip() or f"自訂 {base.split('//')[-1].split('/')[0]}"
+    models: list[dict] = []
+    probe_err = ""
+    headers = {"Authorization": f"Bearer {api_key.strip()}"} if api_key.strip() else {}
+    try:
+        r = requests.get(base + "/models", headers=headers, timeout=15)
+        if r.ok:
+            models = [{"id": m.get("id", "?"), "kind": "text", "status": "untested"}
+                      for m in (r.json().get("data") or [])][:30]
+        else:
+            probe_err = f"GET /models → HTTP {r.status_code}"
+    except requests.RequestException as exc:
+        probe_err = f"連線失敗：{exc.__class__.__name__}"
+    pid = add_custom_entry(name, base, scope, models)
+    if api_key.strip():
+        set_provider_config(pid, "", api_key)
+    test = probe(pid)
+    return {"pid": pid, "models": models, "probe_err": probe_err, "probe": test}

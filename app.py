@@ -256,6 +256,30 @@ def api_config():
     return jsonify(public_config())
 
 
+@app.post("/api/providers")
+def api_providers_add():
+    """新增自訂供應商（雲端/地端 OpenAI 相容端點）：驗連通→存 json＋.env。"""
+    body = request.get_json(silent=True) or {}
+    try:
+        out = providers.custom_add(str(body.get("name", "")), str(body.get("base_url", "")),
+                                   str(body.get("api_key", "")), str(body.get("scope", "cloud")))
+    except providers.ProviderError as exc:
+        return jsonify(ok=False, error=str(exc)[:200]), 400
+    return jsonify(ok=True, **out)
+
+
+@app.delete("/api/providers/<pid>")
+def api_providers_delete(pid: str):
+    """刪除自訂供應商。"""
+    from reach_video.config import delete_custom_entry
+
+    try:
+        delete_custom_entry(pid)
+    except ValueError as exc:
+        return jsonify(ok=False, error=str(exc)), 400
+    return jsonify(ok=True)
+
+
 @app.get("/api/routing")
 def api_routing_get():
     return jsonify(routing=load_routing())

@@ -24,6 +24,12 @@
   let cfg = null;
   let tab = location.hash === "#local" ? "local" : "cloud";
 
+  // 大廠穩定供應商目錄（static/vendors.json：CC Switch 模板＋影音專用分類）
+  const CAT_LABEL = { official: "帳號登入", cn_official: "模型廠商", third_party: "第三方平台",
+                      aggregator: "第三方平台", cloud_provider: "雲端服務商", local: "跨應用", av: "影音模型" };
+  let VENDORS = null;
+  fetch("/static/vendors.json").then((r) => r.json()).then((d) => { VENDORS = d; });
+
   function toast(msg, isErr = false) {
     const el = document.createElement("div");
     el.className = "toast" + (isErr ? " err" : "");
@@ -119,7 +125,8 @@
           </div>
           <input name="note" placeholder="備註（選填）">
         </form>` : ""}
-        <div class="actions"><button class="ghost small" data-test="${esc(p.id)}">${p.scope === "local" ? "測試服務連線" : "測試文字連線"}</button></div>
+        <div class="actions"><button class="ghost small" data-test="${esc(p.id)}">${p.scope === "local" ? "測試服務連線" : "測試文字連線"}</button>
+          ${p.custom ? `<button class="ghost small" data-del="${esc(p.id)}" style="color:var(--error,#c0392b)">刪除</button>` : ""}</div>
         <div class="muted mono" id="t-${esc(p.id)}" style="margin-top:8px;font-size:11.5px;white-space:pre-wrap"></div>
       </section>`).join("") || '<div class="muted">此分類沒有 Provider</div>';
 
@@ -162,6 +169,12 @@
       } catch (err) { if (out) out.textContent = `✗ ${err.message}`; }
     }));
     document.querySelectorAll("[data-test]").forEach((btn) => btn.addEventListener("click", () => runTest(btn.dataset.test)));
+    document.querySelectorAll("[data-del]").forEach((btn) => btn.addEventListener("click", async () => {
+      const pid = btn.dataset.del;
+      if (!confirm(`確定刪除「${cfg.providers.find(p => p.id === pid)?.name ?? pid}」？其模型會從流程中移除（步驟自動回落預設）。`)) return;
+      const res = await (await fetch(`/api/providers/${pid}`, { method: "DELETE" })).json();
+      if (res.ok) { toast("已刪除"); await reload(); } else toast(res.error || "刪除失敗", true);
+    }));
     document.querySelectorAll("[data-import]").forEach((form) => form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const out = document.getElementById("t-local-comfy");
@@ -212,4 +225,84 @@
   }));
 
   fetch("/api/config").then((r) => r.json()).then((data) => { cfg = data; render(); });
+
+  // ---- 新增供應商 ----
+  const addBtn = document.createElement("button");
+  addBtn.className = "ghost small"; addBtn.type = "button";
+  addBtn.textContent = "＋ 新增供應商";
+  document.getElementById("tabs").appendChild(addBtn);
+
+  addBtn.addEventListener("click", () => {
+    const vs = VENDORS || [];
+    const grouped = [];
+    for (const v of vs) {
+      const cat = CAT_LABEL[v.category] || "其他";
+      let g = grouped.find((x) => x.cat === cat);
+      if (!g) grouped.push(g = { cat, items: [] });
+      g.items.push(v);
+    }
+    const vendorOpts = grouped.map((g) =>
+      `<optgroup label="${g.cat}">${g.items.map((v) =>
+        `<option value="${esc(v.url)}" data-name="${esc(v.name)}" data-cat="${esc(v.category)}" data-own="${v.own_api ? 1 : 0}">${esc(v.name)}</option>`).join("")}</optgroup>`).join("");
+    const defaultUrl = (vs.find((v) => v.name === "DeepSeek") ?? vs[0] ?? { url: "" }).url;
+    const d = document.createElement("div");
+    d.className = "vx-mask";
+    d.innerHTML = `<div class="vx" style="width:min(520px,94vw);padding:0 0 4px">
+      <div style="padding:16px 18px 4px"><h3 style="margin:0">新增供應商</h3>
+      <p class="muted" style="font-size:12px;margin:6px 0 0">目錄照 CC Switch 模板（含影音模型分類）。選大廠自動填網址；按「驗證並新增」時系統先驗連通、抓模型清單，存檔後自動測試連結。</p></div>
+      <div style="padding:8px 18px;display:grid;gap:10px">
+        <label class="muted" style="font-size:11.5px">供應商
+          <select id="ap-vendor" style="width:100%">
+            ${vendorOpts}
+            <option value="">自訂網址…</option>
+          </select></label>
+        <label class="muted" style="font-size:11.5px">顯示名稱（留空＝用供應商名）
+          <input id="ap-name" style="width:100%"></label>
+        <label class="muted" style="font-size:11.5px">請求位址
+          <input id="ap-url" class="mono" style="width:100%" value="${esc(defaultUrl)}"></label>
+        <label class="muted" style="font-size:11.5px">API 金鑰
+          <input id="ap-key" class="mono" type="password" autocomplete="off" style="width:100%"></label>
+        <label class="muted" style="font-size:11.5px">分類
+          <select id="ap-scope" style="width:100%"><option value="cloud">雲端</option><option value="local">地端</option></select></label>
+        <p class="muted mono" id="ap-out" style="font-size:11.5px;margin:0;white-space:pre-wrap"></p>
+      </div>
+      <div class="vx-foot"><button class="ghost small" id="ap-cancel">取消</button><button class="small" id="ap-ok">驗證並新增</button></div>
+    </div>`;
+    document.body.appendChild(d);
+    d.querySelector("#ap-vendor").addEventListener("change", (e) => {
+      const opt = e.target.selectedOptions[0];
+      if (e.target.value) {
+        d.querySelector("#ap-url").value = e.target.value;
+        if (!d.querySelector("#ap-name").value) d.querySelector("#ap-name").value = opt.dataset.name ?? "";
+      }
+      d.querySelector("#ap-out").textContent = opt.dataset.own === "1"
+        ? "⚠ 此廠商為自有 API（非 OpenAI 相容），後端適配：架構中；仍可先建卡片。"
+        : "";
+    });
+    d.querySelector("#ap-cancel").addEventListener("click", () => d.remove());
+    d.addEventListener("click", (e) => { if (e.target === d) d.remove(); });
+    d.querySelector("#ap-ok").addEventListener("click", async () => {
+      const out = d.querySelector("#ap-out");
+      const payload = {
+        name: d.querySelector("#ap-name").value,
+        base_url: d.querySelector("#ap-url").value,
+        api_key: d.querySelector("#ap-key").value,
+        scope: d.querySelector("#ap-scope").value,
+      };
+      if (!payload.base_url.trim()) { out.textContent = "✗ 請填請求位址"; return; }
+      out.textContent = "驗證連通中…"; d.querySelector("#ap-ok").disabled = true;
+      try {
+        const res = await (await fetch("/api/providers", {
+          method: "POST", headers: { "Content-Type": "application/json", "X-Requested-With": "fetch" },
+          body: JSON.stringify(payload),
+        })).json();
+        if (!res.ok) { out.textContent = `✗ ${res.error || "新增失敗"}`; d.querySelector("#ap-ok").disabled = false; return; }
+        d.remove();
+        tab = payload.scope; location.hash = `#${tab}`;
+        cfg = await (await fetch("/api/config")).json(); render();
+        if (res.probe?.ok) toast(`✓ 已新增；${res.probe.reply?.slice(0, 60) ?? "連線正常"}`);
+        else toast(`已新增；但連線測試未過：${res.probe?.error?.slice(0, 60) ?? res.probe_err ?? "未知"}`, true);
+      } catch (err) { out.textContent = `✗ ${err.message}`; d.querySelector("#ap-ok").disabled = false; }
+    });
+  });
 })();

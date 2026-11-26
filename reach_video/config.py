@@ -173,6 +173,61 @@ PROVIDERS: dict[str, dict] = {
     },
 }
 
+# ---- 自訂 Provider（使用者安裝時自行填網址＋金鑰；存 data/providers.json）----
+
+CUSTOM_PATH = DATA / "providers.json"
+
+
+def _load_custom() -> list[dict]:
+    if not CUSTOM_PATH.is_file():
+        return []
+    try:
+        items = json.loads(CUSTOM_PATH.read_text(encoding="utf-8"))
+        return items if isinstance(items, list) else []
+    except (OSError, ValueError):
+        return []
+
+
+def _save_custom(items: list[dict]) -> None:
+    CUSTOM_PATH.write_text(json.dumps(items, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def register_custom(it: dict) -> str:
+    """把自訂 entry 併入 PROVIDERS（就地更新，import 時與新增時共用）。"""
+    pid = f"custom-{it['id']}"
+    PROVIDERS[pid] = {
+        "scope": it.get("scope", "cloud"),
+        "name": it.get("name", f"自訂 {it['id']}"),
+        "base_url": it.get("base_url", ""),
+        "kind": "openai-compatible",
+        "key_env": f"REACH_CUSTOM_{it['id'].upper().replace('-', '_')}_KEY",
+        "custom": True,
+        "models": it.get("models", []),
+    }
+    return pid
+
+
+for _it in _load_custom():
+    register_custom(_it)
+
+
+def add_custom_entry(name: str, base_url: str, scope: str, models: list[dict], cid: str = "") -> str:
+    """新增自訂 Provider（網址存 json，金鑰另由 set_provider_config 寫 .env）。"""
+    import uuid as _uuid
+
+    cid = cid or _uuid.uuid4().hex[:8]
+    _save_custom([*[_x for _x in _load_custom() if _x["id"] != cid],
+                  {"id": cid, "name": name, "base_url": base_url, "scope": scope, "models": models}])
+    return register_custom({"id": cid, "name": name, "base_url": base_url, "scope": scope, "models": models})
+
+
+def delete_custom_entry(provider_id: str) -> None:
+    """刪除自訂 Provider；routing.json 指向它的步驟會由 load_routing 自動回落預設。"""
+    if not provider_id.startswith("custom-") or provider_id not in PROVIDERS:
+        raise ValueError("只能刪除自訂 Provider")
+    PROVIDERS.pop(provider_id, None)
+    _save_custom([x for x in _load_custom() if f"custom-{x['id']}" != provider_id])
+
 DEFAULT_TEXT = {"provider": "aliyun", "model": "qwen3.7-plus"}
 DEFAULT_IMAGE = {"provider": "volcano-plan", "model": "doubao-seedream-5.5"}
 DEFAULT_VIDEO = {"provider": "minimax", "model": env("MINIMAX_VIDEO_MODEL") or "MiniMax-H3"}
@@ -277,6 +332,17 @@ def set_provider_config(provider_id: str, base_url: str = "", api_key: str = "")
     if not base_key and not key_key:
         raise ValueError("此 Provider 不可修改")
     out = {}
+    if p.get("custom") and base_url.strip():
+        # 自訂 Provider 網址存在 providers.json（金鑰仍在 .env）
+        cid = provider_id[len("custom-"):]
+        items = _load_custom()
+        for x in items:
+            if x["id"] == cid:
+                x["base_url"] = base_url.strip().rstrip("/")
+                p["base_url"] = x["base_url"]
+                out["base_url"] = x["base_url"]
+                break
+        _save_custom(items)
     if base_key and base_url.strip():
         url = base_url.strip().rstrip("/")
         if not _re.match(r"^https?://[\w.\-]+(:\d{1,5})?(/[\w./\-]*)?$", url):
@@ -307,7 +373,8 @@ def public_config() -> dict:
                 "id": pid,
                 "name": p["name"],
                 "base_url": p["base_url"],
-                "editable": bool(p.get("base_env")),
+                "editable": bool(p.get("base_env")) or bool(p.get("custom")),
+                "custom": bool(p.get("custom")),
                 "key_editable": bool(p.get("key_env")),
                 "extra": p.get("extra", {}),
                 "kind": p["kind"],
