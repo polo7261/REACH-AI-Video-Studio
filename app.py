@@ -310,7 +310,8 @@ def api_comfy_import():
 # --------------------------------------------------------------------- voices
 @app.get("/api/voices")
 def api_voices():
-    return jsonify(voices.catalog(refresh=request.args.get("refresh") == "1"), emotions=voices.EMOTIONS)
+    data = voices.catalog(refresh=request.args.get("refresh") == "1")
+    return jsonify(**data, emotions=voices.EMOTIONS)
 
 
 @app.post("/api/voices/clone")
