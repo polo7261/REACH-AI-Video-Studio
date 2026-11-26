@@ -2152,7 +2152,9 @@ def api_doc(slug: str):
 
 
 if __name__ == "__main__":
+    import os
     import waitress
 
-    print("REACH AI Video Studio → http://0.0.0.0:35350/ (LAN)", flush=True)
-    waitress.serve(app, host="0.0.0.0", port=35350, threads=8)
+    _port = int(os.environ.get("REACH_PORT") or 35350)
+    print(f"REACH AI Video Studio → http://0.0.0.0:{_port}/ (LAN)", flush=True)
+    waitress.serve(app, host="0.0.0.0", port=_port, threads=8)

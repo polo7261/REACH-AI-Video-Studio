@@ -78,6 +78,21 @@ MiniMax `MINIMAX_API_KEY`；其餘選填，留空白即可。
 
 服務綁 `0.0.0.0:35350`，同網段其他裝置也能連；不想開放請在防火牆擋掉。
 
+## Server 版（公司行號集中部署）
+
+個人單機用 `install.command`；公司要讓員工共用一台伺服器時，改用 Server 版安裝程式：
+
+```bash
+bash install_server.sh --port 35350 --service
+```
+
+- 安裝內容同單機（venv＋依賴＋.env），另註冊開機自啟服務
+  （Linux: systemd `reach-ai-video.service`；macOS: launchd）
+- 安裝完會印出員工連線網址（內網 IP）與防火牆開放指令（`sudo ufw allow 35350/tcp`）
+- 埠可用 `--port` 改，之後也能直接改 `.env` 的 `REACH_PORT`
+- 移除服務：`bash install_server.sh --uninstall`
+- 個人單機版（App 跑在自己電腦）與 Server 版（公司行號）安裝時的畫面會標明版別
+
 ## 地端影片伺服器（選填）
 
 `deploy/server_ltx.py` 讀環境變數 `REACH_LTX_KEY`（未設定會拒絕啟動），
