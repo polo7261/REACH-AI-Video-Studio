@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900"><!-- generated: gen_skill_covers.py -->
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f2730"/><stop offset="1" stop-color="#5b7a96"/></linearGradient>
+<radialGradient id="v" cx=".5" cy=".45" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient>
+<pattern id="d" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.6" fill="#fff" opacity=".08"/></pattern></defs>
+<rect width="1600" height="900" fill="url(#g)"/><rect width="1600" height="900" fill="url(#d)"/>
+<g><g transform="translate(720 300) scale(1.2)"><rect x="0" y="20" width="150" height="100" rx="16" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/><path d="m150 50 70-35v110l-70-35" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/><circle cx="40" cy="0" r="22" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"/><circle cx="105" cy="0" r="22" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"/></g><path d="M520 620q380 170 760 0" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="7" stroke-dasharray="18 16"/><path d="m1250 600 35 25-40 15" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"/><path d="M560 220q-70 130 0 260M1240 220q70 130 0 260" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" opacity=".6"/><text x="800" y="760" text-anchor="middle" fill="#fff" opacity=".7" font-size="30" font-family="ui-monospace,Menlo">DOLLY · PAN · TILT · ORBIT</text></g>
+<rect width="1600" height="900" fill="url(#v)"/>
+<rect x="64" y="64" width="184" height="56" rx="28" fill="#000" opacity=".35"/>
+<text x="88" y="102" fill="#fff" font-size="30" font-family="-apple-system,'PingFang TC','Noto Sans TC','Noto Sans CJK TC','Noto Serif CJK TC',sans-serif" opacity=".9">通用技能</text>
+<text x="64" y="790" fill="#fff" font-size="68" font-weight="700" font-family="-apple-system,'PingFang TC','Noto Sans TC','Noto Sans CJK TC','Noto Serif CJK TC',sans-serif">運鏡規格</text>
+<text x="66" y="842" fill="#fff" font-size="32" opacity=".75" font-family="-apple-system,'PingFang TC','Noto Sans TC','Noto Sans CJK TC','Noto Serif CJK TC',sans-serif">運鏡與鏡頭規格的單一事實源</text>
+</svg>

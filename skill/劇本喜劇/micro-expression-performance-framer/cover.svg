@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900"><!-- generated: gen_skill_covers.py -->
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a1f2b"/><stop offset="1" stop-color="#b5523f"/></linearGradient>
+<radialGradient id="v" cx=".5" cy=".45" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient>
+<pattern id="d" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.6" fill="#fff" opacity=".08"/></pattern></defs>
+<rect width="1600" height="900" fill="url(#g)"/><rect width="1600" height="900" fill="url(#d)"/>
+<g><g opacity="1"><circle cx="860" cy="330" r="170" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="8"/><path d="M815 310q15-14 30 0M875 310q15-14 30 0" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"/><path d="M825 370q35 26 70 0" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="7"/></g><path d="M780 255q20-30 50-12M890 243q30-18 50 12" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" opacity=".7"/><circle cx="790" cy="430" r="60" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" stroke-dasharray="10 12" opacity=".7"/><path d="M560 620 L580 632 L600 620 L620 611 L640 620 L660 632 L680 620 L700 611 L720 620 L740 660 L760 620 L780 590 L800 620 L820 660 L840 620 L860 590 L880 620 L900 660 L920 620 L940 590 L960 620 L980 660 L1000 620 L1020 590 L1040 620 L1060 632 L1080 620 L1100 611 L1120 620 L1140 632 L1160 620 " fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="6" opacity=".8"/></g>
+<rect width="1600" height="900" fill="url(#v)"/>
+<rect x="64" y="64" width="184" height="56" rx="28" fill="#000" opacity=".35"/>
+<text x="88" y="102" fill="#fff" font-size="30" font-family="-apple-system,'PingFang TC','Noto Sans TC','Noto Sans CJK TC','Noto Serif CJK TC',sans-serif" opacity=".9">劇本喜劇</text>
+<text x="64" y="790" fill="#fff" font-size="68" font-weight="700" font-family="-apple-system,'PingFang TC','Noto Sans TC','Noto Sans CJK TC','Noto Serif CJK TC',sans-serif">微表情與情緒表演框架</text>
+<text x="66" y="842" fill="#fff" font-size="32" opacity=".75" font-family="-apple-system,'PingFang TC','Noto Sans TC','Noto Sans CJK TC','Noto Serif CJK TC',sans-serif">約束 AI 人物提示詞的微表情寫作，去 AI 味</text>
+</svg>
