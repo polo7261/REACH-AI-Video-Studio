@@ -293,15 +293,17 @@ def api_project_models(pid: str):
 
 @app.put("/api/config/local")
 def api_config_local():
-    """地端服務網址：存本機 .env。"""
-    from reach_video.config import set_local_base
+    """Provider 網址／金鑰：存本機 .env（雲端、地端皆可），即時生效。"""
+    from reach_video.config import set_provider_config
 
     body = request.get_json(silent=True) or {}
     try:
-        url = set_local_base(str(body.get("provider", "")), str(body.get("base_url", "")))
+        out = set_provider_config(str(body.get("provider", "")),
+                                  str(body.get("base_url", "")),
+                                  str(body.get("api_key", "")))
     except ValueError as exc:
         return jsonify(error=str(exc)), 400
-    return jsonify(ok=True, base_url=url)
+    return jsonify(ok=True, **out)
 
 
 @app.get("/api/comfy/models")
@@ -486,7 +488,7 @@ def api_audio_plan(pid: str, nid: str):
 def api_config_test():
     body = request.get_json(silent=True) or {}
     provider = body.get("provider")
-    if provider not in ("aliyun", "minimax", "volcano", "volcano-plan", "local-wan", "local-ltx", "local-comfy"):
+    if provider not in ("aliyun", "minimax", "volcano", "volcano-plan", "local-wan", "local-ltx", "local-comfy", "libtv"):
         return jsonify(error="unknown provider"), 400
     return jsonify(providers.probe(provider))
 

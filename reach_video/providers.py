@@ -454,6 +454,23 @@ def probe(provider: str) -> dict:
             }
         except ProviderError as exc:
             return {"ok": False, "model": "doubao-seedream-5.5", "error": str(exc)[:220]}
+    if provider == "libtv":
+        session = requests.Session()
+        try:
+            session.headers.update({**_headers("libtv"), "Accept": "application/json, text/event-stream"})
+            init = _libtv_rpc(session, {
+                "jsonrpc": "2.0", "id": 1, "method": "initialize",
+                "params": {"protocolVersion": "2025-03-26", "capabilities": {},
+                           "clientInfo": {"name": "reach-video", "version": "1.0"}},
+            }, timeout=30)
+            if "error" in init:
+                raise ProviderError("libtv", f"initialize 失敗：{str(init['error'])[:160]}")
+            tools = _libtv_rpc(session, {"jsonrpc": "2.0", "id": 2, "method": "tools/list"}, timeout=30)
+            names = [t.get("name", "?") for t in (tools.get("result", {}).get("tools") or [])]
+            return {"ok": True, "model": "MCP", "reply": f"MCP ok；tools: {', '.join(names) or '(無)'}",
+                    "seconds": round(time.time() - started, 2)}
+        except ProviderError as exc:
+            return {"ok": False, "model": "MCP", "error": str(exc)[:200]}
     model = next((m["id"] for m in PROVIDERS[provider]["models"] if m["kind"] == "text"), None)
     if not model:
         return {"ok": False, "error": "沒有可測的文字模型"}

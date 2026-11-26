@@ -93,8 +93,10 @@
       <section class="card">
         <h3 class="prov-head"><span class="prov-ico ${p.scope}">${svg(ICON[p.scope] || ICON.cloud, 20)}</span>${esc(p.name)}</h3>
         ${p.editable
-          ? `<div class="actions" style="margin:0;gap:6px"><input class="mono" data-url="${esc(p.id)}" value="${esc(p.base_url)}" style="flex:1;font-size:12px">
-             <button class="ghost small" data-save="${esc(p.id)}">儲存</button></div>`
+          ? `<div class="actions" style="margin:0;gap:6px"><input class="mono" data-url="${esc(p.id)}" value="${esc(p.base_url)}" placeholder="服務網址" style="flex:1;font-size:12px">
+             <button class="ghost small" data-save="${esc(p.id)}">儲存</button></div>
+             ${p.key_editable ? `<div class="actions" style="margin:6px 0 0;gap:6px"><input class="mono" data-key="${esc(p.id)}" type="password" autocomplete="off"
+               placeholder="${p.key_state === "configured" ? "金鑰已設定（留空＝不更換）" : "貼上 API 金鑰"}" style="flex:1;font-size:12px"></div>` : ""}`
           : `<div class="muted mono" style="font-size:11.5px;word-break:break-all">${esc(p.base_url)}</div>`}
         ${p.extra && p.extra.anthropic ? `<div class="muted" style="font-size:11.5px;margin-top:4px">Anthropic 相容：<span class="mono">${esc(p.extra.anthropic)}</span></div>` : ""}
         <div style="margin:10px 0"><span class="chip ${p.key_state === "missing" ? "err" : "ok"}">金鑰 ${{ configured: "已設定", optional: "免金鑰", missing: "未設定" }[p.key_state] || "未設定"}</span>
@@ -122,17 +124,44 @@
       </section>`).join("") || '<div class="muted">此分類沒有 Provider</div>';
 
     const reload = async () => { cfg = await (await fetch("/api/config")).json(); render(); };
+    const runTest = async (pid) => {
+      const btn = document.querySelector(`[data-test="${pid}"]`);
+      const out = document.getElementById(`t-${pid}`);
+      if (btn) btn.disabled = true;
+      if (out) out.textContent = "測試中…";
+      try {
+        const res = await (await fetch("/api/config/test", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "X-Requested-With": "fetch" },
+          body: JSON.stringify({ provider: pid }),
+        })).json();
+        const text = res.ok
+          ? `✓ ${res.model} 回覆「${res.reply ?? "ok"}」於 ${res.seconds ?? "—"}s`
+          : `✗ ${res.error || "失敗"}`;
+        if (out) out.textContent = text;
+        return res.ok;
+      } catch (err) { if (out) out.textContent = `✗ ${err.message}`; return false; }
+      finally { if (btn) btn.disabled = false; }
+    };
     document.querySelectorAll("[data-save]").forEach((btn) => btn.addEventListener("click", async () => {
       const pid = btn.dataset.save;
       const out = document.getElementById(`t-${pid}`);
-      const url = document.querySelector(`[data-url="${pid}"]`).value;
-      const res = await (await fetch("/api/config/local", {
-        method: "PUT", headers: { "Content-Type": "application/json", "X-Requested-With": "fetch" },
-        body: JSON.stringify({ provider: pid, base_url: url }),
-      })).json();
-      if (res.ok) { await reload(); document.getElementById(`t-${pid}`).textContent = `✓ 已存到本機 .env：${res.base_url}`; }
-      else out.textContent = `✗ ${res.error}`;
+      const url = document.querySelector(`[data-url="${pid}"]`)?.value ?? "";
+      const key = document.querySelector(`[data-key="${pid}"]`)?.value ?? "";
+      if (!url.trim() && !key.trim()) { if (out) out.textContent = "沒有變更（網址與金鑰都留空）"; return; }
+      try {
+        const res = await (await fetch("/api/config/local", {
+          method: "PUT", headers: { "Content-Type": "application/json", "X-Requested-With": "fetch" },
+          body: JSON.stringify({ provider: pid, base_url: url, api_key: key }),
+        })).json();
+        if (!res.ok) { if (out) out.textContent = `✗ ${res.error}`; return; }
+        await reload();
+        const saved = [`網址 ${res.base_url ?? "(未變更)"}`, res.key_mask ? `金鑰 ${res.key_mask}` : null].filter(Boolean).join("；");
+        document.getElementById(`t-${pid}`).textContent = `✓ 已存到本機 .env：${saved}；自動測試連結…`;
+        await runTest(pid);  // 存完立刻自行測試連結
+      } catch (err) { if (out) out.textContent = `✗ ${err.message}`; }
     }));
+    document.querySelectorAll("[data-test]").forEach((btn) => btn.addEventListener("click", () => runTest(btn.dataset.test)));
     document.querySelectorAll("[data-import]").forEach((form) => form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const out = document.getElementById("t-local-comfy");

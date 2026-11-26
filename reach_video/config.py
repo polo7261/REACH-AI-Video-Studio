@@ -51,6 +51,7 @@ PROVIDERS: dict[str, dict] = {
         "scope": "cloud",
         "name": "阿里雲 MaaS（token-plan 閘道）",
         "base_url": env("ALIYUN_BASE_URL", "https://token-plan.cn-beijing.maas.aliyuncs.com/compatible-mode/v1"),
+        "base_env": "ALIYUN_BASE_URL",
         "extra": {"anthropic": env("ALIYUN_ANTHROPIC_URL")},
         "kind": "openai-compatible",
         "key_env": "ALIYUN_API_KEY",
@@ -69,6 +70,7 @@ PROVIDERS: dict[str, dict] = {
         "scope": "cloud",
         "name": "MiniMax（中國站）",
         "base_url": env("MINIMAX_BASE_URL", "https://api.minimaxi.com/v1"),
+        "base_env": "MINIMAX_BASE_URL",
         "kind": "minimax",
         "key_env": "MINIMAX_API_KEY",
         "models": [
@@ -134,6 +136,7 @@ PROVIDERS: dict[str, dict] = {
         "scope": "cloud",
         "name": "火山方舟 Agent Plan",
         "base_url": env("VOLC_PLAN_BASE_URL", "https://ark.cn-beijing.volces.com/api/plan/v3"),
+        "base_env": "VOLC_PLAN_BASE_URL",
         "kind": "ark-plan",
         "key_env": "VOLC_PLAN_API_KEY",
         "catalog_note": "專屬 base（/api/plan/v3）與專屬 key；影片模型僅 Large/Max 套餐可用。",
@@ -151,6 +154,7 @@ PROVIDERS: dict[str, dict] = {
         "scope": "cloud",
         "name": "火山方舟 Ark",
         "base_url": env("VOLC_BASE_URL", "https://ark.cn-beijing.volces.com/api/v3"),
+        "base_env": "VOLC_BASE_URL",
         "kind": "ark",
         "key_env": "VOLC_API_KEY",
         "catalog_note": "/api/v3/models 回傳 55 個可存取模型；未開通者呼叫回 ModelNotOpen。",
@@ -248,28 +252,45 @@ def resolve(step: str, plan: dict | None = None, body: dict | None = None) -> tu
     return r["provider"], r["model"]
 
 
-def set_local_base(provider_id: str, url: str) -> str:
-    """地端服務網址寫回本機 .env（不經任何雲端），並即時生效。"""
-    import re as _re
-
-    p = PROVIDERS.get(provider_id) or {}
-    key = p.get("base_env")
-    if p.get("scope") != "local" or not key:
-        raise ValueError("只能修改地端 Provider")
-    url = url.strip().rstrip("/")
-    if not _re.match(r"^https?://[\w.\-]+(:\d{1,5})?(/[\w./\-]*)?$", url):
-        raise ValueError("網址格式錯誤，例：http://192.168.0.240:8188")
+def _write_env(key: str, value: str) -> None:
+    """單一鍵寫回本機 .env（存在覆寫，不存在附加）。"""
     lines = ENV_PATH.read_text(encoding="utf-8").splitlines() if ENV_PATH.is_file() else []
     for i, line in enumerate(lines):
         if line.split("=", 1)[0].strip() == key:
-            lines[i] = f"{key}={url}"
+            lines[i] = f"{key}={value}"
             break
     else:
-        lines.append(f"{key}={url}")
+        lines.append(f"{key}={value}")
     ENV_PATH.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    os.environ[key] = url
-    p["base_url"] = url
-    return url
+
+
+def set_provider_config(provider_id: str, base_url: str = "", api_key: str = "") -> dict:
+    """Provider 網址與金鑰寫回本機 .env（雲端、地端皆可），並即時生效。
+
+    base_url 留空＝不更換網址；api_key 留空＝不更換金鑰。
+    """
+    import re as _re
+
+    p = PROVIDERS.get(provider_id) or {}
+    base_key = p.get("base_env")
+    key_key = p.get("key_env")
+    if not base_key and not key_key:
+        raise ValueError("此 Provider 不可修改")
+    out = {}
+    if base_key and base_url.strip():
+        url = base_url.strip().rstrip("/")
+        if not _re.match(r"^https?://[\w.\-]+(:\d{1,5})?(/[\w./\-]*)?$", url):
+            raise ValueError("網址格式錯誤，例：http://192.168.0.240:8188")
+        _write_env(base_key, url)
+        os.environ[base_key] = url
+        p["base_url"] = url
+        out["base_url"] = url
+    if key_key and api_key.strip():
+        key = api_key.strip()
+        _write_env(key_key, key)
+        os.environ[key_key] = key
+        out["key_mask"] = mask(key)
+    return out
 
 
 def key_for(provider_id: str) -> str:
@@ -287,6 +308,7 @@ def public_config() -> dict:
                 "name": p["name"],
                 "base_url": p["base_url"],
                 "editable": bool(p.get("base_env")),
+                "key_editable": bool(p.get("key_env")),
                 "extra": p.get("extra", {}),
                 "kind": p["kind"],
                 "scope": p.get("scope", "cloud"),
