@@ -279,6 +279,56 @@ for _pid in _load_hidden():
     PROVIDERS.pop(_pid, None)
 
 
+# ---- 生成結果回寫模型狀態（data/model_status.json；重啟後由 apply_status 還原）----
+
+STATUS_PATH = DATA / "model_status.json"
+
+
+def _load_status() -> dict:
+    if not STATUS_PATH.is_file():
+        return {}
+    try:
+        d = json.loads(STATUS_PATH.read_text(encoding="utf-8"))
+        return d if isinstance(d, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def _save_status(d: dict) -> None:
+    STATUS_PATH.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
+
+
+def mark_model(provider_id: str, model_id: str, status: str, note: str = "") -> None:
+    """實際生成後回寫模型狀態（ok＝實測成功；quota＝額度上限）。"""
+    if provider_id in PROVIDERS and model_id:
+        for m in PROVIDERS[provider_id]["models"]:
+            if m.get("id") == model_id:
+                m["status"] = status
+                m["note"] = note or ("實際生成成功" if status == "ok" else m.get("note", ""))
+                break
+    d = _load_status()
+    rec: dict = {"status": status}
+    if note:
+        rec["note"] = note
+    d[f"{provider_id}/{model_id}"] = rec
+    _save_status(d)
+
+
+def apply_status() -> None:
+    """啟動時把持久化的生成實測結果套回 PROVIDERS。"""
+    d = _load_status()
+    for pid, pp in PROVIDERS.items():
+        for m in pp["models"]:
+            rec = d.get(f"{pid}/{m['id']}")
+            if rec and rec.get("status") in ("ok", "quota"):
+                m["status"] = rec["status"]
+                if rec.get("note"):
+                    m["note"] = rec["note"]
+
+
+apply_status()
+
+
 def refresh_comfy() -> None:
     """ComfyUI 的「模型」= 內建預設（240 檔案齊全才出現）＋ workflows/comfyui/*.json。"""
     from . import comfyui

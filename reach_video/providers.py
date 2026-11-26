@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import base64
+import functools
 import json
 import time
 from typing import Any
@@ -13,9 +14,29 @@ from typing import Any
 import requests
 
 from . import comfyui
-from .config import PROVIDERS, key_for
+from .config import PROVIDERS, key_for, mark_model
 
 TIMEOUT = 120
+
+
+def _quota_like(msg: str) -> bool:
+    low = str(msg).lower()
+    return any(t in low for t in ("429", "quota", "額度", "balance", "餘額", "insufficient"))
+
+
+def _mark_gen(fn):
+    """生成函式（簽名 (provider, model, ...)）成功回寫 ok；額度類錯誤回寫 quota。"""
+    @functools.wraps(fn)
+    def wrapper(provider, model, *a, **kw):
+        try:
+            out = fn(provider, model, *a, **kw)
+        except ProviderError as exc:
+            if _quota_like(str(exc)):
+                mark_model(provider, model, "quota", note=f"實測額度上限：{str(exc)[:100]}")
+            raise
+        mark_model(provider, model, "ok", note="實際生成成功")
+        return out
+    return wrapper
 
 
 # ---------- LibTV（MCP streamable HTTP；架構中：工具名稱／參數以 live schema 為準） ----------
@@ -174,6 +195,7 @@ def _minimax_ok(provider: str, body: dict) -> dict:
 
 
 # ---------------------------------------------------------------- text
+@_mark_gen
 def chat(provider: str, model: str, messages: list[dict], max_tokens: int = 800, timeout: int = TIMEOUT) -> str:
     if provider == "minimax":
         body = _post(provider, "/text/chatcompletion_v2", {"model": model, "messages": messages, "max_tokens": max_tokens}, timeout=timeout)
@@ -191,6 +213,7 @@ def chat(provider: str, model: str, messages: list[dict], max_tokens: int = 800,
 
 
 # ---------------------------------------------------------------- image
+@_mark_gen
 def image(provider: str, model: str, prompt: str, size: str = "1024x1024",
           references: list[str] | None = None) -> dict:
     """回傳 {url|b64, raw}。MiniMax 回 url；阿里/火山走 OpenAI images 路由。"""
@@ -243,6 +266,7 @@ def download(url: str, timeout: int = 120) -> bytes:
 
 
 # ---------------------------------------------------------------- tts
+@_mark_gen
 def tts(provider: str, model: str, text: str, voice: str = "male-qn-qingse", speed: float = 1.0,
         pitch: int = 0, vol: float = 1.0, emotion: str = "") -> bytes:
     if provider != "minimax":
@@ -368,9 +392,14 @@ def video_poll(provider: str, task_id: str, model: str | None = None) -> dict:
             url = res.get("url") or res.get("video_url") or ((res.get("content") or {}).get("url"))
             if not url:
                 return {"state": "failed", "message": "成功但沒有 URL"}
+            if model:
+                mark_model(provider, model, "ok", note="實際生成成功")
             return {"state": "succeeded", "url": url, "raw": res}
         if status in ("failed", "cancelled", "canceled"):
-            return {"state": "failed", "message": str(res.get("error") or res)[:200]}
+            msg = str(res.get("error") or res)[:200]
+            if model and _quota_like(msg):
+                mark_model(provider, model, "quota", note=f"實測額度上限：{msg[:100]}")
+            return {"state": "failed", "message": msg}
         return {"state": "running" if status else "queued", "raw": res}
 
     if provider == "local-comfy":
@@ -384,10 +413,14 @@ def video_poll(provider: str, task_id: str, model: str | None = None) -> dict:
             url = (task.get("content") or {}).get("url") or task.get("url")
             if not url:
                 return {"state": "failed", "message": "成功但沒有 URL"}
+            if model:
+                mark_model(provider, model, "ok", note="實際生成成功")
             return {"state": "succeeded", "url": url, "raw": task}
         if status in ("failed", "cancelled"):
-            return {"state": "failed",
-                    "message": str((task.get("error") or task))[:200]}
+            msg = str((task.get("error") or task))[:200]
+            if model and _quota_like(msg):
+                mark_model(provider, model, "quota", note=f"實測額度上限：{msg[:100]}")
+            return {"state": "failed", "message": msg}
         return {"state": "running", "raw": task}
     if provider == "minimax":
         body = _get(provider, "/query/video_generation", {"task_id": task_id})
@@ -401,6 +434,8 @@ def video_poll(provider: str, task_id: str, model: str | None = None) -> dict:
             url = (info.get("file") or {}).get("download_url")
             if not url:
                 return {"state": "failed", "message": f"取檔失敗：{str(info)[:160]}"}
+            if model:
+                mark_model(provider, model, "ok", note="實際生成成功")
             return {"state": "succeeded", "url": url, "raw": body}
         if status in ("Fail", "Failed"):
             return {"state": "failed", "message": str(body)[:200]}
@@ -411,9 +446,14 @@ def video_poll(provider: str, task_id: str, model: str | None = None) -> dict:
         status = body.get("status")
         if status == "succeeded":
             url = (body.get("content") or {}).get("video_url")
+            if model:
+                mark_model(provider, model, "ok", note="實際生成成功")
             return {"state": "succeeded", "url": url, "raw": body}
         if status in ("failed", "cancelled"):
-            return {"state": "failed", "message": str(body.get("error") or status)}
+            msg = str(body.get("error") or status)
+            if model and _quota_like(msg):
+                mark_model(provider, model, "quota", note=f"實測額度上限：{msg[:100]}")
+            return {"state": "failed", "message": msg}
         return {"state": "running", "raw": body}
 
     body = _get(provider, f"/videos/generations/{task_id}")
@@ -421,6 +461,8 @@ def video_poll(provider: str, task_id: str, model: str | None = None) -> dict:
     status = (output.get("task_status") or body.get("status") or "").upper()
     if status in ("SUCCEEDED", "SUCCESS"):
         url = output.get("video_url") or (output.get("results") or [{}])[0].get("url")
+        if model:
+            mark_model(provider, model, "ok", note="實際生成成功")
         return {"state": "succeeded", "url": url, "raw": body}
     if status in ("FAILED", "CANCELED"):
         return {"state": "failed", "message": str(output.get("message") or body)[:200]}
