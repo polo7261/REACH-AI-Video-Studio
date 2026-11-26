@@ -16,7 +16,7 @@ TGZ="$OUT_DIR/${STAMP}.tar.gz"
 
 # 白名單：只收原始碼與文件
 FILES=(app.py reach_mcp.py requirements.txt README.md INSTALL.md .env.example .gitignore
-       install.command start.command install_server.sh)
+       install.command start.command)
 DIRS=(reach_video deploy scripts docs static templates)
 
 TMP="$(mktemp -d)"
@@ -25,6 +25,7 @@ STAGE="$TMP/$NAME"
 mkdir -p "$STAGE"
 
 cp "${FILES[@]}" "$STAGE/"
+cp scripts/install_server.sh "$STAGE/"
 for d in "${DIRS[@]}"; do
   rsync -a --exclude '__pycache__' --exclude '*.py[cod]' --exclude '.DS_Store' "$d" "$STAGE/"
 done
