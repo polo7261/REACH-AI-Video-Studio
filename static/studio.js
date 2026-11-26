@@ -206,7 +206,7 @@
           <div class="actions" style="margin-top:0">
             <button class="ghost small" data-act="img">生成關鍵影格</button>
             <select data-provider style="max-width:150px">
-              ${[["minimax", "MiniMax H3 ✅"], ["volcano", "火山 Seedance（待開通）"], ["local-ltx", "地端 LTXV（219）"], ["local-wan", "地端 Wan（慢）"]]
+              ${[["minimax", "MiniMax H3 ✅"], ["volcano", "火山 Seedance（待開通）"], ["local-comfy", "地端 ComfyUI（240）"], ["local-ltx", "地端 LTXV（219）"], ["local-wan", "地端 Wan（慢）"]]
                 .map(([v, label]) => `<option value="${v}" ${(s.video_provider || "volcano") === v ? "selected" : ""}>${label}</option>`).join("")}
             </select>
             <button class="small" data-act="vid">生成影片</button>

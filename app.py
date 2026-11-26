@@ -17,7 +17,7 @@ from pathlib import Path
 
 from flask import Flask, abort, jsonify, render_template, request, send_from_directory
 
-from reach_video import pipeline, providers
+from reach_video import pipeline, providers, voices
 from reach_video.config import DATA, PROJECTS, load_routing, public_config, resolve, save_routing, valid_choice
 from reach_video.providers import ProviderError
 from reach_video.store import (
@@ -130,7 +130,7 @@ def api_skills_list():
         cover = next(
             (
                 f"cover{ext}"
-                for ext in (".webp", ".png", ".jpg", ".svg")
+                for ext in (".webp", ".png", ".jpg", ".jpeg", ".svg")
                 if (d / f"cover{ext}").is_file()
             ),
             None,
@@ -214,7 +214,7 @@ def api_skill_cover(slug: str):
     info = _skill_dirs().get(slug)
     if not re.fullmatch(r"[a-z0-9\-]+", slug) or info is None:
         abort(404)
-    for ext in (".webp", ".png", ".jpg", ".svg"):
+    for ext in (".webp", ".png", ".jpg", ".jpeg", ".svg"):
         path = info["dir"] / f"cover{ext}"
         if path.is_file():
             return send_from_directory(path.parent, path.name)
@@ -262,11 +262,201 @@ def api_project_models(pid: str):
     return jsonify(models=models)
 
 
+@app.put("/api/config/local")
+def api_config_local():
+    """地端服務網址：存本機 .env。"""
+    from reach_video.config import set_local_base
+
+    body = request.get_json(silent=True) or {}
+    try:
+        url = set_local_base(str(body.get("provider", "")), str(body.get("base_url", "")))
+    except ValueError as exc:
+        return jsonify(error=str(exc)), 400
+    return jsonify(ok=True, base_url=url)
+
+
+@app.get("/api/comfy/models")
+def api_comfy_models():
+    try:
+        return jsonify(ok=True, models=providers.comfyui.installed())
+    except providers.comfyui.ComfyError as exc:
+        return jsonify(ok=False, error=str(exc)[:200]), 502
+
+
+@app.post("/api/comfy/workflows")
+def api_comfy_import():
+    """上傳 ComfyUI「Export (API)」JSON → workflows/comfyui/<id>.json。"""
+    import importlib.util
+
+    f = request.files.get("file")
+    wid = re.sub(r"[^\w.\-]", "-", (request.form.get("id") or "").strip())[:60]
+    kind = request.form.get("kind", "image")
+    if not f or not wid or kind not in ("image", "video"):
+        return jsonify(error="需要 file、id、kind(image|video)"), 400
+    try:
+        graph = json.loads(f.read().decode("utf-8"))
+        spec_mod = importlib.util.spec_from_file_location("comfy_import", Path(__file__).parent / "scripts" / "comfy_import.py")
+        mod = importlib.util.module_from_spec(spec_mod)
+        spec_mod.loader.exec_module(mod)
+        spec, log = mod.build_spec(graph, wid, kind, request.form.get("note", ""))
+    except (ValueError, UnicodeDecodeError) as exc:
+        return jsonify(error=str(exc)[:300]), 400
+    out = Path(__file__).parent / "workflows" / "comfyui" / f"{wid}.json"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(spec, ensure_ascii=False, indent=2), encoding="utf-8")
+    return jsonify(ok=True, id=wid, log=log)
+
+
+# --------------------------------------------------------------------- voices
+@app.get("/api/voices")
+def api_voices():
+    return jsonify(voices.catalog(refresh=request.args.get("refresh") == "1"), emotions=voices.EMOTIONS)
+
+
+@app.post("/api/voices/clone")
+def api_voice_clone():
+    f = request.files.get("file")
+    if not f:
+        return jsonify(error="請選擇音檔（10 秒～5 分鐘，mp3/m4a/wav）"), 400
+    data = f.read()
+    if len(data) > 20 * 1024 * 1024:
+        return jsonify(error="音檔超過 20MB"), 400
+    try:
+        res = voices.clone(data, f.filename or "voice.mp3", str(request.form.get("voice_id") or "").strip(),
+                           str(request.form.get("preview_text") or ""))
+    except voices.VoiceError as exc:
+        return jsonify(error=str(exc)), 400
+    return jsonify(ok=True, **res)
+
+
+@app.get("/api/projects/<pid>/voices")
+def api_project_voices(pid: str):
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    return jsonify(roles=voices.roles(plan))
+
+
+@app.put("/api/projects/<pid>/voices")
+def api_project_voices_put(pid: str):
+    body = request.get_json(silent=True) or {}
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    roles = [r for r in (voices.clean_role(x) for x in (body.get("roles") or [])[:30] if isinstance(x, dict)) if r]
+    seen, uniq = set(), []
+    for r in roles:
+        if r["id"] not in seen:
+            seen.add(r["id"]); uniq.append(r)
+    plan["voices"] = {"roles": uniq}
+    save_project(plan)
+    return jsonify(roles=uniq)
+
+
+@app.post("/api/projects/<pid>/voices/preview")
+def api_project_voice_preview(pid: str):
+    body = request.get_json(silent=True) or {}
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    role = voices.clean_role(body.get("role") or {}) or voices.clean_role({"id": "narrator"})
+    text = str(body.get("text") or "").strip()[:200] or f"你好，我是{role['name']}。這是我在這部片裡的聲音。"
+    prov, model = resolve("tts", plan)
+    try:
+        name = _tts_cached(pid, prov, model, text, role)
+    except ProviderError as exc:
+        return jsonify(error=str(exc)[:300]), 502
+    return jsonify(url=f"/media/{pid}/{name}")
+
+
+AUDIO_PLAN_PROMPT = """你是影片的聲音導演。依劇本與每段畫面，決定「角色聲音表」與「每段台詞／口白」。
+只輸出 JSON（不要其他文字）：
+{"roles":[{"id":"英文小寫id","name":"中文角色名","desc":"年齡性別個性","voice_id":"從音色清單挑","speed":1.0,"emotion":"","reason":"為何選這個音色"}],
+ "clips":[{"node_id":"N3","orig":"keep|duck|mute","lines":[{"role":"角色id","text":"台詞"}]}]}
+規則：
+1. 一定要有 id 為 narrator 的旁白角色；主角、配角各一個 id。同一角色整部片只用一個音色，音色需符合年齡、性別、個性。
+2. voice_id 只能從【音色清單】中挑；標記「鎖定」的角色維持原音色不要改。
+3. 台詞要符合劇本與該段畫面，中文約每秒 4 字，總長不可超過該段秒數減 0.5 秒；不需要台詞的段落 lines 給空陣列。
+4. 有台詞或口白的段落 orig 用 duck（原聲壓低）；畫面原聲是重點（環境音、音樂）時用 keep；原聲雜亂時用 mute。
+5. emotion 只能是：""、neutral、happy、sad、angry、fearful、disgusted、surprised。"""
+
+
+@app.post("/api/projects/<pid>/canvas/<nid>/audio-plan")
+def api_audio_plan(pid: str, nid: str):
+    """AI 依劇本＋場景：配角色音色、寫每段台詞／口白，寫回專案聲音表與合成節點。"""
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    canvas = plan.get("canvas") or {}
+    node = next((n for n in canvas.get("nodes") or [] if n["id"] == nid and n["kind"] == "compose"), None)
+    if not node:
+        return jsonify(error="找不到合成節點"), 404
+    clips = _compose_clips(canvas, node)
+    if not clips:
+        return jsonify(error="請先把影片節點連到合成節點"), 400
+    seg = []
+    for c in clips:
+        n = c["node"]
+        f = (n.get("output") or {}).get("file") or ""
+        dur = _ffprobe(media_dir(pid) / f)[0] if f and (media_dir(pid) / f).is_file() else float((n.get("params") or {}).get("duration") or 5)
+        dur = max(0.5, dur - c["cut_in"] - c["cut_out"])
+        seg.append({"node_id": n["id"], "title": n.get("title"), "seconds": round(dur, 1), "畫面": (n.get("prompt") or "")[:600]})
+    sessions = ((plan.get("workbench") or {}).get("sessions") or {}).values()
+    script = next((x.get("script") for x in sessions if x.get("script")), "") or json.dumps(plan.get("script") or {}, ensure_ascii=False)
+    cat = voices.catalog()
+    vlist = "\n".join(f"- {v['id']}：{v['name']} {v['desc']}"[:120] for v in cat["builtin"][:80])
+    vlist += "".join(f"\n- {v['id']}：（克隆音色）{v['desc']}"[:120] for v in cat["cloned"][:30])
+    current = voices.roles(plan)
+    locked = [r for r in current if r.get("locked")]
+    user = (f"【劇本】\n{script[:8000]}\n\n【專案】{plan.get('title')}；角色設定：{json.dumps(plan.get('cast') or [], ensure_ascii=False)[:1500]}\n\n"
+            f"【鎖定角色】{json.dumps([{k: r[k] for k in ('id', 'name', 'voice_id')} for r in locked], ensure_ascii=False)}\n\n"
+            f"【音色清單】\n{vlist}\n\n【段落】\n{json.dumps(seg, ensure_ascii=False)}")
+    prov, model = resolve("script", plan)
+    try:
+        raw = providers.chat(prov, model, [{"role": "system", "content": AUDIO_PLAN_PROMPT}, {"role": "user", "content": user}],
+                             max_tokens=3000, timeout=180)
+    except ProviderError as exc:
+        return jsonify(error=str(exc)[:300]), 502
+    data = _wb_json(raw) or {}
+    valid_ids = {v["id"] for v in cat["builtin"] + cat["cloned"]}
+    roles = {r["id"]: r for r in current}
+    for x in data.get("roles") or []:
+        r = voices.clean_role(x if isinstance(x, dict) else {})
+        if not r:
+            continue
+        old = roles.get(r["id"])
+        if old and old.get("locked"):
+            continue
+        if r["voice_id"] not in valid_ids and cat["source"] == "api":
+            r["voice_id"] = (old or {}).get("voice_id") or voices.DEFAULT_ROLE["voice_id"]
+        roles[r["id"]] = r
+    if "narrator" not in roles:
+        roles["narrator"] = voices.roles({})[0]
+    plan["voices"] = {"roles": list(roles.values())}
+    by_node = {x.get("node_id"): x for x in data.get("clips") or [] if isinstance(x, dict)}
+    pc = node.setdefault("params", {}).setdefault("clips", [])
+    for c in clips:
+        x = by_node.get(c["node"]["id"]) or {}
+        ent = next((e for e in pc if e["id"] == c["node"]["id"]), None)
+        if ent is None:
+            ent = {"id": c["node"]["id"], "on": True, "cut_in": 0.0, "cut_out": 0.0}
+            pc.append(ent)
+        ent["lines"] = [{"role": ln.get("role") if ln.get("role") in roles else "narrator", "text": str(ln.get("text") or "")[:500]}
+                        for ln in (x.get("lines") or []) if isinstance(ln, dict) and ln.get("text")][:20]
+        ent["orig"] = x.get("orig") if x.get("orig") in ("keep", "duck", "mute") else ("duck" if ent["lines"] else "keep")
+    save_project(plan)
+    return jsonify(roles=plan["voices"]["roles"], node=node)
+
+
 @app.post("/api/config/test")
 def api_config_test():
     body = request.get_json(silent=True) or {}
     provider = body.get("provider")
-    if provider not in ("aliyun", "minimax", "volcano", "volcano-plan", "local-wan", "local-ltx"):
+    if provider not in ("aliyun", "minimax", "volcano", "volcano-plan", "local-wan", "local-ltx", "local-comfy"):
         return jsonify(error="unknown provider"), 400
     return jsonify(providers.probe(provider))
 
@@ -323,7 +513,7 @@ def api_shot_update(pid: str, sid: str):
     if "positive_prompt" in body:
         shot["positive_prompt"] = str(body["positive_prompt"]).strip()[:2000]
     if "video_provider" in body:
-        allowed = {"volcano", "volcano-plan", "minimax", "local-wan", "local-ltx"}
+        allowed = {"volcano", "volcano-plan", "minimax", "local-wan", "local-ltx", "local-comfy"}
         if body["video_provider"] not in allowed:
             return jsonify(error="unsupported video_provider"), 400
         shot["video_provider"] = body["video_provider"]
@@ -694,10 +884,11 @@ def api_shot_video(pid: str, sid: str):
         "minimax": "MiniMax-H3",
         "local-wan": "wan2.2-ti2v-5b",
         "local-ltx": "ltxv-2b-0.9.x",
+        "local-comfy": providers.comfyui.default("video") or "",
     }.get(provider, "doubao-seedance-2-5-flash-261115")
     prompt = pipeline.compile_prompt(shot, plan)
-    duration = int(body.get("duration") or min(10, max(3, round(shot["duration_seconds"]))))
-    duration = max(1, min(10, duration))
+    duration = int(body.get("duration") or min(30, max(3, round(shot["duration_seconds"]))))
+    duration = max(1, min(30, duration))
     steps = body.get("steps")
 
     if provider in ("local-wan", "local-ltx"):
@@ -744,6 +935,10 @@ def api_shot_video(pid: str, sid: str):
         else:
             duration = 10 if duration > 6 else 6
             resolution = body.get("resolution") or "768P"
+    elif provider == "local-comfy" and body.get("use_first_frame", True) and shot.get("image"):
+        img_path = media_dir(pid) / shot["image"]
+        if img_path.is_file():
+            first_frame_uri = _data_uri(img_path)  # workflow 沒有 {{image}} 時會自動忽略
 
     try:
         created = providers.video_create(
@@ -808,7 +1003,8 @@ def api_job_status(jid: str):
             if job.get("node_id"):
                 _canvas_job_finish(job)
             return jsonify(job=job)
-        name = f"{job['shot_id']}-{uuid.uuid4().hex[:6]}.mp4"
+        vext = ".webm" if ".webm" in (url or "").lower() else ".mp4"
+        name = f"{job['shot_id']}-{uuid.uuid4().hex[:6]}{vext}"
         (media_dir(job["project_id"]) / name).write_bytes(data)
         job.update(state="succeeded", video=name, video_url=f"/media/{job['project_id']}/{name}")
         try:
@@ -952,6 +1148,8 @@ _MEDIA_NAME = re.compile(r"[A-Za-z0-9._-]{1,80}")
 
 def _clean_params(kind: str, params: dict) -> dict:
     out = {k: params[k] for k in ("ratio", "duration", "resolution", "voice") if k in params}
+    if kind == "video" and "audio" in params:
+        out["audio"] = params["audio"] is not False
     if kind == "compose":
         out = {"transition": params.get("transition") if params.get("transition") in COMPOSE_TRANSITIONS else "cut"}
         try:
@@ -967,8 +1165,15 @@ def _clean_params(kind: str, params: dict) -> dict:
                     return max(0.0, float(v or 0))
                 except (TypeError, ValueError):
                     return 0.0
+            lines = []
+            for ln in (c.get("lines") or [])[:20]:
+                if isinstance(ln, dict) and str(ln.get("text") or "").strip():
+                    lines.append({"role": re.sub(r"[^\w-]", "", str(ln.get("role") or "narrator"))[:40] or "narrator",
+                                  "text": str(ln["text"]).strip()[:500]})
             clips.append({"id": str(c["id"]), "on": c.get("on", True) is not False,
-                          "cut_in": num(c.get("cut_in")), "cut_out": num(c.get("cut_out"))})
+                          "cut_in": num(c.get("cut_in")), "cut_out": num(c.get("cut_out")),
+                          "orig": c.get("orig") if c.get("orig") in ("keep", "duck", "mute") else "keep",
+                          "lines": lines})
         out["clips"] = clips
     return out
 
@@ -1013,7 +1218,8 @@ def _compose_clips(canvas: dict, node: dict) -> list[dict]:
     out = []
     for n in ups:
         c = saved.get(n["id"], (0, {}))[1]
-        out.append({"node": n, "on": c.get("on", True), "cut_in": c.get("cut_in", 0.0), "cut_out": c.get("cut_out", 0.0)})
+        out.append({"node": n, "on": c.get("on", True), "cut_in": c.get("cut_in", 0.0), "cut_out": c.get("cut_out", 0.0),
+                    "orig": c.get("orig", "keep"), "lines": c.get("lines") or []})
     return out
 
 
@@ -1038,7 +1244,8 @@ def _compose_run(pid: str, canvas: dict, node: dict) -> dict:
         dur, has_a, size = _ffprobe(path)
         a = min(c["cut_in"], max(0.0, dur - 0.5))
         b = max(a + 0.5, dur - c["cut_out"])
-        items.append({"path": path, "a": a, "b": b, "d": b - a, "audio": has_a, "size": size})
+        items.append({"path": path, "a": a, "b": b, "d": b - a, "audio": has_a, "size": size,
+                      "vol": {"keep": 1.0, "duck": 0.25, "mute": 0.0}.get(c.get("orig"), 1.0), "lines": c.get("lines") or []})
     W, H = items[0]["size"]
     W, H = W - W % 2, H - H % 2
     if trans != "cut" and len(items) > 1:
@@ -1056,7 +1263,7 @@ def _compose_run(pid: str, canvas: dict, node: dict) -> dict:
                   f"setsar=1,fps=24,format=yuv420p[v{i}]")
         if it["audio"]:
             fc.append(f"[{i}:a]atrim=start={it['a']:.3f}:end={it['b']:.3f},asetpts=PTS-STARTPTS,"
-                      f"aresample=44100,aformat=channel_layouts=stereo[a{i}]")
+                      f"aresample=44100,aformat=channel_layouts=stereo,volume={it['vol']:.2f}[a{i}]")
         else:
             fc.append(f"[{silent_idx}:a]aresample=44100,aformat=channel_layouts=stereo[a{i}]")
             silent_idx += 1
@@ -1072,8 +1279,33 @@ def _compose_run(pid: str, canvas: dict, node: dict) -> dict:
             fc.append(f"[{prev_v}][v{i}]xfade=transition={xf}:duration={tdur:.3f}:offset={offset:.3f}[{ov}]")
             fc.append(f"[{prev_a}][a{i}]acrossfade=d={tdur:.3f}[{oa}]")
             prev_v, prev_a = ov, oa
+    # 台詞／口白：依角色聲音表 TTS，對齊每段在成片中的起點
+    dialog = []
+    if any(it["lines"] for it in items):
+        cast = voices.role_map(load_project(pid))
+        tprov, tmodel = resolve("tts", load_project(pid))
+        start = 0.0
+        for i, it in enumerate(items):
+            t = start + 0.3
+            for ln in it["lines"]:
+                role = cast.get(ln["role"]) or cast.get("narrator") or voices.clean_role({"id": "narrator"})
+                f = _tts_cached(pid, tprov, tmodel, ln["text"], role)
+                d, _, _ = _ffprobe(mdir / f)
+                dialog.append((mdir / f, t))
+                t += d + 0.25
+            start += it["d"] - (tdur if trans != "cut" and n > 1 else 0)
+    base_idx = len(items) + sum(1 for it in items if not it["audio"])
+    for k, (path, t) in enumerate(dialog):
+        args += ["-i", str(path)]
+        ms = int(t * 1000)
+        fc.append(f"[{base_idx + k}:a]aresample=44100,aformat=channel_layouts=stereo,adelay={ms}|{ms}[d{k}]")
+    out_a = "ao"
+    if dialog:
+        fc.append("[ao]" + "".join(f"[d{k}]" for k in range(len(dialog)))
+                  + f"amix=inputs={len(dialog) + 1}:duration=first:dropout_transition=0:normalize=0[am]")
+        out_a = "am"
     name = f"compose-{node['id']}-{uuid.uuid4().hex[:6]}.mp4"
-    args += ["-filter_complex", ";".join(fc), "-map", "[vo]", "-map", "[ao]",
+    args += ["-filter_complex", ";".join(fc), "-map", "[vo]", "-map", f"[{out_a}]",
              "-c:v", "libx264", "-preset", "veryfast", "-crf", "18", "-pix_fmt", "yuv420p",
              "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", str(mdir / name)]
     r = _sp.run(args, capture_output=True, text=True, timeout=900)
@@ -1081,7 +1313,22 @@ def _compose_run(pid: str, canvas: dict, node: dict) -> dict:
         raise RuntimeError("ffmpeg 合成失敗：" + (r.stderr or "")[-240:])
     total, _, _ = _ffprobe(mdir / name)
     return {"type": "video", "file": name, "url": f"/media/{pid}/{name}",
-            "duration": round(total, 2), "clips": len(items), "transition": trans}
+            "duration": round(total, 2), "clips": len(items), "transition": trans, "lines": len(dialog)}
+
+
+def _tts_cached(pid: str, provider: str, model: str, text: str, role: dict) -> str:
+    """同一音色＋文字只合成一次（存在專案 media）。"""
+    import hashlib
+
+    key = json.dumps([provider, model, text, role.get("voice_id"), role.get("speed"), role.get("pitch"),
+                      role.get("vol"), role.get("emotion")], ensure_ascii=False)
+    name = f"tts-{hashlib.sha1(key.encode()).hexdigest()[:12]}.mp3"
+    path = media_dir(pid) / name
+    if not path.is_file():
+        path.write_bytes(providers.tts(provider, model, text, role.get("voice_id") or "male-qn-qingse",
+                                       role.get("speed", 1.0), role.get("pitch", 0), role.get("vol", 1.0),
+                                       role.get("emotion", "")))
+    return name
 
 
 def _default_canvas() -> dict:
@@ -1227,7 +1474,7 @@ def api_canvas_run(pid: str):
             return done({"type": "text", "text": text.strip()})
 
         if node["kind"] == "image":
-            refs = [_data_uri(media_dir(pid) / f) for f in images[:4]] if provider in ("volcano", "volcano-plan") else None
+            refs = [_data_uri(media_dir(pid) / f) for f in images[:4]] if provider in ("volcano", "volcano-plan", "local-comfy") else None
             result = providers.image(provider, model, prompt, size=CANVAS_RATIOS[ratio], references=refs)
             url = result.get("url") or ""
             if result.get("b64"):
@@ -1260,13 +1507,14 @@ def api_canvas_run(pid: str):
                 return jsonify(error="首幀模式需要連接上游的圖片節點（並已生成圖片）"), 400
             node["mode"] = "t2v"  # 上游沒有圖片：自動改用文字生成影片
         if node.get("mode") == "i2v":
-            if not (provider == "minimax" and model.startswith("MiniMax-H3")):
-                return jsonify(error="目前只有 MiniMax-H3 支援首幀生成影片"), 400
+            if not ((provider == "minimax" and model.startswith("MiniMax-H3")) or provider == "local-comfy"):
+                return jsonify(error="目前只有 MiniMax-H3 與地端 ComfyUI 支援首幀生成影片"), 400
             first_frame = _data_uri(media_dir(pid) / images[0])
         if provider == "minimax":
             duration = max(4, min(15, duration)) if model.startswith("MiniMax-H3") else (10 if duration > 6 else 6)
-        created = providers.video_create(provider, model, prompt, duration=max(1, min(15, duration)),
-                                         resolution=resolution, ratio=ratio, first_frame_data_uri=first_frame)
+        created = providers.video_create(provider, model, prompt, duration=max(1, min(30, duration)),
+                                         resolution=resolution, ratio=ratio, first_frame_data_uri=first_frame,
+                                         generate_audio=params.get("audio", True) is not False)
     except ProviderError as exc:
         node.update(status="error", message=str(exc)[:300])
         save_project(plan)
@@ -1591,6 +1839,113 @@ def api_wb_put(pid: str, sid: str):
     ss["updated"] = time.strftime("%Y-%m-%d %H:%M:%S")
     save_project(plan)
     return jsonify(session=ss | {"id": sid})
+
+
+_CAM_KEYS = [("子彈", "bullet_time"), ("柯克", "dolly_zoom"), ("甩", "whip_pan"), ("航拍", "drone"), ("無人機", "drone"),
+             ("第一視角", "pov"), ("POV", "pov"), ("升降", "crane"), ("推軌後", "dolly_out"), ("拉遠", "dolly_out"),
+             ("推軌", "dolly_in"), ("推進", "dolly_in"), ("跟拍", "tracking"), ("跟隨", "tracking"), ("手持", "handheld"),
+             ("搖鏡", "pan"), ("橫搖", "pan"), ("俯仰", "tilt"), ("直搖", "tilt"), ("固定", "locked")]
+
+
+def _wb_camera(text: str) -> str:
+    return next((k for kw, k in _CAM_KEYS if kw in (text or "")), "locked")
+
+
+def _wb_plan_shots(ss: dict, video_provider: str) -> list[dict]:
+    """工作台分鏡 → 專案分鏡表（plan.shots）。"""
+    out, t = [], 0.0
+    for i, x in enumerate(ss.get("shots") or []):
+        cam = _wb_camera(x.get("camera", ""))
+        sec = float(x.get("seconds") or 5)
+        out.append({
+            "id": f"S{i + 1:02d}", "beat": (x.get("title") or f"分鏡 {i + 1}")[:40],
+            "start_seconds": round(t, 2), "duration_seconds": sec, "framing": x.get("camera", "")[:120],
+            "camera": cam, "camera_zh": pipeline.CAMERAS[cam]["zh"],
+            "action": x.get("desc", ""), "lighting": "",
+            "positive_prompt": x.get("prompt") or x.get("desc", ""),
+            "negative_prompt": x.get("negative") or "blurry, distorted hands, extra limbs, watermark, text overlay, low quality",
+            "motion": x.get("motion", ""),
+            "image": None, "video": None, "video_job": None, "video_provider": video_provider, "status": "planned",
+        })
+        t += sec
+    return out
+
+
+def _wb_canvas_nodes(ss: dict, canvas: dict) -> int:
+    """把工作台分鏡加進畫布（圖片 → 影片），最後接一個合成節點。回傳新增組數。"""
+    shots = ss.get("shots") or []
+    nodes, edges = canvas.setdefault("nodes", []), canvas.setdefault("edges", [])
+    nxt = max([0] + [int(n["id"][1:]) for n in nodes if n["id"][1:].isdigit()])
+    y0 = (max(n["y"] for n in nodes) + 360) if nodes else 0
+    models = ss.get("models") or {}
+    vm, im = models.get("video") or "", models.get("image") or ""
+    vids = []
+    for i, x in enumerate(shots):
+        y, t = y0 + i * 300, f"分鏡 {i + 1}"
+        img = {"id": f"N{nxt + 1}", "kind": "image", "title": f"{t}・畫面", "x": 0, "y": y,
+               "prompt": x.get("prompt") or x.get("desc", ""), "model": im, "mode": "t2i",
+               "params": {"ratio": "16:9"}, "output": None, "status": "idle"}
+        vid = {"id": f"N{nxt + 2}", "kind": "video", "title": f"{t}・{(x.get('title') or '影片')[:20]}", "x": 460, "y": y,
+               "prompt": "\n".join(v for v in (x.get("motion"), x.get("prompt") or x.get("desc")) if v), "model": vm,
+               "mode": "i2v" if ("|MiniMax-H3" in vm or vm.startswith("local-comfy|")) else "t2v",
+               "params": {"ratio": "16:9", "duration": max(2, min(30, int(x.get("seconds") or 5))), "resolution": "768P"},
+               "output": None, "status": "idle"}
+        nxt += 2
+        nodes += [img, vid]
+        edges.append({"from": img["id"], "to": vid["id"]})
+        vids.append(vid["id"])
+    if vids:
+        nxt += 1
+        cmp_ = {"id": f"N{nxt}", "kind": "compose", "title": "影片合成", "x": 920,
+                "y": y0 + (len(vids) - 1) * 150, "prompt": "", "model": "", "mode": "",
+                "params": {"transition": "cut", "tdur": 0.5, "clips": [{"id": v, "on": True, "cut_in": 0.0, "cut_out": 0.0} for v in vids]},
+                "output": None, "status": "idle"}
+        nodes.append(cmp_)
+        edges += [{"from": v, "to": cmp_["id"]} for v in vids]
+    return len(vids)
+
+
+@app.post("/api/projects/<pid>/workbench/<sid>/to-project")
+def api_wb_to_project(pid: str, sid: str):
+    """mode=new：以這個 Skill 對話建立新專案（分鏡表＋畫布，對話一起搬過去）；mode=current：加到目前專案畫布。"""
+    body = request.get_json(silent=True) or {}
+    try:
+        plan = load_project(pid)
+    except (FileNotFoundError, ValueError):
+        return jsonify(error="找不到專案"), 404
+    ss = _wb(plan)["sessions"].get(sid) if _WB_ID.fullmatch(sid) else None
+    if ss is None:
+        return jsonify(error="找不到工作階段"), 404
+    if not ss.get("shots"):
+        return jsonify(error="還沒有分鏡表"), 400
+
+    if body.get("mode") != "new":
+        canvas = plan.get("canvas") or {"nodes": [], "edges": [], "viewport": {"x": 0, "y": 0, "k": 1}}
+        n = _wb_canvas_nodes(ss, canvas)
+        plan["canvas"] = canvas
+        save_project(plan)
+        return jsonify(ok=True, pid=pid, shots=n, created=False)
+
+    vm = (ss.get("models") or {}).get("video") or ""
+    vprov = vm.split("|")[0] if "|" in vm else "minimax"
+    title = (str(body.get("title") or "") or ss.get("title") or "Skill 專案")[:60]
+    first = (ss["shots"][0].get("desc") or "")[:200]
+    new = pipeline.make_plan(title=title, idea=first or title, style=str(body.get("style") or "電影感寫實"),
+                             duration=sum(float(x.get("seconds") or 5) for x in ss["shots"]), ratio="16:9")
+    new["shots"] = _wb_plan_shots(ss, vprov)
+    new["script"] = {"beats": [{"beat": x.get("title") or f"分鏡 {i + 1}", "description": x.get("desc", "")}
+                               for i, x in enumerate(ss["shots"])],
+                     "synopsis": (ss.get("script") or first)[:2000], "text": ss.get("script", ""),
+                     "source": "workbench", "skill": ss.get("skill", "")}
+    new["stage"] = "storyboard"
+    canvas = {"nodes": [], "edges": [], "viewport": {"x": 0, "y": 0, "k": 0.6}}
+    n = _wb_canvas_nodes(ss, canvas)
+    new["canvas"] = canvas
+    _wb(new)["sessions"][sid] = ss
+    save_project(new)
+    _wb(plan)["sessions"].pop(sid, None)  # 對話搬到新專案
+    save_project(plan)
+    return jsonify(ok=True, pid=new["id"], sid=sid, title=new["title"], shots=n, created=True)
 
 
 @app.delete("/api/projects/<pid>/workbench/<sid>")

@@ -1,6 +1,6 @@
 (() => {
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const STATUS = { ok: ["ok", "已實測"], quota: ["warn", "額度上限"], untested: ["", "未實測"], license: ["err", "條款限制"] };
+  const STATUS = { ok: ["ok", "已實測"], quota: ["warn", "額度上限"], untested: ["", "未實測"], builtin: ["use", "內建"], license: ["err", "條款限制"] };
   const KIND = { text: "文字", image: "圖片", video: "影片", tts: "語音", music: "音樂" };
   const SCOPE = { cloud: "雲端", local: "地端" };
   const NUM = ["①", "②", "③", "④", "⑤", "⑥", "⑦"];
@@ -92,18 +92,68 @@
     document.getElementById("providers").innerHTML = list.map((p) => `
       <section class="card">
         <h3 class="prov-head"><span class="prov-ico ${p.scope}">${svg(ICON[p.scope] || ICON.cloud, 20)}</span>${esc(p.name)}</h3>
-        <div class="muted mono" style="font-size:11.5px;word-break:break-all">${esc(p.base_url)}</div>
+        ${p.editable
+          ? `<div class="actions" style="margin:0;gap:6px"><input class="mono" data-url="${esc(p.id)}" value="${esc(p.base_url)}" style="flex:1;font-size:12px">
+             <button class="ghost small" data-save="${esc(p.id)}">儲存</button></div>`
+          : `<div class="muted mono" style="font-size:11.5px;word-break:break-all">${esc(p.base_url)}</div>`}
         ${p.extra && p.extra.anthropic ? `<div class="muted" style="font-size:11.5px;margin-top:4px">Anthropic 相容：<span class="mono">${esc(p.extra.anthropic)}</span></div>` : ""}
-        <div style="margin:10px 0"><span class="chip ${p.key_state === "configured" ? "ok" : "err"}">金鑰 ${p.key_state === "configured" ? "已設定" : "未設定"}</span>
+        <div style="margin:10px 0"><span class="chip ${p.key_state === "missing" ? "err" : "ok"}">金鑰 ${{ configured: "已設定", optional: "免金鑰", missing: "未設定" }[p.key_state] || "未設定"}</span>
         <span class="mono muted" style="font-size:11.5px">${esc(p.key_mask)}</span></div>
         <table class="map"><tr><th>模型</th><th>類型</th><th>狀態</th><th>對應步驟</th></tr>
+          ${!p.models.length && p.kind === "comfyui" ? `<tr><td colspan="4" class="muted" style="font-size:12px">尚未匯入 workflow。ComfyUI 的模型要搭配 workflow 才能生成，請由下方匯入。</td></tr>` : ""}
           ${p.models.map((m) => `<tr><td class="mono">${esc(m.id)}</td><td class="kind">${kindIcon(m.kind)} ${esc(KIND[m.kind] || m.kind)}</td>
             <td>${badge(m.status)}${m.note ? `<div class="muted" style="font-size:11px;margin-top:2px">${esc(m.note)}</div>` : ""}</td>
             <td>${stepChips(p.id, m)}</td></tr>`).join("")}
         </table>
+        ${p.kind === "comfyui" ? `
+        <details data-installed style="margin-top:10px"><summary class="muted" style="cursor:pointer;font-size:12px">ComfyUI 已安裝模型（載入中…）</summary><div class="mono" style="font-size:11px;margin-top:6px"></div></details>
+        <form data-import style="margin-top:12px;display:grid;gap:6px">
+          <div class="muted" style="font-size:11.5px">匯入 workflow：ComfyUI 選單 Workflow → Export (API) 的 JSON</div>
+          <input type="file" name="file" accept=".json" required>
+          <div class="actions" style="margin:0;gap:6px">
+            <input name="id" placeholder="模型 ID，例 flux-dev" required style="flex:1">
+            <select name="kind"><option value="image">圖片</option><option value="video">影片</option></select>
+            <button class="small">匯入</button>
+          </div>
+          <input name="note" placeholder="備註（選填）">
+        </form>` : ""}
         <div class="actions"><button class="ghost small" data-test="${esc(p.id)}">${p.scope === "local" ? "測試服務連線" : "測試文字連線"}</button></div>
-        <div class="muted mono" id="t-${esc(p.id)}" style="margin-top:8px;font-size:11.5px"></div>
+        <div class="muted mono" id="t-${esc(p.id)}" style="margin-top:8px;font-size:11.5px;white-space:pre-wrap"></div>
       </section>`).join("") || '<div class="muted">此分類沒有 Provider</div>';
+
+    const reload = async () => { cfg = await (await fetch("/api/config")).json(); render(); };
+    document.querySelectorAll("[data-save]").forEach((btn) => btn.addEventListener("click", async () => {
+      const pid = btn.dataset.save;
+      const out = document.getElementById(`t-${pid}`);
+      const url = document.querySelector(`[data-url="${pid}"]`).value;
+      const res = await (await fetch("/api/config/local", {
+        method: "PUT", headers: { "Content-Type": "application/json", "X-Requested-With": "fetch" },
+        body: JSON.stringify({ provider: pid, base_url: url }),
+      })).json();
+      if (res.ok) { await reload(); document.getElementById(`t-${pid}`).textContent = `✓ 已存到本機 .env：${res.base_url}`; }
+      else out.textContent = `✗ ${res.error}`;
+    }));
+    document.querySelectorAll("[data-import]").forEach((form) => form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const out = document.getElementById("t-local-comfy");
+      out.textContent = "匯入中…";
+      const res = await (await fetch("/api/comfy/workflows", {
+        method: "POST", headers: { "X-Requested-With": "fetch" }, body: new FormData(form),
+      })).json();
+      if (res.ok) { await reload(); document.getElementById("t-local-comfy").textContent = `✓ ${res.id}\n${(res.log || []).join("\n")}`; }
+      else out.textContent = `✗ ${res.error}`;
+    }));
+
+    document.querySelectorAll("[data-installed]").forEach(async (box) => {
+      const sum = box.querySelector("summary"), body = box.querySelector("div");
+      try {
+        const res = await (await fetch("/api/comfy/models")).json();
+        if (!res.ok) { sum.textContent = `ComfyUI 已安裝模型（✗ ${res.error}）`; return; }
+        const groups = Object.entries(res.models);
+        sum.textContent = `ComfyUI 已安裝模型（${groups.reduce((n, [, v]) => n + v.length, 0)}）`;
+        body.innerHTML = groups.map(([f, v]) => `<div style="margin-top:6px"><b>${esc(f)}</b>（${v.length}）${v.map((x) => `<div class="muted">· ${esc(x)}</div>`).join("")}</div>`).join("");
+      } catch (err) { sum.textContent = `ComfyUI 已安裝模型（✗ ${err.message}）`; }
+    });
 
     document.querySelectorAll("[data-test]").forEach((btn) => btn.addEventListener("click", async () => {
       const pid = btn.dataset.test;

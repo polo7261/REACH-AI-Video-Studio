@@ -12,6 +12,7 @@ from typing import Any
 
 import requests
 
+from . import comfyui
 from .config import PROVIDERS, key_for
 
 TIMEOUT = 120
@@ -22,6 +23,13 @@ class ProviderError(RuntimeError):
         super().__init__(f"[{provider}] {message}")
         self.provider = provider
         self.code = code
+
+
+def _comfy(fn, *args, **kw):
+    try:
+        return fn(*args, **kw)
+    except comfyui.ComfyError as exc:
+        raise ProviderError("local-comfy", str(exc)) from exc
 
 
 def _headers(provider: str) -> dict[str, str]:
@@ -132,6 +140,8 @@ def chat(provider: str, model: str, messages: list[dict], max_tokens: int = 800,
 def image(provider: str, model: str, prompt: str, size: str = "1024x1024",
           references: list[str] | None = None) -> dict:
     """回傳 {url|b64, raw}。MiniMax 回 url；阿里/火山走 OpenAI images 路由。"""
+    if provider == "local-comfy":
+        return _comfy(comfyui.run_image, model, prompt, size, references)
     if provider == "minimax":
         ratio = {"1280x720": "16:9", "720x1280": "9:16", "1024x1024": "1:1", "1024x768": "4:3"}.get(size, "1:1")
         body = _post(
@@ -171,7 +181,8 @@ def download(url: str, timeout: int = 120) -> bytes:
 
 
 # ---------------------------------------------------------------- tts
-def tts(provider: str, model: str, text: str, voice: str = "male-qn-qingse") -> bytes:
+def tts(provider: str, model: str, text: str, voice: str = "male-qn-qingse", speed: float = 1.0,
+        pitch: int = 0, vol: float = 1.0, emotion: str = "") -> bytes:
     if provider != "minimax":
         raise ProviderError(provider, "目前僅 MiniMax TTS 已打通")
     body = _post(
@@ -181,7 +192,8 @@ def tts(provider: str, model: str, text: str, voice: str = "male-qn-qingse") -> 
             "model": model,
             "text": text,
             "stream": False,
-            "voice_setting": {"voice_id": voice, "speed": 1.0, "vol": 1.0, "pitch": 0},
+            "voice_setting": {"voice_id": voice, "speed": float(speed), "vol": float(vol), "pitch": int(pitch)}
+            | ({"emotion": emotion} if emotion else {}),
             "audio_setting": {"sample_rate": 32000, "bitrate": 128000, "format": "mp3", "channel": 1},
         },
         timeout=180,
@@ -205,9 +217,17 @@ def ark_resolution(value: str) -> str:
     return "720p"
 
 
+RES_ALIAS = {"2K": "1440P", "4K": "2160P"}
+
+
 def video_create(provider: str, model: str, prompt: str, duration: int = 6,
                  resolution: str = "768P", ratio: str = "16:9",
-                 first_frame_data_uri: str | None = None) -> dict:
+                 first_frame_data_uri: str | None = None, generate_audio: bool = True) -> dict:
+    resolution = RES_ALIAS.get(str(resolution).upper(), resolution)
+    if provider == "minimax" and resolution.upper() in ("1440P", "2160P"):
+        resolution = "1080P"  # MiniMax 最高 1080P
+    if provider == "local-comfy":
+        return _comfy(comfyui.video_create, model, prompt, duration, resolution, ratio, first_frame_data_uri)
     if provider == "minimax" and str(model).startswith("MiniMax-H3"):
         content = [{"type": "text", "text": prompt}]
         if first_frame_data_uri:
@@ -215,7 +235,7 @@ def video_create(provider: str, model: str, prompt: str, duration: int = 6,
         body = _post_url(
             _minimax_v2_root() + "/v2/video_generation",
             {"model": model, "content": content, "resolution": resolution,
-             "duration": int(duration), "ratio": ratio, "generate_audio": True},
+             "duration": int(duration), "ratio": ratio, "generate_audio": bool(generate_audio)},
             timeout=120,
         )
         task = body.get("task_id") or (body.get("task") or {}).get("id")
@@ -271,6 +291,8 @@ def video_create(provider: str, model: str, prompt: str, duration: int = 6,
 
 def video_poll(provider: str, task_id: str, model: str | None = None) -> dict:
     """回傳 {state: queued|running|succeeded|failed, url?, message?}。"""
+    if provider == "local-comfy":
+        return _comfy(comfyui.poll, task_id, "video")
     if provider == "minimax" and str(model or "").startswith("MiniMax-H3"):
         # 注意：v2 查詢是「路徑參數」，用 query string 會忽略 task_id 回傳清單
         body = _get_url(_minimax_v2_root() + f"/v2/query/video_generation/{task_id}", {})
@@ -326,6 +348,14 @@ def video_poll(provider: str, task_id: str, model: str | None = None) -> dict:
 def probe(provider: str) -> dict:
     """輕量連線測試：文字模型實打一次；Agent Plan 用圖片生成實測。"""
     started = time.time()
+    if provider == "local-comfy":
+        try:
+            h = comfyui.health()
+            return {"ok": True, "model": ", ".join(h["workflows"]) or "（尚無 workflow）",
+                    "reply": f"{h['gpu']} free {h['vram_free_gb']}/{h['vram_total_gb']}GB queue {h['queue']}",
+                    "seconds": round(time.time() - started, 2)}
+        except comfyui.ComfyError as exc:
+            return {"ok": False, "model": "comfyui", "error": str(exc)[:200]}
     if provider in ("local-wan", "local-ltx"):
         health = local_wan_health(provider)
         return {"ok": health["ok"], "model": "ltxv-2b" if provider == "local-ltx" else "wan2.2-ti2v-5b",

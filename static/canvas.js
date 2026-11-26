@@ -30,10 +30,12 @@
     image: [["t2i", "文生圖"], ["i2i", "參考圖生圖"]],
   };
   const RATIOS = ["16:9", "4:3", "1:1", "3:4", "9:16", "21:9"];
+  const ORIG = [["keep", "原聲"], ["duck", "原聲壓低"], ["mute", "靜音"]];
+  const EMO = { "": "自動", neutral: "平靜", happy: "開心", sad: "悲傷", angry: "生氣", fearful: "害怕", disgusted: "厭惡", surprised: "驚訝" };
   const VOICES = ["male-qn-qingse", "female-shaonv", "female-yujie", "male-qn-jingying"];
   const DEFAULT_PARAMS = { video: { ratio: "16:9", duration: 5, resolution: "768P" }, image: { ratio: "16:9" }, audio: { voice: "male-qn-qingse" }, text: {}, compose: { transition: "cut", tdur: 0.5, clips: [] } };
 
-  const state = { pid: null, cfg: null, canvas: null, sel: null, selEdge: null, polls: new Set(), saveTimer: null };
+  const state = { pid: null, cfg: null, canvas: null, sel: null, selEdge: null, polls: new Set(), saveTimer: null, roles: [], openLines: new Set() };
   const cv = $("#cv"), world = $("#cv-world"), nodesEl = $("#cv-nodes"), edgesEl = $("#cv-edges");
   const panel = $("#cv-panel"), pop = $("#cv-pop");
 
@@ -201,7 +203,11 @@
     const r = anchor.getBoundingClientRect(), c = cv.getBoundingClientRect();
     const pw = pop.offsetWidth, ph = pop.offsetHeight;
     let left = r.left - c.left, top = r.bottom - c.top + 6;
-    if (top + ph > c.height - 8) top = r.top - c.top - ph - 6;
+    if (top + ph > c.height - 8) {
+      // 往上開：若錨點在底部面板內，改貼在整個面板上方，避免蓋住提示詞
+      const box = (anchor.closest(".cv-panel") || anchor).getBoundingClientRect();
+      top = box.top - c.top - ph - 8;
+    }
     left = Math.max(8, Math.min(left, c.width - pw - 8));
     pop.style.left = `${left}px`; pop.style.top = `${Math.max(8, top)}px`;
     pop.onclick = (e) => { const b = e.target.closest("[data-v]"); if (b && !b.disabled) onClick(b.dataset.v, b); };
@@ -223,7 +229,7 @@
   function upstream(n) { return state.canvas.edges.filter((e) => e.to === n.id).map((e) => node(e.from)).filter(Boolean); }
   function paramSummary(n) {
     const p = n.params || {};
-    if (n.kind === "video") return `${p.ratio || "16:9"} · ${p.resolution || "768P"} · ${p.duration || 5}s`;
+    if (n.kind === "video") return `${p.ratio || "16:9"} · ${p.resolution || "768P"} · ${p.duration || 5}s${p.audio === false ? " · 無聲" : ""}`;
     if (n.kind === "image") return p.ratio || "16:9";
     if (n.kind === "audio") return p.voice || VOICES[0];
     return "";
@@ -236,8 +242,90 @@
     const saved = p.clips || [];
     const idx = (id) => { const i = saved.findIndex((c) => c.id === id); return i < 0 ? 1e4 : i; };
     ups.sort((a, b) => idx(a.id) - idx(b.id) || natNo(a.title) - natNo(b.title) || a.y - b.y || a.x - b.x);
-    p.clips = ups.map((u) => { const c = saved.find((x) => x.id === u.id) || {}; return { id: u.id, on: c.on !== false, cut_in: +c.cut_in || 0, cut_out: +c.cut_out || 0 }; });
+    p.clips = ups.map((u) => { const c = saved.find((x) => x.id === u.id) || {}; return { id: u.id, on: c.on !== false, cut_in: +c.cut_in || 0, cut_out: +c.cut_out || 0, orig: c.orig || "keep", lines: Array.isArray(c.lines) ? c.lines : [] }; });
     return ups;
+  }
+  function linesEditor(c, i) {
+    const opts = (sel) => state.roles.map((r) => `<option value="${esc(r.id)}" ${r.id === sel ? "selected" : ""}>${esc(r.name)}</option>`).join("");
+    return `<div class="cmp-lines" data-i="${i}">
+      ${c.lines.map((ln, j) => `<div class="cmp-line" data-li="${j}">
+        <select data-f="role">${opts(ln.role)}</select>
+        <input data-f="text" value="${esc(ln.text)}" placeholder="台詞或口白（中文約每秒 4 字）">
+        <button type="button" class="cmp-mv" data-act="del" title="刪除">${svg(IC.x, 13)}</button></div>`).join("")}
+      <button type="button" class="ghost small" data-act="add">＋ 新增一句</button>
+    </div>`;
+  }
+  async function loadRoles() {
+    try { state.roles = (await api(`/api/projects/${state.pid}/voices`)).roles || []; } catch { state.roles = []; }
+  }
+  async function openVoices() {
+    const [cat, cur] = await Promise.all([api("/api/voices"), api(`/api/projects/${state.pid}/voices`)]);
+    let roles = cur.roles.map((r) => ({ ...r }));
+    const dlg = document.createElement("div"); dlg.className = "vx-mask";
+    const vopts = (sel) => `<optgroup label="克隆音色">${cat.cloned.map((v) => `<option value="${esc(v.id)}" ${v.id === sel ? "selected" : ""}>${esc(v.id)}</option>`).join("") || '<option disabled>（尚無）</option>'}</optgroup>
+      <optgroup label="MiniMax 內建">${cat.builtin.map((v) => `<option value="${esc(v.id)}" ${v.id === sel ? "selected" : ""}>${esc(v.name)}${v.desc ? `｜${esc(v.desc).slice(0, 24)}` : ""}</option>`).join("")}</optgroup>
+      ${[...cat.builtin, ...cat.cloned].some((v) => v.id === sel) ? "" : `<option value="${esc(sel)}" selected>${esc(sel)}</option>`}`;
+    const draw = () => {
+      dlg.innerHTML = `<div class="vx">
+        <div class="vx-head"><b>${svg(IC.audio, 16)} 角色聲音表</b><span class="muted">同一角色整部片固定一個聲音；「鎖定」後 AI 配音不會改它</span><button type="button" class="cmp-mv" data-x="close">${svg(IC.x, 16)}</button></div>
+        <div class="vx-body">
+          <div class="vx-row vx-th"><span>角色</span><span>描述</span><span>音色</span><span>語速</span><span>音調</span><span>情緒</span><span>鎖定</span><span></span></div>
+          ${roles.map((r, i) => `<div class="vx-row" data-i="${i}">
+            <input data-f="name" value="${esc(r.name)}" ${r.id === "narrator" ? 'title="旁白"' : ""}>
+            <input data-f="desc" value="${esc(r.desc || "")}" placeholder="年齡、性別、個性">
+            <select data-f="voice_id">${vopts(r.voice_id)}</select>
+            <input data-f="speed" type="number" min="0.5" max="2" step="0.1" value="${r.speed}">
+            <input data-f="pitch" type="number" min="-12" max="12" step="1" value="${r.pitch}">
+            <select data-f="emotion">${Object.entries(EMO).map(([k, l]) => `<option value="${k}" ${r.emotion === k ? "selected" : ""}>${l}</option>`).join("")}</select>
+            <input data-f="locked" type="checkbox" ${r.locked ? "checked" : ""}>
+            <span class="vx-act"><button type="button" class="ghost small" data-x="play">試聽</button>${r.id === "narrator" ? "" : `<button type="button" class="cmp-mv" data-x="del">${svg(IC.x, 13)}</button>`}</span>
+            ${r.reason ? `<small class="muted vx-why">AI：${esc(r.reason)}</small>` : ""}
+          </div>`).join("")}
+          <button type="button" class="ghost small" data-x="add">＋ 新增角色</button>
+          <details class="vx-clone"><summary>上傳音檔做聲音克隆</summary>
+            <div class="muted" style="font-size:11.5px;margin:6px 0">音檔 10 秒～5 分鐘、單人清楚說話（mp3/m4a/wav）。克隆後出現在「克隆音色」；MiniMax 於首次使用時計費。</div>
+            <div class="vx-cl"><input type="file" id="vx-file" accept="audio/*"><input id="vx-id" placeholder="音色 ID，例 reachLeadMale01"><button type="button" class="small" data-x="clone">克隆</button></div>
+          </details>
+        </div>
+        <div class="vx-foot"><span class="muted" id="vx-msg">${cat.source === "api" ? `音色 ${cat.builtin.length} 個（MiniMax 即時清單）` : "音色清單：備用清單（MiniMax 目錄未取得）"}</span>
+          <button type="button" class="ghost small" data-x="close">取消</button><button type="button" class="small" data-x="save">儲存</button></div>
+      </div>`;
+    };
+    const msg = (t) => { const el = dlg.querySelector("#vx-msg"); if (el) el.textContent = t; };
+    dlg.addEventListener("change", (e) => {
+      const row = e.target.closest(".vx-row[data-i]"); if (!row) return;
+      const r = roles[+row.dataset.i], f = e.target.dataset.f;
+      r[f] = f === "locked" ? e.target.checked : (f === "speed" || f === "pitch") ? +e.target.value : e.target.value;
+    });
+    dlg.addEventListener("click", async (e) => {
+      const b = e.target.closest("[data-x]"); if (!b) { if (e.target === dlg) dlg.remove(); return; }
+      const row = b.closest(".vx-row[data-i]"), r = row && roles[+row.dataset.i];
+      if (b.dataset.x === "close") dlg.remove();
+      if (b.dataset.x === "add") { roles.push({ id: `role${Date.now().toString(36)}`, name: "新角色", desc: "", voice_id: "male-qn-qingse", speed: 1, pitch: 0, vol: 1, emotion: "", locked: false }); draw(); }
+      if (b.dataset.x === "del") { roles.splice(+row.dataset.i, 1); draw(); }
+      if (b.dataset.x === "play") {
+        b.disabled = true; b.textContent = "合成中…";
+        try { const res = await api(`/api/projects/${state.pid}/voices/preview`, { method: "POST", body: JSON.stringify({ role: r }) }); new Audio(res.url).play(); }
+        catch (err) { msg(`✗ ${err.message}`); }
+        b.disabled = false; b.textContent = "試聽";
+      }
+      if (b.dataset.x === "clone") {
+        const f = dlg.querySelector("#vx-file").files[0], vid = dlg.querySelector("#vx-id").value.trim();
+        if (!f || !vid) { msg("請選音檔並填音色 ID"); return; }
+        const fd = new FormData(); fd.append("file", f); fd.append("voice_id", vid);
+        b.disabled = true; msg("上傳並克隆中…（約 10–60 秒）");
+        try {
+          const res = await fetch("/api/voices/clone", { method: "POST", headers: { "X-Requested-With": "fetch" }, body: fd }).then((x) => x.json());
+          if (res.error) throw new Error(res.error);
+          cat.cloned.unshift({ id: res.voice_id, name: res.voice_id, desc: "剛克隆" }); draw(); msg(`✓ 已克隆 ${res.voice_id}，可在音色選單選用`);
+        } catch (err) { msg(`✗ ${err.message}`); b.disabled = false; }
+      }
+      if (b.dataset.x === "save") {
+        try { state.roles = (await api(`/api/projects/${state.pid}/voices`, { method: "PUT", body: JSON.stringify({ roles }) })).roles; dlg.remove(); toast("角色聲音已儲存"); renderPanel(); }
+        catch (err) { msg(`✗ ${err.message}`); }
+      }
+    });
+    draw(); document.body.appendChild(dlg);
   }
   function renderComposePanel(n) {
     const ups = composeClips(n), p = n.params;
@@ -257,12 +345,16 @@
           <span class="cmp-t"><b>${esc(u.title)}</b><small>${ok ? `<span data-dur="${i}">—</span>` : "尚未生成（會略過）"}</small></span>
           <label class="cmp-trim" title="剪掉開頭秒數">頭 <input type="number" min="0" step="0.1" value="${c.cut_in}" data-k="cut_in"></label>
           <label class="cmp-trim" title="剪掉結尾秒數">尾 <input type="number" min="0" step="0.1" value="${c.cut_out}" data-k="cut_out"></label>
+          <select class="cmp-orig" data-k="orig" title="影片原聲">${ORIG.map(([v, l]) => `<option value="${v}" ${c.orig === v ? "selected" : ""}>${l}</option>`).join("")}</select>
+          <button type="button" class="cmp-lbtn ${state.openLines.has(u.id) ? "on" : ""}" data-lines="${esc(u.id)}" title="台詞／口白">${svg(IC.audio, 13)}${c.lines.length || ""}</button>
           <label class="cmp-on" title="是否納入成片"><input type="checkbox" ${c.on ? "checked" : ""} data-k="on"></label>
           <button type="button" class="cmp-mv" data-mv="-1" ${i ? "" : "disabled"} title="上移">${svg(IC.up, 14)}</button>
           <button type="button" class="cmp-mv" data-mv="1" ${i < ups.length - 1 ? "" : "disabled"} title="下移">${svg(IC.down, 14)}</button>
-        </div>`; }).join("") : '<div class="muted" style="padding:14px 4px;font-size:12.5px">從影片節點右側的 + 拖一條線到這張卡片；也可以按上方工具列的「合成分鏡」自動連好全部分鏡。</div>'}</div>
+        </div>${state.openLines.has(u.id) ? linesEditor(c, i) : ""}`; }).join("") : '<div class="muted" style="padding:14px 4px;font-size:12.5px">從影片節點右側的 + 拖一條線到這張卡片；也可以按上方工具列的「合成分鏡」自動連好全部分鏡。</div>'}</div>
       <div class="cvp-bar">
         <button type="button" class="cvp-btn" id="cmp-trans">${svg(IC.layers, 14)}<span>${esc((TRANS.find((t) => t[0] === p.transition) || TRANS[0])[1])}${p.transition !== "cut" ? ` · ${p.tdur}s` : ""}</span>${svg(IC.chev, 12)}</button>
+        <button type="button" class="cvp-btn" id="cmp-voices" title="每個角色固定一個聲音（內建或克隆）">${svg(IC.audio, 14)}<span>角色聲音 · ${state.roles.length}</span></button>
+        <button type="button" class="cvp-btn" id="cmp-ai" title="AI 依劇本與場景：配音色、寫台詞／口白">${svg(IC.spark, 14)}<span>AI 配音</span></button>
         <span class="muted" style="font-size:11.5px" id="cmp-total"></span>
         <span style="flex:1"></span>
         <button type="button" class="cvp-go" id="cvp-run" ${n.status === "running" || !ready.length ? "disabled" : ""}>${svg(IC.compose, 13)} ${n.status === "running" ? "合成中…" : "合成"}</button>
@@ -278,6 +370,37 @@
     panel.querySelectorAll(".cmp-th video").forEach((v) => {
       const i = +v.closest(".cmp-row").dataset.i;
       v.addEventListener("loadedmetadata", () => { durs[i] = v.duration; const el = panel.querySelector(`[data-dur="${i}"]`); if (el) el.textContent = `${v.duration.toFixed(1)}s`; total(); });
+    });
+    panel.querySelectorAll(".cmp-row select.cmp-orig").forEach((sel) => sel.addEventListener("change", () => {
+      p.clips[+sel.closest(".cmp-row").dataset.i].orig = sel.value; save();
+    }));
+    panel.querySelectorAll("[data-lines]").forEach((b) => b.addEventListener("click", () => {
+      const id = b.dataset.lines; state.openLines.has(id) ? state.openLines.delete(id) : state.openLines.add(id); renderPanel();
+    }));
+    panel.querySelectorAll(".cmp-lines").forEach((box) => {
+      const c = p.clips[+box.dataset.i];
+      box.addEventListener("change", (e) => {
+        const row = e.target.closest("[data-li]"); if (!row) return;
+        const ln = c.lines[+row.dataset.li]; ln[e.target.dataset.f] = e.target.value; save();
+      });
+      box.addEventListener("click", (e) => {
+        const b = e.target.closest("button"); if (!b) return;
+        if (b.dataset.act === "add") c.lines.push({ role: (state.roles[1] || state.roles[0] || { id: "narrator" }).id, text: "" });
+        if (b.dataset.act === "del") c.lines.splice(+b.closest("[data-li]").dataset.li, 1);
+        save(); renderPanel();
+      });
+    });
+    $("#cmp-voices").addEventListener("click", () => openVoices());
+    $("#cmp-ai").addEventListener("click", async (e) => {
+      const b = e.currentTarget; b.disabled = true; b.querySelector("span").textContent = "AI 分析劇本中…";
+      try {
+        await save(true);
+        const r = await api(`/api/projects/${state.pid}/canvas/${n.id}/audio-plan`, { method: "POST", body: "{}" });
+        state.roles = r.roles; n.params.clips = r.node.params.clips;
+        n.params.clips.forEach((c) => { if (c.lines && c.lines.length) state.openLines.add(c.id); });
+        toast(`已配置 ${r.roles.length} 個角色聲音、${n.params.clips.reduce((k, c) => k + (c.lines || []).length, 0)} 句台詞`);
+        renderPanel();
+      } catch (err) { toast(err.message, true); b.disabled = false; b.querySelector("span").textContent = "AI 配音"; }
     });
     panel.querySelectorAll(".cmp-row input").forEach((inp) => inp.addEventListener("change", () => {
       const c = p.clips[+inp.closest(".cmp-row").dataset.i];
@@ -327,7 +450,7 @@
         return `<div class="pop-group">${scope === "cloud" ? "雲端" : "地端"}</div>` + items.map((x) => `
           <button type="button" data-v="${esc(x.v)}" class="${x.v === mv ? "on" : ""}">${svg(IC[n.kind], 15)}
             <span class="pm-name">${esc(x.id)}<small>${esc(x.p.name)}</small></span>
-            <em class="chip ${x.m.status === "ok" ? "ok" : x.m.status === "quota" ? "warn" : ""}">${x.m.status === "ok" ? "已實測" : x.m.status === "quota" ? "額度" : "未實測"}</em></button>`).join("");
+            <em class="chip ${x.m.status === "ok" ? "ok" : x.m.status === "quota" ? "warn" : x.m.status === "builtin" ? "use" : ""}">${x.m.status === "ok" ? "已實測" : x.m.status === "quota" ? "額度" : x.m.status === "builtin" ? "內建" : "未實測"}</em></button>`).join("");
       }).join("");
       openPop(e.currentTarget, html, (v) => { n.model = v; closePop(); renderPanel(); save(); });
     });
@@ -350,15 +473,16 @@
     }
     if (n.kind === "video") {
       html += `<div class="pop-title">時長 <span class="muted" id="dur-v">${p.duration || 5}s</span></div>
-        <input type="range" min="4" max="10" step="1" value="${p.duration || 5}" id="dur-r" class="range">
-        <div class="pop-title">解析度</div><div class="seg">${["768P", "1080P"].map((r) => `<button type="button" data-v="res:${r}" class="${(p.resolution || "768P") === r ? "on" : ""}">${r}</button>`).join("")}</div>`;
+        <input type="range" min="2" max="30" step="1" value="${p.duration || 5}" id="dur-r" class="range">
+        <div class="pop-title">解析度</div><div class="seg">${["768P", "1080P", "2K", "4K"].map((r) => `<button type="button" data-v="res:${r}" class="${(p.resolution || "768P") === r ? "on" : ""}">${r}</button>`).join("")}</div>
+        <div class="pop-title">影片聲音 <span class="muted" style="font-size:11px">關閉＝只出畫面，聲音統一由合成配音</span></div><div class="seg">${[["on", "模型生成聲音"], ["off", "不生成聲音"]].map(([v, l]) => `<button type="button" data-v="aud:${v}" class="${(p.audio === false ? "off" : "on") === v ? "on" : ""}">${l}</button>`).join("")}</div>`;
     }
     if (n.kind === "audio") {
       html += `<div class="pop-title">聲音</div>` + VOICES.map((v) => `<button type="button" data-v="voice:${v}" class="${(p.voice || VOICES[0]) === v ? "on" : ""}">${v}</button>`).join("");
     }
     openPop(anchor, `<div class="pop-params">${html}</div>`, (v) => {
       const [k, val] = v.split(/:(.+)/);
-      if (k === "ratio") p.ratio = val; if (k === "res") p.resolution = val; if (k === "voice") p.voice = val;
+      if (k === "ratio") p.ratio = val; if (k === "res") p.resolution = val; if (k === "voice") p.voice = val; if (k === "aud") p.audio = val === "on";
       save(); openParams(anchor, n); renderPanelBarOnly(n);
     });
     $("#dur-r")?.addEventListener("input", (e) => { p.duration = +e.target.value; $("#dur-v").textContent = `${p.duration}s`; renderPanelBarOnly(n); save(); });
@@ -553,6 +677,7 @@
     $("#cv-project").innerHTML = projects.map((p) => `<option value="${esc(p.id)}" ${p.id === pid ? "selected" : ""}>${esc(p.title)}</option>`).join("");
     const { canvas } = await api(`/api/projects/${pid}/canvas`);
     state.canvas = canvas;
+    await loadRoles();
     const fresh = canvas.viewport.x === 0 && canvas.viewport.y === 0;
     renderAll(); setSave("已載入");
     if (fresh) fit();

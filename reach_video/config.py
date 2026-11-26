@@ -86,6 +86,7 @@ PROVIDERS: dict[str, dict] = {
         "scope": "local",
         "name": "地端 Wan2.2（192.168.0.219）",
         "base_url": env("REACH_WAN_BASE", "http://192.168.0.219:35331"),
+        "base_env": "REACH_WAN_BASE",
         "kind": "local-wan",
         "key_env": "REACH_WAN_KEY",
         "catalog_note": "Wan2.2 TI2V-5B / 24fps / 20 steps / lazy load；同步生成（5s 約 2–4 分鐘）。需 GPU 空閒。",
@@ -97,12 +98,24 @@ PROVIDERS: dict[str, dict] = {
         "scope": "local",
         "name": "地端 LTXV 2B（192.168.0.219）",
         "base_url": env("REACH_LTX_BASE", "http://192.168.0.219:35332"),
+        "base_env": "REACH_LTX_BASE",
         "kind": "local-ltx",
         "key_env": "REACH_LTX_KEY",
         "catalog_note": "LTXV 2B（diffusers）/ 24fps / 704x400 / lazy load；3 秒約 1–3 分鐘。需 GPU 空閒。",
         "models": [
             {"id": "ltxv-2b-0.9.x", "kind": "video", "status": "untested", "note": "服務部署中；參數量約為 Wan2.2 5B 的 2/5"},
         ],
+    },
+    "local-comfy": {
+        "scope": "local",
+        "name": "地端 ComfyUI（192.168.0.240）",
+        "base_url": env("COMFYUI_BASE_URL", "http://192.168.0.240:8188"),
+        "base_env": "COMFYUI_BASE_URL",
+        "kind": "comfyui",
+        "key_env": "COMFYUI_API_KEY",
+        "key_optional": True,
+        "catalog_note": "RTX PRO 6000 96GB；模型＝workflows/comfyui/*.json（用 scripts/comfy_import.py 匯入）。",
+        "models": [],
     },
     "volcano-plan": {
         "scope": "cloud",
@@ -161,7 +174,16 @@ STEP_MAP = {s["id"]: s for s in STEPS}
 ROUTING_PATH = DATA / "routing.json"
 
 
+def refresh_comfy() -> None:
+    """ComfyUI 的「模型」= 內建預設（240 檔案齊全才出現）＋ workflows/comfyui/*.json。"""
+    from . import comfyui
+
+    PROVIDERS["local-comfy"]["models"] = comfyui.models_for_config()
+
+
 def find_model(provider_id: str, model_id: str) -> dict | None:
+    if provider_id == "local-comfy":
+        refresh_comfy()
     p = PROVIDERS.get(provider_id)
     if not p:
         return None
@@ -213,11 +235,36 @@ def resolve(step: str, plan: dict | None = None, body: dict | None = None) -> tu
     return r["provider"], r["model"]
 
 
+def set_local_base(provider_id: str, url: str) -> str:
+    """地端服務網址寫回本機 .env（不經任何雲端），並即時生效。"""
+    import re as _re
+
+    p = PROVIDERS.get(provider_id) or {}
+    key = p.get("base_env")
+    if p.get("scope") != "local" or not key:
+        raise ValueError("只能修改地端 Provider")
+    url = url.strip().rstrip("/")
+    if not _re.match(r"^https?://[\w.\-]+(:\d{1,5})?(/[\w./\-]*)?$", url):
+        raise ValueError("網址格式錯誤，例：http://192.168.0.240:8188")
+    lines = ENV_PATH.read_text(encoding="utf-8").splitlines() if ENV_PATH.is_file() else []
+    for i, line in enumerate(lines):
+        if line.split("=", 1)[0].strip() == key:
+            lines[i] = f"{key}={url}"
+            break
+    else:
+        lines.append(f"{key}={url}")
+    ENV_PATH.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    os.environ[key] = url
+    p["base_url"] = url
+    return url
+
+
 def key_for(provider_id: str) -> str:
     return env(PROVIDERS[provider_id]["key_env"])
 
 
 def public_config() -> dict:
+    refresh_comfy()
     out = []
     for pid, p in PROVIDERS.items():
         key = key_for(pid)
@@ -226,10 +273,11 @@ def public_config() -> dict:
                 "id": pid,
                 "name": p["name"],
                 "base_url": p["base_url"],
+                "editable": bool(p.get("base_env")),
                 "extra": p.get("extra", {}),
                 "kind": p["kind"],
                 "scope": p.get("scope", "cloud"),
-                "key_state": "configured" if key else "missing",
+                "key_state": "configured" if key else ("optional" if p.get("key_optional") else "missing"),
                 "key_mask": mask(key),
                 "models": p["models"],
             }

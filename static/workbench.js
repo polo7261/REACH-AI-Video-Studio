@@ -185,28 +185,22 @@
     const blob = new Blob([`${s.script || ""}\n\n---\n\n# 分鏡表\n\n${shots}\n`], { type: "text/markdown" });
     const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `${s.title || "skill"}-劇本分鏡.md`; a.click(); URL.revokeObjectURL(a.href);
   };
-  $("#wb-canvas").onclick = async () => {
+  async function toProject(mode) {
     const s = st.ss, shots = (s && s.shots) || [];
     if (!shots.length) { toast("還沒有分鏡表", true); return; }
     try {
-      const { canvas } = await api(`/api/projects/${st.pid}/canvas`);
-      let next = Math.max(0, ...canvas.nodes.map((n) => +n.id.slice(1)));
-      const y0 = canvas.nodes.length ? Math.max(...canvas.nodes.map((n) => n.y)) + 360 : 0;
-      const vm = (s.models && s.models.video) || "", im = (s.models && s.models.image) || "";
-      shots.forEach((x, i) => {
-        const y = y0 + i * 300, t = `分鏡 ${i + 1}`;
-        const img = { id: `N${++next}`, kind: "image", title: `${t}・畫面`, x: 0, y, prompt: x.prompt || x.desc, model: im, mode: "t2i", params: { ratio: "16:9" }, output: null, status: "idle" };
-        const vid = { id: `N${++next}`, kind: "video", title: `${t}・${(x.title || "影片").slice(0, 20)}`, x: 460, y,
-          prompt: [x.motion, x.prompt || x.desc].filter(Boolean).join("\n"), model: vm, mode: /\|MiniMax-H3/.test(vm) ? "i2v" : "t2v",
-          params: { ratio: "16:9", duration: Math.max(4, Math.min(10, +x.seconds || 5)), resolution: "768P" }, output: null, status: "idle" };
-        canvas.nodes.push(img, vid); canvas.edges.push({ from: img.id, to: vid.id });
-      });
-      await api(`/api/projects/${st.pid}/canvas`, { method: "PUT", body: JSON.stringify(canvas) });
+      const r = await api(`/api/projects/${st.pid}/workbench/${st.sid}/to-project`, { method: "POST", body: JSON.stringify({ mode }) });
+      if (r.created) store.set("reach.wb.last", { pid: r.pid, sid: r.sid });
       const t = document.createElement("div"); t.className = "toast";
-      t.innerHTML = `已建立 ${shots.length} 組「圖片 → 影片」節點　<a href="/canvas?pid=${encodeURIComponent(st.pid)}" style="color:inherit;text-decoration:underline">開啟畫布 →</a>`;
-      document.body.appendChild(t); setTimeout(() => t.remove(), 7000);
+      t.innerHTML = (r.created ? `已建立專案「${esc(r.title)}」：${r.shots} 個分鏡（專案分鏡表＋畫布）` : `已加入 ${r.shots} 組「圖片 → 影片」節點`)
+        + `　<a href="/canvas?pid=${encodeURIComponent(r.pid)}" style="color:inherit;text-decoration:underline">開啟畫布 →</a>`
+        + (r.created ? `　<a href="/studio?pid=${encodeURIComponent(r.pid)}" style="color:inherit;text-decoration:underline">專案工作室 →</a>` : "");
+      document.body.appendChild(t); setTimeout(() => t.remove(), 9000);
+      if (r.created) setTimeout(() => { location.href = `/workbench?pid=${encodeURIComponent(r.pid)}&sid=${encodeURIComponent(r.sid)}`; }, 1500);
     } catch (e) { toast(e.message, true); }
-  };
+  }
+  $("#wb-canvas").onclick = () => toProject("new");
+  $("#wb-canvas-here").onclick = () => toProject("current");
   $("#wb-edit").onclick = () => { st.edit = !st.edit; renderDoc(); };
   document.querySelectorAll("#wb-tabs button").forEach((b) => b.onclick = () => setTab(b.dataset.tab));
 
