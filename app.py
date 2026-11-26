@@ -15,7 +15,7 @@ import time
 import uuid
 from pathlib import Path
 
-from flask import Flask, abort, jsonify, render_template, request, send_from_directory
+from flask import Flask, abort, jsonify, redirect, render_template, request, send_from_directory
 
 from reach_video import pipeline, providers, voices
 from reach_video.config import DATA, PROJECTS, load_routing, public_config, resolve, save_routing, valid_choice
@@ -46,7 +46,25 @@ def _asset_helper():
         f = ROOT / "static" / name
         v = int(f.stat().st_mtime) if f.is_file() else 0
         return f"/static/{name}?v={v}"
-    return {"asset": asset}
+    return {"asset": asset, "PLUGIN_GD": PLUGIN_GD}
+
+
+# Blender 插件 zip 的 Google Drive 直鏈（confirm=t 跳過掃毒確認頁，直接下載）
+PLUGIN_GD = {
+    "macos": "https://drive.usercontent.google.com/download?id=1qNsVSVBTvRM9SlTsY6bitWOb-1wIQqS2&export=download&confirm=t",
+    "windows": "https://drive.usercontent.google.com/download?id=1dkXuUodPfHkNSmsvPeQOJf9lX2lS14Sk&export=download&confirm=t",
+}
+
+
+@app.get("/download/blender")
+def download_blender():
+    """依訪客 User-Agent 直接導到對應平台的插件 zip；無法判別（如 Linux）→ /plugins 選擇頁。"""
+    ua = request.headers.get("User-Agent", "")
+    if "Windows" in ua:
+        return redirect(PLUGIN_GD["windows"])
+    if "Mac OS" in ua or "Macintosh" in ua:
+        return redirect(PLUGIN_GD["macos"])
+    return redirect("/plugins")
 
 
 # --------------------------------------------------------------------- pages

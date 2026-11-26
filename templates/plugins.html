@@ -16,13 +16,16 @@
 
     <section class="card">
       <div class="grid two" style="gap:14px">
-        <a class="btn" data-gd-dl="macos" href="/static/downloads/blender-macos.zip" download>
+        <a class="btn" href="{{ PLUGIN_GD.macos }}">
           {{ icon("plug") }} <span data-i18n="plugins.mac">macOS 版</span>
         </a>
-        <a class="btn" data-gd-dl="windows" href="/static/downloads/blender-windows-x64.zip" download>
+        <a class="btn" href="{{ PLUGIN_GD.windows }}">
           {{ icon("plug") }} <span data-i18n="plugins.win">Windows 版（x64）</span>
         </a>
       </div>
+      <p class="muted" style="margin-top:10px;font-size:13px" data-i18n="plugins.single">
+        每個壓縮包僅適用單一平台：macOS 版只裝 macOS、Windows 版只裝 Windows（x64），不可互裝。目前版本 0.1.26。
+      </p>
       <p class="muted" style="margin-top:14px;font-size:13px" data-i18n="plugins.nolinux">
         官方目前未提供 Linux 版。安裝方式請參考
         <a href="https://resonate.feishu.cn/wiki/GwRpwYzGSiESYtkLPBEcvQ4knHd" target="_blank" rel="noopener">安裝指南</a>。
