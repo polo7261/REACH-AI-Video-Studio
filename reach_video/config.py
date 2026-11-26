@@ -108,6 +108,18 @@ PROVIDERS: dict[str, dict] = {
             {"id": "ltxv-2b-0.9.x", "kind": "video", "status": "untested", "note": "服務部署中；參數量約為 Wan2.2 5B 的 2/5"},
         ],
     },
+    "local-bluemagpie": {
+        "scope": "local",
+        "name": "地端 BlueMagpie TTS（192.168.0.219）",
+        "base_url": env("REACH_BM_BASE", "http://192.168.0.219:35333"),
+        "base_env": "REACH_BM_BASE",
+        "kind": "local-bluemagpie",
+        "key_env": "REACH_BM_KEY",
+        "catalog_note": "OpenFormosa 台灣華語 TTS / 48kHz / 語者 hung_yi_lee・female_voice；一句幾秒（GPU）。需 GPU 空閒。",
+        "models": [
+            {"id": "bluemagpie-48k", "kind": "tts", "status": "untested", "note": "台灣華語＋中英混合；免逐字稿聲音複製架構中"},
+        ],
+    },
     "local-comfy": {
         "scope": "local",
         "name": "地端 ComfyUI（192.168.0.240）",

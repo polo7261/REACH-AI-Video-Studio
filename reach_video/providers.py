@@ -266,9 +266,36 @@ def download(url: str, timeout: int = 120) -> bytes:
 
 
 # ---------------------------------------------------------------- tts
+def _tts_bluemagpie(text: str, speaker: str = "hung_yi_lee", speed: float = 1.0) -> bytes:
+    """地端 BlueMagpie（deploy/server_bluemagpie.py）：POST /v1/tts 回 wav bytes。"""
+    base = _base("local-bluemagpie")
+    key = key_for("local-bluemagpie")
+    try:
+        r = requests.post(
+            base + "/v1/tts",
+            headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
+            json={"text": text, "speaker": speaker or "hung_yi_lee", "speed": float(speed)},
+            timeout=600,
+        )
+    except requests.RequestException as exc:
+        raise ProviderError("local-bluemagpie", f"連線失敗：{exc.__class__.__name__}") from exc
+    if r.status_code >= 400:
+        try:
+            msg = (r.json() or {}).get("error", "")
+        except ValueError:
+            msg = ""
+        raise ProviderError("local-bluemagpie", f"HTTP {r.status_code} {msg}".strip())
+    if not r.content:
+        raise ProviderError("local-bluemagpie", "TTS 無音訊資料")
+    return r.content
+
+
 @_mark_gen
 def tts(provider: str, model: str, text: str, voice: str = "male-qn-qingse", speed: float = 1.0,
         pitch: int = 0, vol: float = 1.0, emotion: str = "") -> bytes:
+    if provider == "local-bluemagpie":
+        # voice 參數對應 BlueMagpie 語者 id（hung_yi_lee／female_voice）
+        return _tts_bluemagpie(text, speaker=voice, speed=speed)
     if provider != "minimax":
         raise ProviderError(provider, "目前僅 MiniMax TTS 已打通")
     body = _post(
@@ -480,9 +507,10 @@ def probe(provider: str) -> dict:
                     "seconds": round(time.time() - started, 2)}
         except comfyui.ComfyError as exc:
             return {"ok": False, "model": "comfyui", "error": str(exc)[:200]}
-    if provider in ("local-wan", "local-ltx"):
+    if provider in ("local-wan", "local-ltx", "local-bluemagpie"):
         health = local_wan_health(provider)
-        return {"ok": health["ok"], "model": "ltxv-2b" if provider == "local-ltx" else "wan2.2-ti2v-5b",
+        names = {"local-ltx": "ltxv-2b", "local-wan": "wan2.2-ti2v-5b", "local-bluemagpie": "bluemagpie-48k"}
+        return {"ok": health["ok"], "model": names[provider],
                 "reply": json.dumps(health.get("state") or {}, ensure_ascii=False)[:120],
                 "error": health.get("error"), "seconds": round(time.time() - started, 2)}
     p = PROVIDERS.get(provider) or {}
