@@ -271,11 +271,11 @@ def api_providers_add():
 
 @app.delete("/api/providers/<pid>")
 def api_providers_delete(pid: str):
-    """刪除自訂供應商。"""
-    from reach_video.config import delete_custom_entry
+    """刪除供應商（自訂→移除 entry；內建→記入 hidden 清單，啟動時跳過）。"""
+    from reach_video.config import delete_provider
 
     try:
-        delete_custom_entry(pid)
+        delete_provider(pid)
     except ValueError as exc:
         return jsonify(ok=False, error=str(exc)), 400
     return jsonify(ok=True)

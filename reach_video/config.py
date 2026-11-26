@@ -245,6 +245,38 @@ STEPS: list[dict] = [
 ]
 STEP_MAP = {s["id"]: s for s in STEPS}
 ROUTING_PATH = DATA / "routing.json"
+HIDDEN_PATH = DATA / "hidden_providers.json"
+
+
+def _load_hidden() -> list[str]:
+    """被使用者刪除的內建 Provider id 清單（啟動時從 PROVIDERS 移除）。"""
+    if not HIDDEN_PATH.is_file():
+        return []
+    try:
+        items = json.loads(HIDDEN_PATH.read_text(encoding="utf-8"))
+        return [x for x in items if isinstance(x, str)] if isinstance(items, list) else []
+    except (OSError, ValueError):
+        return []
+
+
+def _save_hidden(items: list[str]) -> None:
+    HIDDEN_PATH.write_text(json.dumps(sorted(set(items))), encoding="utf-8")
+
+
+def delete_provider(provider_id: str) -> None:
+    """刪除供應商：自訂→移除 entry；內建→記入 hidden 清單（啟動時跳過）。
+    routing 指向它的步驟由 load_routing 自動回落（預設被刪則改用第一個可用廠商）。"""
+    if provider_id not in PROVIDERS:
+        raise ValueError("Provider 不存在")
+    if provider_id.startswith("custom-"):
+        delete_custom_entry(provider_id)
+        return
+    PROVIDERS.pop(provider_id, None)
+    _save_hidden([*_load_hidden(), provider_id])
+
+
+for _pid in _load_hidden():
+    PROVIDERS.pop(_pid, None)
 
 
 def refresh_comfy() -> None:
@@ -282,8 +314,16 @@ def load_routing() -> dict:
         c = saved.get(s["id"]) or {}
         if valid_choice(s["id"], c.get("provider", ""), c.get("model", "")):
             out[s["id"]] = {"provider": c["provider"], "model": c["model"]}
-        else:
-            out[s["id"]] = {"provider": s["default"]["provider"], "model": s["default"]["model"]}
+            continue
+        d = s["default"]
+        if d["provider"] in PROVIDERS and valid_choice(s["id"], d["provider"], d["model"]):
+            out[s["id"]] = {"provider": d["provider"], "model": d["model"]}
+            continue
+        # 預設供應商被刪除：改用第一個有此步驟類型模型的廠商
+        fb = next((pid for pid, pp in PROVIDERS.items()
+                   if any(m["kind"] == s["kind"] and m.get("status") != "license" for m in pp["models"])), "")
+        fm = next((m["id"] for m in PROVIDERS[fb]["models"] if m["kind"] == s["kind"]), "") if fb else ""
+        out[s["id"]] = {"provider": fb, "model": fm}
     return out
 
 

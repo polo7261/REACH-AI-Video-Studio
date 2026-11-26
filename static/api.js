@@ -127,7 +127,7 @@
           <div class="actions" style="margin:0;gap:6px">
             ${p.editable ? `<button class="ghost small" data-edit="${esc(p.id)}">${editing.has(p.id) ? "收起編輯" : "編輯"}</button>` : ""}
             <button class="ghost small" data-test="${esc(p.id)}">${p.scope === "local" ? "測試服務連線" : "測試文字連線"}</button>
-            ${p.custom ? `<button class="ghost small" data-del="${esc(p.id)}" style="color:var(--error,#c0392b)">刪除</button>` : ""}
+            <button class="ghost small" data-del="${esc(p.id)}" style="color:var(--error,#c0392b)">刪除</button>
           </div>
           ${p.editable && editing.has(p.id) ? `
           <div style="display:grid;gap:6px">
@@ -217,7 +217,8 @@
     document.querySelectorAll("[data-test]").forEach((btn) => btn.addEventListener("click", () => runTest(btn.dataset.test)));
     document.querySelectorAll("[data-del]").forEach((btn) => btn.addEventListener("click", async () => {
       const pid = btn.dataset.del;
-      if (!confirm(`確定刪除「${cfg.providers.find(p => p.id === pid)?.name ?? pid}」？其模型會從流程中移除（步驟自動回落預設）。`)) return;
+      const prov = cfg.providers.find((p) => p.id === pid);
+      if (!confirm(`確定刪除「${prov?.name ?? pid}」？\n使用它的步驟會自動改用其他可用廠商${prov?.custom ? "" : "；這是內建供應商，要還原需刪除 data/hidden_providers.json 後重啟"}。`)) return;
       const res = await (await fetch(`/api/providers/${pid}`, { method: "DELETE" })).json();
       if (res.ok) { toast("已刪除"); await reload(); } else toast(res.error || "刪除失敗", true);
     }));
