@@ -32,13 +32,18 @@
       </p>
       <p class="muted" style="margin-top:12px;font-size:13px;font-weight:600" data-i18n="plugins.auto">下載即自動安裝（一鍵腳本）</p>
       <p class="muted" style="font-size:13px;margin-top:6px" data-i18n="plugins.autoHint">
-        下載腳本後執行：它會自己找 zip 與 Blender，安裝、啟用並驗證。
+        下載腳本後執行：它會自己找 zip 與 Blender，安裝、啟用並驗證。macOS／Linux 也可直接一行安裝（單機版）：
       </p>
+      <pre class="mono" style="font-size:12px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow-x:auto;user-select:all">curl -fsSL https://raw.githubusercontent.com/polo7261/REACH-AI-Video-Studio/main/scripts/blender_plugin_install.sh | bash</pre>
       <ul style="font-size:13px;line-height:1.9">
         <li>macOS：<a href="/static/downloads/blender_plugin_install.sh" download>blender_plugin_install.sh</a>
           <span class="muted mono">→ bash blender_plugin_install.sh</span></li>
         <li>Windows：<a href="/static/downloads/blender_plugin_install.ps1" download>blender_plugin_install.ps1</a>
           <span class="muted mono">→ .\blender_plugin_install.ps1</span></li>
       </ul>
+      <p class="muted" style="font-size:12.5px;margin-top:10px">
+        版本說明：<b>單機版</b>＝個人使用，App 跑在你自己的電腦（127.0.0.1:35350）。
+        <b>Server 版</b>＝公司行號集中部署（另行提供，請聯絡我們取得 Server 安裝程式）。
+      </p>
     </section>
 {% endblock %}
