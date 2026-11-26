@@ -116,13 +116,28 @@
     menu.hidden = !open; btn.classList.toggle("open", open); btn.setAttribute("aria-expanded", String(open));
   });
 
-  // 插件下載：依訪客作業系統指向對應本機 zip；未知系統（如 Linux）落到 /plugins 選擇頁
+  // 插件下載：Blender 插件 zip 改走 Google Drive 連結。
+  // ★ 在此兩行貼上你的 Google Drive 連結即生效；未貼（仍是 PASTE_GD_LINK）時
+  //   自動退回包內本機 zip /static/downloads/。
+  const PLUGIN_DOWNLOADS = {
+    macos: "PASTE_GD_LINK_HERE",   // ← blender-macos.zip 的 Google Drive 連結
+    windows: "PASTE_GD_LINK_HERE", // ← blender-windows-x64.zip 的 Google Drive 連結
+  };
+  const isSet = (u) => u && !u.includes("PASTE_GD_LINK");
   const pluginDl = document.querySelector("[data-plugin-dl]");
   if (pluginDl) {
     const ua = navigator.userAgent;
-    pluginDl.href = /Mac/i.test(ua) ? "/static/downloads/blender-macos.zip"
-      : /Win/i.test(ua) ? "/static/downloads/blender-windows-x64.zip" : "/plugins";
+    pluginDl.href = /Mac/i.test(ua)
+      ? (isSet(PLUGIN_DOWNLOADS.macos) ? PLUGIN_DOWNLOADS.macos : "/static/downloads/blender-macos.zip")
+      : /Win/i.test(ua)
+        ? (isSet(PLUGIN_DOWNLOADS.windows) ? PLUGIN_DOWNLOADS.windows : "/static/downloads/blender-windows-x64.zip")
+        : "/plugins";
   }
+  // /plugins 頁按鈕：有 GD 連結就覆寫 href
+  document.querySelectorAll("[data-gd-dl]").forEach((a) => {
+    const u = PLUGIN_DOWNLOADS[a.dataset.gdDl];
+    if (isSet(u)) { a.href = u; a.removeAttribute("download"); }
+  });
 
   window.REACH = { t, get lang() { return lang; }, onLang(fn) { listeners.push(fn); } };
   applyLang();

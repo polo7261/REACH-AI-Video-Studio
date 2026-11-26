@@ -65,6 +65,8 @@ fi
 mkdir -p "$OUT_DIR"
 rm -f "$ZIP" "$TGZ"
 (cd "$TMP" && zip -qrX "$ZIP" "$NAME")
+# Linux 包不含 Blender 插件 zip（約 100MB）——下載改走 Google Drive 連結；安裝腳本保留
+rm -f "$STAGE/static/downloads/blender-macos.zip" "$STAGE/static/downloads/blender-windows-x64.zip"
 # tar.gz 給 Linux：不帶 macOS 擴充屬性／._ 檔，擁有者設 root（一般使用者解壓會歸自己）
 (cd "$TMP" && COPYFILE_DISABLE=1 tar --no-xattrs --no-mac-metadata \
    --uid 0 --gid 0 --uname root --gname root -czf "$TGZ" "$NAME")
