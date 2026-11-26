@@ -1,776 +1,178 @@
 [
  {
-  "name": "88API",
-  "category": "aggregator",
-  "url": "https://api.88api.ai",
-  "own_api": false
- },
- {
-  "name": "9527CODE",
-  "category": "aggregator",
-  "url": "https://9527.codes",
-  "own_api": false
- },
- {
-  "name": "A6API",
-  "category": "aggregator",
-  "url": "https://api.a6api.vip",
-  "own_api": false
- },
- {
-  "name": "AICodeWith",
-  "category": "aggregator",
-  "url": "https://api.aicodewith.ai",
-  "own_api": false
- },
- {
-  "name": "AIComing",
-  "category": "aggregator",
-  "url": "https://api.aicoming.top",
-  "own_api": false
- },
- {
-  "name": "AiHubMix",
-  "category": "aggregator",
-  "url": "https://aihubmix.com",
-  "own_api": false
- },
- {
-  "name": "AllTokens",
-  "category": "aggregator",
-  "url": "https://alltokens.cc",
-  "own_api": false
- },
- {
-  "name": "AllTokens SI",
-  "category": "aggregator",
-  "url": "https://alltokens.si",
-  "own_api": false
- },
- {
-  "name": "Amux",
-  "category": "aggregator",
-  "url": "https://api.amux.ai",
-  "own_api": false
- },
- {
-  "name": "AtlasCloud",
-  "category": "aggregator",
-  "url": "https://api.atlascloud.ai/v1",
-  "own_api": false
- },
- {
-  "name": "Baseten",
-  "category": "aggregator",
-  "url": "https://inference.baseten.co",
-  "own_api": false
- },
- {
-  "name": "BotCF",
-  "category": "aggregator",
-  "url": "https://botcf.com",
-  "own_api": false
- },
- {
-  "name": "BuyToken",
-  "category": "aggregator",
-  "url": "https://api.buytoken.work",
-  "own_api": false
- },
- {
-  "name": "CCSub",
-  "category": "aggregator",
-  "url": "https://www.ccsub.net",
-  "own_api": false
- },
- {
-  "name": "CherryIN",
-  "category": "aggregator",
-  "url": "https://open.cherryin.net",
-  "own_api": false
- },
- {
-  "name": "ClaudeAPI",
-  "category": "aggregator",
-  "url": "https://gw.apito.ai",
-  "own_api": false
- },
- {
-  "name": "Code0",
-  "category": "aggregator",
-  "url": "https://code0.ai",
-  "own_api": false
- },
- {
-  "name": "Compshare",
-  "category": "aggregator",
-  "url": "https://api.modelverse.cn",
-  "own_api": false
- },
- {
-  "name": "Compshare Coding Plan",
-  "category": "aggregator",
-  "url": "https://cp.compshare.cn",
-  "own_api": false
- },
- {
-  "name": "DMXAPI",
-  "category": "aggregator",
-  "url": "https://www.dmxapi.cn",
-  "own_api": false
- },
- {
-  "name": "DeepInfra",
-  "category": "aggregator",
-  "url": "https://api.deepinfra.com/anthropic",
-  "own_api": false
- },
- {
-  "name": "FennoAI",
-  "category": "aggregator",
-  "url": "https://api.fenno.ai",
-  "own_api": false
- },
- {
-  "name": "Genesis",
-  "category": "aggregator",
-  "url": "https://token.moi.matrixorigin.cn",
-  "own_api": false
- },
- {
-  "name": "GrooRoute Pro",
-  "category": "aggregator",
-  "url": "https://grooroute.pro",
-  "own_api": false
- },
- {
-  "name": "Groq",
-  "category": "aggregator",
-  "url": "https://api.groq.com/openai/v1",
-  "own_api": false
- },
- {
-  "name": "Hugging Face",
-  "category": "aggregator",
-  "url": "https://router.huggingface.co",
-  "own_api": false
- },
- {
-  "name": "IKunCode",
-  "category": "aggregator",
-  "url": "https://api.ikuncode.ai",
-  "own_api": false
- },
- {
-  "name": "JieKou AI",
-  "category": "aggregator",
-  "url": "https://api.jiekou.ai/anthropic",
-  "own_api": false
- },
- {
-  "name": "ModelScope",
-  "category": "aggregator",
-  "url": "https://api-inference.modelscope.cn",
-  "own_api": false
- },
- {
-  "name": "Modelflare",
-  "category": "aggregator",
-  "url": "https://modelflare.dev",
-  "own_api": false
- },
- {
-  "name": "Nebius Token Factory",
-  "category": "aggregator",
-  "url": "https://api.tokenfactory.nebius.com",
-  "own_api": false
- },
- {
-  "name": "NekoCode",
-  "category": "aggregator",
-  "url": "https://nekoapi.ai",
-  "own_api": false
- },
- {
-  "name": "Novita AI",
-  "category": "aggregator",
-  "url": "https://api.novita.ai/anthropic",
-  "own_api": false
- },
- {
-  "name": "Nvidia",
-  "category": "aggregator",
-  "url": "https://integrate.api.nvidia.com",
-  "own_api": false
- },
- {
-  "name": "OpenModel",
-  "category": "aggregator",
-  "url": "https://api.openmodel.ai",
-  "own_api": false
- },
- {
-  "name": "OpenRouter",
-  "category": "aggregator",
-  "url": "https://openrouter.ai/api",
-  "own_api": false
- },
- {
-  "name": "OspreyAI",
-  "category": "aggregator",
-  "url": "https://open.ospreyai.cn",
-  "own_api": false
- },
- {
-  "name": "PIPELLM",
-  "category": "aggregator",
-  "url": "https://cc-api.pipellm.ai/v1",
-  "own_api": false
- },
- {
-  "name": "PPIO",
-  "category": "aggregator",
-  "url": "https://api.ppio.com/anthropic",
-  "own_api": false
- },
- {
-  "name": "Qiniu",
-  "category": "aggregator",
-  "url": "https://api.qnaigc.com",
-  "own_api": false
- },
- {
-  "name": "RunAPI",
-  "category": "aggregator",
-  "url": "https://runapi.host",
-  "own_api": false
- },
- {
-  "name": "RunToken",
-  "category": "aggregator",
-  "url": "https://www.runtoken.ai",
-  "own_api": false
- },
- {
-  "name": "Shengsuanyun",
-  "category": "aggregator",
-  "url": "https://router.shengsuanyun.com/api",
-  "own_api": false
- },
- {
-  "name": "SiliconFlow",
-  "category": "aggregator",
-  "url": "https://api.siliconflow.cn",
-  "own_api": false
- },
- {
-  "name": "SiliconFlow en",
-  "category": "aggregator",
-  "url": "https://api.siliconflow.com",
-  "own_api": false
- },
- {
-  "name": "SoleAPI",
-  "category": "aggregator",
-  "url": "https://soleapi.com",
-  "own_api": false
- },
- {
-  "name": "SoruxGPT",
-  "category": "aggregator",
-  "url": "https://ai.soruxgpt.com",
-  "own_api": false
- },
- {
-  "name": "SoruxGPT Coding Plan",
-  "category": "aggregator",
-  "url": "https://app.soruxgpt.com/api/cc",
-  "own_api": false
- },
- {
-  "name": "StringAI",
-  "category": "aggregator",
-  "url": "https://www.string.ink",
-  "own_api": false
- },
- {
-  "name": "SubRouter",
-  "category": "aggregator",
-  "url": "https://subrouter.ai",
-  "own_api": false
- },
- {
-  "name": "TeamoRouter",
-  "category": "aggregator",
-  "url": "https://api.teamorouter.com",
-  "own_api": false
- },
- {
-  "name": "TheRouter",
-  "category": "aggregator",
-  "url": "https://api.therouter.ai",
-  "own_api": false
- },
- {
-  "name": "TokenFactory",
-  "category": "aggregator",
-  "url": "https://api.tokenfactory.cn/anthropic",
-  "own_api": false
- },
- {
-  "name": "TokenFlux",
-  "category": "aggregator",
-  "url": "https://tokenflux.com",
-  "own_api": false
- },
- {
-  "name": "TokenPlus",
-  "category": "aggregator",
-  "url": "https://api.tokenplus.cn/v1",
-  "own_api": false
- },
- {
-  "name": "Tu-zi",
-  "category": "aggregator",
-  "url": "https://api.tu-zi.com",
-  "own_api": false
- },
- {
-  "name": "V-API",
-  "category": "aggregator",
-  "url": "https://api.gpt.ge",
-  "own_api": false
- },
- {
-  "name": "Vercel AI Gateway",
-  "category": "aggregator",
-  "url": "https://ai-gateway.vercel.sh/claude-code",
-  "own_api": false
- },
- {
-  "name": "XycAi",
-  "category": "aggregator",
-  "url": "https://apicdn.xycai.us",
-  "own_api": false
- },
- {
-  "name": "YYLX",
-  "category": "aggregator",
-  "url": "https://app.yylx.io",
-  "own_api": false
- },
- {
-  "name": "hao.ai",
-  "category": "aggregator",
-  "url": "https://api.hao.ai/anthropic",
-  "own_api": false
- },
- {
-  "name": "模力方舟",
-  "category": "aggregator",
-  "url": "https://moark.com/anthropic",
-  "own_api": false
- },
- {
-  "name": "AWS Bedrock (AKSK)",
-  "category": "cloud_provider",
-  "url": "https://aws.amazon.com/bedrock/",
-  "own_api": false
- },
- {
-  "name": "AWS Bedrock (API Key)",
-  "category": "cloud_provider",
-  "url": "https://aws.amazon.com/bedrock/",
-  "own_api": false
- },
- {
-  "name": "Cloudflare AI Gateway",
-  "category": "cloud_provider",
-  "url": "https://developers.cloudflare.com/ai-gateway/",
-  "own_api": false
- },
- {
-  "name": "DigitalOcean",
-  "category": "cloud_provider",
-  "url": "https://inference.do-ai.run/v1、wire_api",
-  "own_api": false
- },
- {
-  "name": "Fireworks AI",
-  "category": "cloud_provider",
-  "url": "https://api.fireworks.ai/inference/v1、",
-  "own_api": false
- },
- {
-  "name": "Microsoft Foundry",
-  "category": "cloud_provider",
-  "url": "https://azure.microsoft.com/en-us/products/ai-foundry",
-  "own_api": false
- },
- {
-  "name": "Ollama Cloud",
-  "category": "cloud_provider",
-  "url": "https://ollama.com",
-  "own_api": false
- },
- {
-  "name": "SambaNova",
-  "category": "cloud_provider",
-  "url": "https://api.sambanova.ai/v1、",
-  "own_api": false
- },
- {
-  "name": "BaiLing",
-  "category": "cn_official",
-  "url": "https://api.ant-ling.com/anthropic",
-  "own_api": false
- },
- {
-  "name": "Baidu Qianfan Coding Plan",
-  "category": "cn_official",
-  "url": "https://qianfan.baidubce.com/anthropic/coding",
-  "own_api": false
- },
- {
-  "name": "BytePlus",
-  "category": "cn_official",
-  "url": "",
+  "name": "OpenAI",
+  "category": "模型廠商",
+  "url": "https://api.openai.com/v1",
+  "website": "",
+  "key_url": "",
+  "own_api": false
+ },
+ {
+  "name": "Google Gemini",
+  "category": "模型廠商",
+  "url": "https://generativelanguage.googleapis.com/v1beta/openai",
+  "website": "",
+  "key_url": "",
   "own_api": false
  },
  {
   "name": "DeepSeek",
-  "category": "cn_official",
+  "category": "模型廠商",
   "url": "https://api.deepseek.com/v1",
+  "website": "https://platform.deepseek.com",
+  "key_url": "",
   "own_api": false
  },
  {
   "name": "Kimi",
-  "category": "cn_official",
+  "category": "模型廠商",
   "url": "https://api.moonshot.cn/v1",
-  "own_api": false
- },
- {
-  "name": "Kimi For Coding",
-  "category": "cn_official",
-  "url": "https://api.kimi.com/coding/v1",
-  "own_api": false
- },
- {
-  "name": "Kimi For Coding Global",
-  "category": "cn_official",
-  "url": "https://api.kimi.ai/coding/",
-  "own_api": false
- },
- {
-  "name": "Kimi Global",
-  "category": "cn_official",
-  "url": "https://api.moonshot.ai/anthropic",
-  "own_api": false
- },
- {
-  "name": "Longcat",
-  "category": "cn_official",
-  "url": "https://api.longcat.chat/anthropic",
-  "own_api": false
- },
- {
-  "name": "Meta Model API",
-  "category": "cn_official",
-  "url": "https://api.meta.ai",
+  "website": "",
+  "key_url": "",
   "own_api": false
  },
  {
   "name": "MiniMax",
-  "category": "cn_official",
+  "category": "模型廠商",
   "url": "https://api.minimaxi.com/v1",
-  "own_api": false
- },
- {
-  "name": "MiniMax en",
-  "category": "cn_official",
-  "url": "https://api.minimax.io/anthropic",
-  "own_api": false
- },
- {
-  "name": "Mistral AI",
-  "category": "cn_official",
-  "url": "https://api.mistral.ai",
-  "own_api": false
- },
- {
-  "name": "QwenCloud",
-  "category": "cn_official",
-  "url": "https://home.qwencloud.com/?utm_content=g_20000002974",
-  "own_api": false
- },
- {
-  "name": "QwenCloud For Coding",
-  "category": "cn_official",
-  "url": "https://www.qwencloud.com",
-  "own_api": false
- },
- {
-  "name": "QwenCloud Token Plan",
-  "category": "cn_official",
-  "url": "",
-  "own_api": false
- },
- {
-  "name": "StepFun",
-  "category": "cn_official",
-  "url": "https://api.stepfun.com/step_plan",
-  "own_api": false
- },
- {
-  "name": "StepFun en",
-  "category": "cn_official",
-  "url": "https://api.stepfun.ai/step_plan",
-  "own_api": false
- },
- {
-  "name": "StreamLake",
-  "category": "cn_official",
-  "url": "https://www.streamlake.com",
-  "own_api": false
- },
- {
-  "name": "StreamLake en",
-  "category": "cn_official",
-  "url": "https://console.streamlake.ai",
-  "own_api": false
- },
- {
-  "name": "Volcengine Doubao",
-  "category": "cn_official",
-  "url": "https://ark.cn-beijing.volces.com/api/compatible",
-  "own_api": false
- },
- {
-  "name": "Xiaomi MiMo",
-  "category": "cn_official",
-  "url": "https://api.xiaomimimo.com/anthropic",
-  "own_api": false
- },
- {
-  "name": "Xiaomi MiMo Token Plan (China)",
-  "category": "cn_official",
-  "url": "https://token-plan-cn.xiaomimimo.com/anthropic",
+  "website": "https://platform.minimax.cn",
+  "key_url": "https://platform.minimax.cn/subscribe/token-plan",
   "own_api": false
  },
  {
   "name": "Zhipu GLM",
-  "category": "cn_official",
+  "category": "模型廠商",
   "url": "https://open.bigmodel.cn/api/paas/v4",
+  "website": "https://open.bigmodel.cn",
+  "key_url": "https://www.bigmodel.cn/claude-code",
   "own_api": false
  },
  {
-  "name": "Zhipu GLM en",
-  "category": "cn_official",
-  "url": "https://api.z.ai/api/anthropic",
-  "own_api": false
- },
- {
-  "name": "千问AI平台",
-  "category": "cn_official",
-  "url": "https://maas.qianwenaiapi.com/apps/anthropic",
-  "own_api": false
- },
- {
-  "name": "千问AI平台 Coding Plan",
-  "category": "cn_official",
-  "url": "https://bailian.console.aliyun.com",
-  "own_api": false
- },
- {
-  "name": "千问AI平台 Token Plan",
-  "category": "cn_official",
-  "url": "",
-  "own_api": false
- },
- {
-  "name": "火山 Agent Plan",
-  "category": "cn_official",
-  "url": "https://ark.cn-beijing.volces.com/api/plan",
-  "own_api": false
- },
- {
-  "name": "火山 Coding Plan",
-  "category": "cn_official",
-  "url": "https://ark.cn-beijing.volces.com/api/coding",
-  "own_api": false
- },
- {
-  "name": "LM Studio",
-  "category": "local",
-  "url": "http://localhost:1234",
-  "own_api": false
- },
- {
-  "name": "Ollama",
-  "category": "local",
-  "url": "http://localhost:11434",
-  "own_api": false
- },
- {
-  "name": "llama.cpp",
-  "category": "local",
-  "url": "http://127.0.0.1:9931",
-  "own_api": false
- },
- {
-  "name": "vLLM",
-  "category": "local",
-  "url": "http://localhost:8000",
-  "own_api": false
- },
- {
-  "name": "Claude Official",
-  "category": "official",
-  "url": "https://www.anthropic.com/claude-code",
-  "own_api": false
- },
- {
-  "name": "AICodeMirror",
-  "category": "third_party",
-  "url": "https://api.aicodemirror.ai/api/claudecode",
-  "own_api": false
- },
- {
-  "name": "AICoding",
-  "category": "third_party",
-  "url": "https://api.aicoding.inc",
-  "own_api": false
- },
- {
-  "name": "AIGoCode",
-  "category": "third_party",
-  "url": "https://api.aigocode.dev",
-  "own_api": false
- },
- {
-  "name": "APIKEY.FUN",
-  "category": "third_party",
-  "url": "https://api.apikey.fan/v1",
-  "own_api": false
- },
- {
-  "name": "APINebula",
-  "category": "third_party",
-  "url": "https://apinebula.ai/v1",
-  "own_api": false
- },
- {
-  "name": "ClaudeCN",
-  "category": "third_party",
-  "url": "https://claudecn.top",
-  "own_api": false
- },
- {
-  "name": "ClinePass",
-  "category": "third_party",
-  "url": "https://api.cline.bot/api/v1",
-  "own_api": false
- },
- {
-  "name": "Codex",
-  "category": "third_party",
-  "url": "https://chatgpt.com/backend-api/codex",
-  "own_api": false
- },
- {
-  "name": "Command Code",
-  "category": "third_party",
-  "url": "https://api.commandcode.ai/provider",
-  "own_api": false
- },
- {
-  "name": "CrazyRouter",
-  "category": "third_party",
-  "url": "https://cn.crazyrouter.com",
-  "own_api": false
- },
- {
-  "name": "Cubence",
-  "category": "third_party",
-  "url": "https://api.cubence.com",
-  "own_api": false
- },
- {
-  "name": "E-FlowCode",
-  "category": "third_party",
-  "url": "https://e-flowcode.cc/v1",
-  "own_api": false
- },
- {
-  "name": "Gemini Native",
-  "category": "third_party",
-  "url": "https://generativelanguage.googleapis.com",
-  "own_api": false
- },
- {
-  "name": "GitHub Copilot",
-  "category": "third_party",
-  "url": "https://api.githubcopilot.com",
-  "own_api": false
- },
- {
-  "name": "Micu",
-  "category": "third_party",
-  "url": "https://www.micuapi.ai",
-  "own_api": false
- },
- {
-  "name": "OpenCode Go",
-  "category": "third_party",
-  "url": "https://opencode.ai/zen/go",
-  "own_api": false
- },
- {
-  "name": "PackyCode",
-  "category": "third_party",
-  "url": "https://www.packyapi.ai",
-  "own_api": false
- },
- {
-  "name": "PatewayAI",
-  "category": "third_party",
-  "url": "https://api.pateway.ai",
-  "own_api": false
- },
- {
-  "name": "RelaxyCode",
-  "category": "third_party",
-  "url": "https://www.relaxycode.com",
-  "own_api": false
- },
- {
-  "name": "RightCode",
-  "category": "third_party",
-  "url": "https://www.rightapi.ai/claude",
-  "own_api": false
- },
- {
-  "name": "SSSAiCode",
-  "category": "third_party",
-  "url": "https://node-hk.sssaicodeapi.com/api",
-  "own_api": false
- },
- {
-  "name": "SudoCode.chat",
-  "category": "third_party",
-  "url": "https://api.sudocode.chat/v1",
-  "own_api": false
- },
- {
-  "name": "SudoCode.us",
-  "category": "third_party",
-  "url": "https://sudocode.us/v1",
+  "name": "StepFun",
+  "category": "模型廠商",
+  "url": "https://api.stepfun.com/v1",
+  "website": "https://platform.stepfun.com/step-plan",
+  "key_url": "https://platform.stepfun.com/interface-key",
   "own_api": false
  },
  {
   "name": "xAI (Grok)",
-  "category": "third_party",
+  "category": "模型廠商",
   "url": "https://api.x.ai/v1",
+  "website": "https://x.ai/grok",
+  "key_url": "https://platform.openai.com/api-keys",
+  "own_api": false
+ },
+ {
+  "name": "Mistral AI",
+  "category": "模型廠商",
+  "url": "https://api.mistral.ai/v1",
+  "website": "https://mistral.ai",
+  "key_url": "https://chat.mistral.ai/code/extensions",
+  "own_api": false
+ },
+ {
+  "name": "QwenCloud",
+  "category": "模型廠商",
+  "url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+  "website": "https://home.qwencloud.com/?utm_content=g_20000002974",
+  "key_url": "https://home.qwencloud.com/api-keys?utm_content=g_20000002975",
+  "own_api": false
+ },
+ {
+  "name": "Baidu Qianfan",
+  "category": "模型廠商",
+  "url": "https://qianfan.baidubce.com/v2",
+  "website": "",
+  "key_url": "",
+  "own_api": false
+ },
+ {
+  "name": "Tencent",
+  "category": "模型廠商",
+  "url": "https://api.hunyuan.cloud.tencent.com/v1",
+  "website": "",
+  "key_url": "",
+  "own_api": false
+ },
+ {
+  "name": "火山引擎",
+  "category": "模型廠商",
+  "url": "https://ark.cn-beijing.volces.com/api/v3",
+  "website": "",
+  "key_url": "",
+  "own_api": false
+ },
+ {
+  "name": "OpenRouter",
+  "category": "第三方平台",
+  "url": "https://openrouter.ai/api/v1",
+  "website": "https://openrouter.ai",
+  "key_url": "https://openrouter.ai/keys",
+  "own_api": false
+ },
+ {
+  "name": "SiliconFlow",
+  "category": "第三方平台",
+  "url": "https://api.siliconflow.cn/v1",
+  "website": "https://siliconflow.cn",
+  "key_url": "https://cloud.siliconflow.cn/i/YflgU2Ve",
+  "own_api": false
+ },
+ {
+  "name": "AiHubMix",
+  "category": "第三方平台",
+  "url": "https://aihubmix.com/v1",
+  "website": "https://aihubmix.com",
+  "key_url": "https://aihubmix.com",
+  "own_api": false
+ },
+ {
+  "name": "88API",
+  "category": "第三方平台",
+  "url": "https://api.88api.ai",
+  "website": "https://88api.ai",
+  "key_url": "https://88api.ai/sign-up?aff=HSGY",
+  "own_api": false
+ },
+ {
+  "name": "PackyCode",
+  "category": "第三方平台",
+  "url": "https://www.packyapi.ai",
+  "website": "https://www.packyapi.ai",
+  "key_url": "https://www.packyapi.ai/register?aff=cc-switch",
+  "own_api": false
+ },
+ {
+  "name": "Tu-zi",
+  "category": "第三方平台",
+  "url": "https://api.tu-zi.com",
+  "website": "https://api.tu-zi.com",
+  "key_url": "https://api.tu-zi.com/token",
+  "own_api": false
+ },
+ {
+  "name": "TokenFactory",
+  "category": "第三方平台",
+  "url": "https://api.tokenfactory.cn",
+  "website": "https://tokenfactory.cn",
+  "key_url": "https://console.tokenfactory.cn/login",
+  "own_api": false
+ },
+ {
+  "name": "DeepInfra",
+  "category": "雲端服務商",
+  "url": "https://api.deepinfra.com/v1/openai",
+  "website": "https://deepinfra.com",
+  "key_url": "https://deepinfra.com/dash/api_keys",
+  "own_api": false
+ },
+ {
+  "name": "Azure OpenAI",
+  "category": "雲端服務商",
+  "url": "",
+  "website": "",
+  "key_url": "",
   "own_api": false
  },
  {
