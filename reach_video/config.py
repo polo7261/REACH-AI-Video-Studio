@@ -117,6 +117,19 @@ PROVIDERS: dict[str, dict] = {
         "catalog_note": "RTX PRO 6000 96GB；模型＝workflows/comfyui/*.json（用 scripts/comfy_import.py 匯入）。",
         "models": [],
     },
+    "libtv": {
+        "scope": "cloud",
+        "name": "LibTV（哩布哩布雲端）",
+        "base_url": env("LIBTV_MCP_URL", "https://mcp.liblib.tv/mcp"),
+        "base_env": "LIBTV_MCP_URL",
+        "kind": "libtv",
+        "key_env": "LIBTV_ACCESS_TOKEN",
+        "catalog_note": "走 MCP streamable HTTP（OAuth 取 token）；Seedream 5.0 Pro 生圖、Seedance 2.5 生片（會員模型）。後端串接：架構中。",
+        "models": [
+            {"id": "seedream-5.0-pro", "kind": "image", "status": "untested", "note": "經 MCP generate_image；工具名稱以 live schema 為準"},
+            {"id": "star-video2.5", "kind": "video", "status": "quota", "note": "實測 COMMERCIAL_BLOCKED: member_only_model（需會員）"},
+        ],
+    },
     "volcano-plan": {
         "scope": "cloud",
         "name": "火山方舟 Agent Plan",

@@ -18,6 +18,60 @@ from .config import PROVIDERS, key_for
 TIMEOUT = 120
 
 
+# ---------- LibTV（MCP streamable HTTP；架構中：工具名稱／參數以 live schema 為準） ----------
+
+def _libtv_rpc(session: "requests.Session", payload: dict, timeout: int) -> dict:
+    url = _base("libtv")
+    try:
+        r = session.post(url, json=payload, timeout=timeout)
+    except requests.RequestException as exc:
+        raise ProviderError("libtv", f"連線失敗：{exc.__class__.__name__}") from exc
+    if r.status_code >= 400:
+        raise ProviderError("libtv", _err_text(r), r.status_code)
+    if "text/event-stream" in r.headers.get("Content-Type", ""):
+        for line in r.text.splitlines():
+            if line.startswith("data:"):
+                try:
+                    body = json.loads(line[5:].strip())
+                except ValueError:
+                    continue
+                if body.get("id") == payload.get("id"):
+                    return body
+        raise ProviderError("libtv", "SSE 回應中沒有對應 id 的結果")
+    try:
+        return r.json()
+    except ValueError as exc:
+        raise ProviderError("libtv", f"非 JSON 回應：{r.text[:120]}") from exc
+
+
+def _libtv_call(tool: str, arguments: dict, timeout: int = 600) -> dict:
+    """呼叫 LibTV MCP 工具；回傳 content[0].text 的 JSON（非 JSON 時包成 {text, raw}）。"""
+    token = key_for("libtv")
+    if not token:
+        raise ProviderError("libtv", "缺少 LIBTV_ACCESS_TOKEN（由 LibTV OAuth 取得；後端串接：架構中）")
+    session = requests.Session()
+    session.headers.update({**_headers("libtv"), "Accept": "application/json, text/event-stream"})
+    init = _libtv_rpc(session, {
+        "jsonrpc": "2.0", "id": 1, "method": "initialize",
+        "params": {"protocolVersion": "2025-03-26", "capabilities": {},
+                   "clientInfo": {"name": "reach-video", "version": "1.0"}},
+    }, timeout=60)
+    if "error" in init:
+        raise ProviderError("libtv", f"initialize 失敗：{str(init['error'])[:160]}")
+    call = _libtv_rpc(session, {
+        "jsonrpc": "2.0", "id": 2, "method": "tools/call",
+        "params": {"name": tool, "arguments": arguments},
+    }, timeout=timeout)
+    if "error" in call:
+        raise ProviderError("libtv", f"{tool} 失敗：{str(call['error'])[:200]}")
+    content = ((call.get("result") or {}).get("content") or [{}])[0]
+    text = content.get("text") or ""
+    try:
+        return json.loads(text)
+    except ValueError:
+        return {"text": text, "raw": call.get("result")}
+
+
 class ProviderError(RuntimeError):
     def __init__(self, provider: str, message: str, code: Any = None):
         super().__init__(f"[{provider}] {message}")
@@ -160,6 +214,14 @@ def image(provider: str, model: str, prompt: str, size: str = "1024x1024",
             return {"b64": data["image_base64"], "raw": body}
         raise ProviderError(provider, f"圖片回應格式未知：{str(body)[:160]}")
 
+    if provider == "libtv":
+        res = _libtv_call("generate_image", {"prompt": prompt, "size": size, "model": model})
+        if res.get("url"):
+            return {"url": res["url"], "raw": res}
+        if res.get("b64") or res.get("image_base64"):
+            return {"b64": res.get("b64") or res.get("image_base64"), "raw": res}
+        raise ProviderError("libtv", f"圖片回應格式未知：{str(res)[:160]}")
+
     payload = {"model": model, "prompt": prompt, "n": 1, "size": size, "response_format": "url"}
     if provider in ("volcano", "volcano-plan"):
         payload["watermark"] = False
@@ -228,6 +290,14 @@ def video_create(provider: str, model: str, prompt: str, duration: int = 6,
         resolution = "1080P"  # MiniMax 最高 1080P
     if provider == "local-comfy":
         return _comfy(comfyui.video_create, model, prompt, duration, resolution, ratio, first_frame_data_uri)
+    if provider == "libtv":
+        res = _libtv_call("generate_video", {"prompt": prompt, "duration": int(duration),
+                                             "ratio": ratio, "resolution": resolution, "count": 1}, timeout=900)
+        task = res.get("task_id") or res.get("taskId") or res.get("nodeId") or res.get("node_id") or res.get("id")
+        if not task:
+            raise ProviderError("libtv", f"無 task_id／node id：{str(res)[:200]}")
+        return {"task_id": str(task), "raw": res, "api": "mcp"}
+
     if provider == "minimax" and str(model).startswith("MiniMax-H3"):
         content = [{"type": "text", "text": prompt}]
         if first_frame_data_uri:
@@ -291,6 +361,18 @@ def video_create(provider: str, model: str, prompt: str, duration: int = 6,
 
 def video_poll(provider: str, task_id: str, model: str | None = None) -> dict:
     """回傳 {state: queued|running|succeeded|failed, url?, message?}。"""
+    if provider == "libtv":
+        res = _libtv_call("read_node", {"nodeId": task_id}, timeout=120)
+        status = str(res.get("status") or res.get("state") or "").lower()
+        if status in ("succeeded", "success", "done"):
+            url = res.get("url") or res.get("video_url") or ((res.get("content") or {}).get("url"))
+            if not url:
+                return {"state": "failed", "message": "成功但沒有 URL"}
+            return {"state": "succeeded", "url": url, "raw": res}
+        if status in ("failed", "cancelled", "canceled"):
+            return {"state": "failed", "message": str(res.get("error") or res)[:200]}
+        return {"state": "running" if status else "queued", "raw": res}
+
     if provider == "local-comfy":
         return _comfy(comfyui.poll, task_id, "video")
     if provider == "minimax" and str(model or "").startswith("MiniMax-H3"):
