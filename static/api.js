@@ -248,6 +248,7 @@
     document.getElementById("providers").style.display = "none";
     document.getElementById("tabs").style.display = "none";
     addView.style.display = "";
+    addView.style.marginTop = "22px";
     renderPicker();
   }
   function closeAdd() {
