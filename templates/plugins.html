@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% set active = "plugins" %}
+{% block title %}Blender 插件下載{% endblock %}
+{% block content %}
+    <h1 data-i18n="plugins.title">Blender 插件下載</h1>
+    <div class="sub" data-i18n="plugins.sub">
+      在 Blender 內完成白模影片，一鍵上傳到 LibTV 生成成片。選擇你的作業系統版本（目前 0.1.26）。
+    </div>
+
+    <section class="card">
+      <div class="grid two" style="gap:14px">
+        <a class="btn" href="/static/downloads/blender-macos.zip" download>
+          {{ icon("plug") }} <span data-i18n="plugins.mac">macOS 版</span>
+        </a>
+        <a class="btn" href="/static/downloads/blender-windows-x64.zip" download>
+          {{ icon("plug") }} <span data-i18n="plugins.win">Windows 版（x64）</span>
+        </a>
+      </div>
+      <p class="muted" style="margin-top:14px;font-size:13px" data-i18n="plugins.nolinux">
+        官方目前未提供 Linux 版。安裝方式請參考
+        <a href="https://resonate.feishu.cn/wiki/GwRpwYzGSiESYtkLPBEcvQ4knHd" target="_blank" rel="noopener">安裝指南</a>。
+      </p>
+      <details style="margin-top:12px">
+        <summary class="muted" style="cursor:pointer;font-size:13px" data-i18n="plugins.auto">下載即自動安裝（一鍵腳本）</summary>
+        <p class="muted" style="font-size:13px;margin-top:8px" data-i18n="plugins.autoHint">
+          下載腳本後執行：它會自己找 zip 與 Blender，安裝、啟用並驗證。
+        </p>
+        <ul style="font-size:13px;line-height:1.9">
+          <li>macOS：<a href="/static/downloads/blender_plugin_install.sh" download>blender_plugin_install.sh</a>
+            <span class="muted mono">→ bash blender_plugin_install.sh</span></li>
+          <li>Windows：<a href="/static/downloads/blender_plugin_install.ps1" download>blender_plugin_install.ps1</a>
+            <span class="muted mono">→ .\blender_plugin_install.ps1</span></li>
+        </ul>
+      </details>
+    </section>
+{% endblock %}

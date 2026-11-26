@@ -80,6 +80,11 @@ def page_director():
     return render_template("director.html")
 
 
+@app.get("/plugins")
+def page_plugins():
+    return render_template("plugins.html")
+
+
 @app.get("/api-page")
 def page_api():
     return render_template("api.html")

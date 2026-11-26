@@ -5,6 +5,11 @@
       "nav.home": "首頁", "nav.projects": "專案", "nav.assets": "素材庫", "nav.skills": "Skill 庫", "nav.create": "創作",
       "nav.workbench": "Skill 工作台", "nav.director": "AI 導演", "nav.canvas": "無限畫布", "nav.timeline": "時間軸剪輯", "tag.soon": "即將推出",
       "nav.settings": "設定", "nav.api": "API 與網址", "nav.docs": "技術文件",
+      "nav.plugins": "插件", "nav.pluginBlender": "Blender 插件", "nav.pluginLibtv": "LibTV Plugin", "tag.external": "外部", "tag.download": "下載",
+      "plugins.title": "Blender 插件下載", "plugins.sub": "在 Blender 內完成白模影片，一鍵上傳到 LibTV 生成成片。選擇你的作業系統版本（目前 0.1.26）。",
+      "plugins.mac": "macOS 版", "plugins.win": "Windows 版（x64）",
+      "plugins.nolinux": "官方目前未提供 Linux 版。安裝方式請參考安裝指南。",
+      "plugins.auto": "下載即自動安裝（一鍵腳本）", "plugins.autoHint": "下載腳本後執行：它會自己找 zip 與 Blender，安裝、啟用並驗證。",
       "theme.toLight": "切換為亮色", "theme.toDark": "切換為暗色",
       "home.heroTitle": "一句話，開始一部片", "home.heroPh": "例：一名少女在雨夜的霓虹街道上追逐一枚飄走的紙鶴",
       "home.start": "開始創作", "home.tools": "創作工具", "home.models": "目前使用模型", "home.edit": "調整",
@@ -20,6 +25,11 @@
       "nav.home": "首页", "nav.projects": "项目", "nav.assets": "素材库", "nav.skills": "Skill 库", "nav.create": "创作",
       "nav.workbench": "Skill 工作台", "nav.director": "AI 导演", "nav.canvas": "无限画布", "nav.timeline": "时间轴剪辑", "tag.soon": "即将推出",
       "nav.settings": "设置", "nav.api": "API 与网址", "nav.docs": "技术文档",
+      "nav.plugins": "插件", "nav.pluginBlender": "Blender 插件", "nav.pluginLibtv": "LibTV Plugin", "tag.external": "外部", "tag.download": "下载",
+      "plugins.title": "Blender 插件下载", "plugins.sub": "在 Blender 内完成白模视频，一键上传到 LibTV 生成成片。选择你的操作系统版本（目前 0.1.26）。",
+      "plugins.mac": "macOS 版", "plugins.win": "Windows 版（x64）",
+      "plugins.nolinux": "官方目前未提供 Linux 版。安装方式请参考安装指南。",
+      "plugins.auto": "下载即自动安装（一键脚本）", "plugins.autoHint": "下载脚本后执行：它会自己找 zip 与 Blender，安装、启用并验证。",
       "theme.toLight": "切换为亮色", "theme.toDark": "切换为暗色",
       "home.heroTitle": "一句话，开始一部片", "home.heroPh": "例：一名少女在雨夜的霓虹街道上追逐一枚飘走的纸鹤",
       "home.start": "开始创作", "home.tools": "创作工具", "home.models": "当前使用模型", "home.edit": "调整",
@@ -35,6 +45,11 @@
       "nav.home": "Home", "nav.projects": "Projects", "nav.assets": "Assets", "nav.skills": "Skills", "nav.create": "Create",
       "nav.workbench": "Skill Workbench", "nav.director": "AI Director", "nav.canvas": "Canvas", "nav.timeline": "Timeline", "tag.soon": "Soon",
       "nav.settings": "Settings", "nav.api": "APIs & Endpoints", "nav.docs": "Docs",
+      "nav.plugins": "Plugins", "nav.pluginBlender": "Blender Plugin", "nav.pluginLibtv": "LibTV Plugin", "tag.external": "External", "tag.download": "Download",
+      "plugins.title": "Blender Plugin Download", "plugins.sub": "Finish white-model videos in Blender, then send them to LibTV in one click. Pick your OS build (currently 0.1.26).",
+      "plugins.mac": "macOS", "plugins.win": "Windows (x64)",
+      "plugins.nolinux": "No official Linux build yet. See the install guide for setup.",
+      "plugins.auto": "Auto-install after download (one-click script)", "plugins.autoHint": "Run the script after downloading: it locates the zip and Blender itself, installs, enables and verifies.",
       "theme.toLight": "Switch to light", "theme.toDark": "Switch to dark",
       "home.heroTitle": "One sentence. One film.", "home.heroPh": "e.g. A girl chases a drifting paper crane down a neon street on a rainy night",
       "home.start": "Create", "home.tools": "Tools", "home.models": "Models in use", "home.edit": "Edit",
@@ -95,6 +110,19 @@
     const open = menu.hidden;
     menu.hidden = !open; btn.classList.toggle("open", open); btn.setAttribute("aria-expanded", String(open));
   });
+  document.getElementById("plugins-toggle")?.addEventListener("click", (e) => {
+    const btn = e.currentTarget, menu = document.getElementById("plugins-menu");
+    const open = menu.hidden;
+    menu.hidden = !open; btn.classList.toggle("open", open); btn.setAttribute("aria-expanded", String(open));
+  });
+
+  // 插件下載：依訪客作業系統指向對應本機 zip；未知系統（如 Linux）落到 /plugins 選擇頁
+  const pluginDl = document.querySelector("[data-plugin-dl]");
+  if (pluginDl) {
+    const ua = navigator.userAgent;
+    pluginDl.href = /Mac/i.test(ua) ? "/static/downloads/blender-macos.zip"
+      : /Win/i.test(ua) ? "/static/downloads/blender-windows-x64.zip" : "/plugins";
+  }
 
   window.REACH = { t, get lang() { return lang; }, onLang(fn) { listeners.push(fn); } };
   applyLang();
