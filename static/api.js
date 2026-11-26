@@ -26,7 +26,9 @@
 
   // 大廠穩定供應商目錄（static/vendors.json：CC Switch 模板＋影音專用分類）
   const CAT_LABEL = { official: "帳號登入", cn_official: "模型廠商", third_party: "第三方平台",
-                      aggregator: "第三方平台", cloud_provider: "雲端服務商", local: "跨應用", av: "影音模型" };
+                      aggregator: "第三方平台", cloud_provider: "雲端服務商", local: "跨應用", av: "影音模型",
+                      "模型廠商": "模型廠商", "第三方平台": "第三方平台", "雲端服務商": "雲端服務商" };
+  const catOf = (v) => CAT_LABEL[v.category] || v.category || "其他";
   let VENDORS = null;
   fetch("/static/vendors.json").then((r) => r.json()).then((d) => { VENDORS = d; });
 
@@ -98,6 +100,7 @@
     document.getElementById("providers").innerHTML = list.map((p) => `
       <section class="card">
         <h3 class="prov-head"><span class="prov-ico ${p.scope}">${svg(ICON[p.scope] || ICON.cloud, 20)}</span>${esc(p.name)}</h3>
+        ${p.note ? `<div class="muted" style="font-size:11.5px;margin-top:-4px">${esc(p.note)}</div>` : ""}
         ${p.editable
           ? `<div class="actions" style="margin:0;gap:6px"><input class="mono" data-url="${esc(p.id)}" value="${esc(p.base_url)}" placeholder="服務網址" style="flex:1;font-size:12px">
              <button class="ghost small" data-save="${esc(p.id)}">儲存</button></div>
@@ -226,83 +229,140 @@
 
   fetch("/api/config").then((r) => r.json()).then((data) => { cfg = data; render(); });
 
-  // ---- 新增供應商 ----
+  // ---- 新增供應商（CC Switch 式：挑選頁 → 詳細表單頁）----
   const addBtn = document.createElement("button");
   addBtn.className = "ghost small"; addBtn.type = "button";
   addBtn.textContent = "＋ 新增供應商";
   document.getElementById("tabs").appendChild(addBtn);
 
-  addBtn.addEventListener("click", () => {
-    const vs = VENDORS || [];
-    const grouped = [];
+  const addView = document.getElementById("add-view");
+  let pick = { cat: "全部", q: "", v: null };
+  const domain = (u) => (u || "").replace(/^https?:\/\//, "").split("/")[0] || "手動填寫";
+
+  function openAdd() {
+    pick = { cat: "全部", q: "", v: null };
+    document.getElementById("providers").style.display = "none";
+    document.getElementById("tabs").style.display = "none";
+    addView.style.display = "";
+    renderPicker();
+  }
+  function closeAdd() {
+    addView.style.display = "none";
+    document.getElementById("providers").style.display = "";
+    document.getElementById("tabs").style.display = "";
+    location.hash = `#${tab}`;
+  }
+
+  function renderPicker() {
+    const vs = (VENDORS || []).filter((v) =>
+      (pick.cat === "全部" || (catOf(v)) === pick.cat) &&
+      (!pick.q || `${v.name} ${v.url} ${v.website || ""}`.toLowerCase().includes(pick.q.toLowerCase())));
+    const cats = ["全部", ...new Set((VENDORS || []).map((v) => catOf(v)))];
+    const count = (c) => (VENDORS || []).filter((v) => c === "全部" || (catOf(v)) === c).length;
+    const groups = [];
     for (const v of vs) {
-      const cat = CAT_LABEL[v.category] || "其他";
-      let g = grouped.find((x) => x.cat === cat);
-      if (!g) grouped.push(g = { cat, items: [] });
+      const c = catOf(v);
+      let g = groups.find((x) => x.cat === c);
+      if (!g) groups.push(g = { cat: c, items: [] });
       g.items.push(v);
     }
-    const vendorOpts = grouped.map((g) =>
-      `<optgroup label="${g.cat}">${g.items.map((v) =>
-        `<option value="${esc(v.url)}" data-name="${esc(v.name)}" data-cat="${esc(v.category)}" data-own="${v.own_api ? 1 : 0}">${esc(v.name)}</option>`).join("")}</optgroup>`).join("");
-    const defaultUrl = (vs.find((v) => v.name === "DeepSeek") ?? vs[0] ?? { url: "" }).url;
-    const d = document.createElement("div");
-    d.className = "vx-mask";
-    d.innerHTML = `<div class="vx" style="width:min(520px,94vw);padding:0 0 4px">
-      <div style="padding:16px 18px 4px"><h3 style="margin:0">新增供應商</h3>
-      <p class="muted" style="font-size:12px;margin:6px 0 0">目錄照 CC Switch 模板（含影音模型分類）。選大廠自動填網址；按「驗證並新增」時系統先驗連通、抓模型清單，存檔後自動測試連結。</p></div>
-      <div style="padding:8px 18px;display:grid;gap:10px">
-        <label class="muted" style="font-size:11.5px">供應商
-          <select id="ap-vendor" style="width:100%">
-            ${vendorOpts}
-            <option value="">自訂網址…</option>
-          </select></label>
-        <label class="muted" style="font-size:11.5px">顯示名稱（留空＝用供應商名）
-          <input id="ap-name" style="width:100%"></label>
-        <label class="muted" style="font-size:11.5px">請求位址
-          <input id="ap-url" class="mono" style="width:100%" value="${esc(defaultUrl)}"></label>
-        <label class="muted" style="font-size:11.5px">API 金鑰
-          <input id="ap-key" class="mono" type="password" autocomplete="off" style="width:100%"></label>
-        <label class="muted" style="font-size:11.5px">分類
-          <select id="ap-scope" style="width:100%"><option value="cloud">雲端</option><option value="local">地端</option></select></label>
-        <p class="muted mono" id="ap-out" style="font-size:11.5px;margin:0;white-space:pre-wrap"></p>
+    addView.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <h3 style="margin:0">新增供應商</h3>
+        <input id="pk-q" placeholder="搜尋名稱或網址，例如 kimi、智譜、openrouter" style="flex:1" value="${esc(pick.q)}">
+        <button class="ghost small" id="pk-back">返回</button>
       </div>
-      <div class="vx-foot"><button class="ghost small" id="ap-cancel">取消</button><button class="small" id="ap-ok">驗證並新增</button></div>
-    </div>`;
-    document.body.appendChild(d);
-    d.querySelector("#ap-vendor").addEventListener("change", (e) => {
-      const opt = e.target.selectedOptions[0];
-      if (e.target.value) {
-        d.querySelector("#ap-url").value = e.target.value;
-        if (!d.querySelector("#ap-name").value) d.querySelector("#ap-name").value = opt.dataset.name ?? "";
-      }
-      d.querySelector("#ap-out").textContent = opt.dataset.own === "1"
-        ? "⚠ 此廠商為自有 API（非 OpenAI 相容），後端適配：架構中；仍可先建卡片。"
-        : "";
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+        ${cats.map((c) => `<button class="chip ${pick.cat === c ? "use" : ""}" data-cat="${esc(c)}" type="button" style="cursor:pointer">${esc(c)} ${count(c)}</button>`).join("")}
+      </div>
+      <div class="grid three" id="pk-grid"></div>`;
+    addView.querySelector("#pk-grid").innerHTML = `
+      <section class="card" data-pick="__custom" style="cursor:pointer">
+        <h3 style="font-size:15px">自訂設定</h3>
+        <div class="muted" style="font-size:12px">手動填寫請求位址和 API Key</div>
+      </section>
+      ${groups.map((g) => `
+        <section class="card" style="grid-column:1/-1;background:none;border:none;padding:0;margin-top:6px">
+          <h3 class="muted" style="margin:0;font-size:13px">${esc(g.cat)}</h3></section>
+        ${g.items.map((v) => `
+        <section class="card" data-pick="${esc(v.url)}" style="cursor:pointer">
+          <h3 style="font-size:15px">${esc(v.name)}</h3>
+          <div class="muted mono" style="font-size:11.5px">${esc(domain(v.website || v.url))}</div>
+          ${v.own_api ? `<div style="margin-top:6px"><span class="chip warn">自有 API</span></div>` : ""}
+        </section>`).join("")}`).join("")}`;
+    const q = addView.querySelector("#pk-q");
+    q.addEventListener("input", () => {
+      pick.q = q.value;
+      const caret = q.selectionStart;
+      renderPicker();
+      const q2 = addView.querySelector("#pk-q");
+      q2.focus(); q2.setSelectionRange(caret, caret);
     });
-    d.querySelector("#ap-cancel").addEventListener("click", () => d.remove());
-    d.addEventListener("click", (e) => { if (e.target === d) d.remove(); });
-    d.querySelector("#ap-ok").addEventListener("click", async () => {
-      const out = d.querySelector("#ap-out");
+    addView.querySelector("#pk-back").addEventListener("click", closeAdd);
+    addView.querySelectorAll("[data-cat]").forEach((b) => b.addEventListener("click", () => { pick.cat = b.dataset.cat; renderPicker(); }));
+    addView.querySelectorAll("[data-pick]").forEach((c) => c.addEventListener("click", () => {
+      pick.v = c.dataset.pick === "__custom"
+        ? { name: "", url: "", website: "", key_url: "", own_api: false }
+        : (VENDORS || []).find((v) => v.url === c.dataset.pick);
+      renderDetail();
+    }));
+  }
+
+  function renderDetail() {
+    const v = pick.v || { name: "", url: "", website: "", key_url: "", own_api: false };
+    addView.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+        <button class="ghost small" id="dt-back" type="button">‹ 更換</button>
+        <h3 style="margin:0">${esc(v.name || "自訂設定")}</h3>
+        ${v.website ? `<a class="muted mono" style="font-size:11.5px" href="${esc(v.website)}" target="_blank" rel="noreferrer">${esc(domain(v.website))}</a>` : ""}
+      </div>
+      <section class="card" style="display:grid;gap:10px;max-width:640px">
+        <label class="muted" style="font-size:11.5px">名稱 *
+          <input id="dt-name" style="width:100%" value="${esc(v.name)}" placeholder="例如：公司專用帳號"></label>
+        <label class="muted" style="font-size:11.5px">備註
+          <input id="dt-note" style="width:100%" placeholder="選填"></label>
+        <label class="muted" style="font-size:11.5px">API Key *
+          <input id="dt-key" class="mono" type="password" autocomplete="off" style="width:100%" placeholder="只需要填這裡"></label>
+        ${v.key_url ? `<a class="muted" style="font-size:11.5px" href="${esc(v.key_url)}" target="_blank" rel="noreferrer">取得 API Key ↗</a>` : ""}
+        <label class="muted" style="font-size:11.5px">請求位址 *
+          <input id="dt-url" class="mono" style="width:100%" value="${esc(v.url)}" placeholder="https://api.example.com/v1"></label>
+        <p class="muted" style="font-size:11.5px;margin:0">填寫 OpenAI 相容端點位址，請勿以斜線結尾。按「驗證並新增」時系統先驗連通、抓模型清單，存檔後自動測試連結。</p>
+        ${v.own_api ? `<p class="chip warn">⚠ 自有 API（非 OpenAI 相容），後端適配：架構中；仍可先建卡片。</p>` : ""}
+        <label class="muted" style="font-size:11.5px">分類
+          <select id="dt-scope" style="width:100%"><option value="cloud">雲端</option><option value="local">地端</option></select></label>
+        <p class="muted mono" id="dt-out" style="font-size:11.5px;margin:0;white-space:pre-wrap"></p>
+        <div style="display:flex;gap:8px;justify-content:flex-end">
+          <button class="ghost small" id="dt-cancel" type="button">取消</button>
+          <button class="small" id="dt-ok" type="button">驗證並新增</button>
+        </div>
+      </section>`;
+    addView.querySelector("#dt-back").addEventListener("click", renderPicker);
+    addView.querySelector("#dt-cancel").addEventListener("click", closeAdd);
+    addView.querySelector("#dt-ok").addEventListener("click", async () => {
+      const out = addView.querySelector("#dt-out");
       const payload = {
-        name: d.querySelector("#ap-name").value,
-        base_url: d.querySelector("#ap-url").value,
-        api_key: d.querySelector("#ap-key").value,
-        scope: d.querySelector("#ap-scope").value,
+        name: addView.querySelector("#dt-name").value,
+        note: addView.querySelector("#dt-note").value,
+        base_url: addView.querySelector("#dt-url").value,
+        api_key: addView.querySelector("#dt-key").value,
+        scope: addView.querySelector("#dt-scope").value,
       };
       if (!payload.base_url.trim()) { out.textContent = "✗ 請填請求位址"; return; }
-      out.textContent = "驗證連通中…"; d.querySelector("#ap-ok").disabled = true;
+      out.textContent = "驗證連通中…"; addView.querySelector("#dt-ok").disabled = true;
       try {
         const res = await (await fetch("/api/providers", {
           method: "POST", headers: { "Content-Type": "application/json", "X-Requested-With": "fetch" },
           body: JSON.stringify(payload),
         })).json();
-        if (!res.ok) { out.textContent = `✗ ${res.error || "新增失敗"}`; d.querySelector("#ap-ok").disabled = false; return; }
-        d.remove();
+        if (!res.ok) { out.textContent = `✗ ${res.error || "新增失敗"}`; addView.querySelector("#dt-ok").disabled = false; return; }
+        closeAdd();
         tab = payload.scope; location.hash = `#${tab}`;
         cfg = await (await fetch("/api/config")).json(); render();
         if (res.probe?.ok) toast(`✓ 已新增；${res.probe.reply?.slice(0, 60) ?? "連線正常"}`);
         else toast(`已新增；但連線測試未過：${res.probe?.error?.slice(0, 60) ?? res.probe_err ?? "未知"}`, true);
-      } catch (err) { out.textContent = `✗ ${err.message}`; d.querySelector("#ap-ok").disabled = false; }
+      } catch (err) { out.textContent = `✗ ${err.message}`; addView.querySelector("#dt-ok").disabled = false; }
     });
-  });
+  }
+
+  addBtn.addEventListener("click", openAdd);
 })();

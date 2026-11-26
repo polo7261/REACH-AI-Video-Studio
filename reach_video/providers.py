@@ -532,7 +532,7 @@ def local_wan_health(provider: str = "local-wan") -> dict:
 
 
 # ---------------------------------------------------------------- 自訂 Provider
-def custom_add(name: str, base_url: str, api_key: str, scope: str = "cloud") -> dict:
+def custom_add(name: str, base_url: str, api_key: str, scope: str = "cloud", note: str = "") -> dict:
     """新增自訂 Provider：驗證連通（GET /models，失敗 fallback chat READY）→ 存 json＋.env。"""
     from reach_video.config import add_custom_entry, set_provider_config
 
@@ -552,7 +552,7 @@ def custom_add(name: str, base_url: str, api_key: str, scope: str = "cloud") -> 
             probe_err = f"GET /models → HTTP {r.status_code}"
     except requests.RequestException as exc:
         probe_err = f"連線失敗：{exc.__class__.__name__}"
-    pid = add_custom_entry(name, base, scope, models)
+    pid = add_custom_entry(name, base, scope, models, note=note)
     if api_key.strip():
         set_provider_config(pid, "", api_key)
     test = probe(pid)

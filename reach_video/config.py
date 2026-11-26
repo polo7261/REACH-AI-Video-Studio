@@ -202,6 +202,7 @@ def register_custom(it: dict) -> str:
         "kind": "openai-compatible",
         "key_env": f"REACH_CUSTOM_{it['id'].upper().replace('-', '_')}_KEY",
         "custom": True,
+        "note": it.get("note", ""),
         "models": it.get("models", []),
     }
     return pid
@@ -211,14 +212,14 @@ for _it in _load_custom():
     register_custom(_it)
 
 
-def add_custom_entry(name: str, base_url: str, scope: str, models: list[dict], cid: str = "") -> str:
+def add_custom_entry(name: str, base_url: str, scope: str, models: list[dict], cid: str = "", note: str = "") -> str:
     """新增自訂 Provider（網址存 json，金鑰另由 set_provider_config 寫 .env）。"""
     import uuid as _uuid
 
     cid = cid or _uuid.uuid4().hex[:8]
     _save_custom([*[_x for _x in _load_custom() if _x["id"] != cid],
-                  {"id": cid, "name": name, "base_url": base_url, "scope": scope, "models": models}])
-    return register_custom({"id": cid, "name": name, "base_url": base_url, "scope": scope, "models": models})
+                  {"id": cid, "name": name, "base_url": base_url, "scope": scope, "note": note, "models": models}])
+    return register_custom({"id": cid, "name": name, "base_url": base_url, "scope": scope, "note": note, "models": models})
 
 
 def delete_custom_entry(provider_id: str) -> None:
@@ -379,6 +380,7 @@ def public_config() -> dict:
                 "extra": p.get("extra", {}),
                 "kind": p["kind"],
                 "scope": p.get("scope", "cloud"),
+                "note": p.get("note", ""),
                 "key_state": "configured" if key else ("optional" if p.get("key_optional") else "missing"),
                 "key_mask": mask(key),
                 "models": p["models"],

@@ -262,7 +262,8 @@ def api_providers_add():
     body = request.get_json(silent=True) or {}
     try:
         out = providers.custom_add(str(body.get("name", "")), str(body.get("base_url", "")),
-                                   str(body.get("api_key", "")), str(body.get("scope", "cloud")))
+                                   str(body.get("api_key", "")), str(body.get("scope", "cloud")),
+                                   note=str(body.get("note", ""))[:120])
     except providers.ProviderError as exc:
         return jsonify(ok=False, error=str(exc)[:200]), 400
     return jsonify(ok=True, **out)
