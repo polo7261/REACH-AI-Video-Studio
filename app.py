@@ -46,13 +46,14 @@ def _asset_helper():
         f = ROOT / "static" / name
         v = int(f.stat().st_mtime) if f.is_file() else 0
         return f"/static/{name}?v={v}"
-    return {"asset": asset, "PLUGIN_GD": PLUGIN_GD}
+    return {"asset": asset, "PLUGIN_DL": PLUGIN_DL}
 
 
-# Blender 插件 zip 的 Google Drive 直鏈（confirm=t 跳過掃毒確認頁，直接下載）
-PLUGIN_GD = {
-    "macos": "https://drive.usercontent.google.com/download?id=1qNsVSVBTvRM9SlTsY6bitWOb-1wIQqS2&export=download&confirm=t",
-    "windows": "https://drive.usercontent.google.com/download?id=1dkXuUodPfHkNSmsvPeQOJf9lX2lS14Sk&export=download&confirm=t",
+# Blender 插件 zip 的下載直鏈（GitHub Release 資產；attachment header 直接觸發下載）
+# 注意：repo 目前是 private——匿名訪客需 repo 公開（或協作者已登入 GitHub）才下載得到。
+PLUGIN_DL = {
+    "macos": "https://github.com/polo7261/REACH-AI-Video-Studio/releases/download/plugins-v0.1.26/blender-macos.zip",
+    "windows": "https://github.com/polo7261/REACH-AI-Video-Studio/releases/download/plugins-v0.1.26/blender-windows-x64.zip",
 }
 
 
@@ -61,9 +62,9 @@ def download_blender():
     """依訪客 User-Agent 直接導到對應平台的插件 zip；無法判別（如 Linux）→ /plugins 選擇頁。"""
     ua = request.headers.get("User-Agent", "")
     if "Windows" in ua:
-        return redirect(PLUGIN_GD["windows"])
+        return redirect(PLUGIN_DL["windows"])
     if "Mac OS" in ua or "Macintosh" in ua:
-        return redirect(PLUGIN_GD["macos"])
+        return redirect(PLUGIN_DL["macos"])
     return redirect("/plugins")
 
 
