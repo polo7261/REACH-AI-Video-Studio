@@ -7,7 +7,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-VERSION="${1:-v0.3}"
+VERSION="${1:-v0.4}"
 NAME="REACH-AI-Video-Studio"
 OUT_DIR="$ROOT/dist"
 STAMP="${NAME}-${VERSION}-$(date +%Y%m%d)"
@@ -15,7 +15,7 @@ ZIP="$OUT_DIR/${STAMP}.zip"
 TGZ="$OUT_DIR/${STAMP}.tar.gz"
 
 # 白名單：只收原始碼與文件
-FILES=(app.py requirements.txt README.md INSTALL.md .env.example .gitignore
+FILES=(app.py reach_mcp.py requirements.txt README.md INSTALL.md .env.example .gitignore
        install.command start.command)
 DIRS=(reach_video deploy scripts docs static templates)
 
