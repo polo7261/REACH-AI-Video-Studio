@@ -21,7 +21,7 @@ Write-Host "▸ Blender：$bin"
 $verLine = (& $bin --version | Select-Object -First 1)
 if ($verLine -notmatch "^Blender (\d+\.\d+)") { Die "無法取得 Blender 版本" }
 $ver = $Matches[1]
-$addons = Join-Path $env:APPDATA "Blender Foundation\Blender\$ver\scripts\addons"
+$addons = $env:APPDATA | Join-Path -ChildPath "Blender Foundation" | Join-Path -ChildPath "Blender" | Join-Path -ChildPath $ver | Join-Path -ChildPath "scripts" | Join-Path -ChildPath "addons"
 Write-Host "▸ Blender $ver → $addons"
 
 # 3) 找 zip
@@ -34,7 +34,7 @@ if (-not $Zip) {
 if (-not $Zip -or -not (Test-Path $Zip)) { Die "找不到 blender-*.zip；請以 -Zip 傳入路徑" }
 
 # 4) 解包並找頂層資料夾
-$tmp = Join-Path $env:TEMP ("reach-blender-" + [guid]::NewGuid().ToString("N").Substring(0, 8))
+$tmp = Join-Path ($env:TEMP ?? "/tmp") ("reach-blender-" + [guid]::NewGuid().ToString("N").Substring(0, 8))
 Expand-Archive -Path $Zip -DestinationPath $tmp -Force
 $top = Get-ChildItem $tmp -Directory | Select-Object -First 1
 if (-not $top -or -not (Test-Path (Join-Path $top.FullName "__init__.py"))) {
