@@ -238,6 +238,10 @@
   const addView = document.getElementById("add-view");
   let pick = { cat: "全部", q: "", v: null };
   const domain = (u) => (u || "").replace(/^https?:\/\//, "").split("/")[0] || "手動填寫";
+  const logo = (u, size = 20) => {
+    const d = (u || "").replace(/^https?:\/\//, "").split("/")[0];
+    return d ? `<img src="https://icons.duckduckgo.com/ip3/${d}.ico" width="${size}" height="${size}" loading="lazy" alt="" style="border-radius:5px;vertical-align:-4px;flex:none">` : "";
+  };
 
   function openAdd() {
     pick = { cat: "全部", q: "", v: null };
@@ -273,12 +277,14 @@
         <button class="ghost small" id="pk-back">返回</button>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
-        ${cats.map((c) => `<button class="chip ${pick.cat === c ? "use" : ""}" data-cat="${esc(c)}" type="button" style="cursor:pointer">${esc(c)} ${count(c)}</button>`).join("")}
+        ${cats.map((c) => `<button data-cat="${esc(c)}" type="button" style="cursor:pointer;font-size:11.5px;padding:3px 12px;border-radius:999px;
+          border:1px solid ${pick.cat === c ? "var(--accent)" : "var(--line)"};
+          ${pick.cat === c ? "background:var(--tint-accent);color:var(--accent);font-weight:600" : "background:transparent;color:var(--muted)"}">${esc(c)} ${count(c)}</button>`).join("")}
       </div>
       <div class="grid three" id="pk-grid"></div>`;
     addView.querySelector("#pk-grid").innerHTML = `
       <section class="card" data-pick="__custom" style="cursor:pointer">
-        <h3 style="font-size:15px">自訂設定</h3>
+        <h3 style="font-size:15px">${svg(ICON.text, 18)} 自訂設定</h3>
         <div class="muted" style="font-size:12px">手動填寫請求位址和 API Key</div>
       </section>
       ${groups.map((g) => `
@@ -286,7 +292,7 @@
           <h3 class="muted" style="margin:0;font-size:13px">${esc(g.cat)}</h3></section>
         ${g.items.map((v) => `
         <section class="card" data-pick="${esc(v.url)}" style="cursor:pointer">
-          <h3 style="font-size:15px">${esc(v.name)}</h3>
+          <h3 style="font-size:15px;display:flex;align-items:center;gap:8px">${logo(v.website || v.url)}<span>${esc(v.name)}</span></h3>
           <div class="muted mono" style="font-size:11.5px">${esc(domain(v.website || v.url))}</div>
           ${v.own_api ? `<div style="margin-top:6px"><span class="chip warn">自有 API</span></div>` : ""}
         </section>`).join("")}`).join("")}`;
@@ -313,7 +319,7 @@
     addView.innerHTML = `
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap">
         <button class="ghost small" id="dt-back" type="button">‹ 更換</button>
-        <h3 style="margin:0">${esc(v.name || "自訂設定")}</h3>
+        <h3 style="margin:0;display:flex;align-items:center;gap:8px">${logo(v.website || v.url, 22)}<span>${esc(v.name || "自訂設定")}</span></h3>
         ${v.website ? `<a class="muted mono" style="font-size:11.5px" href="${esc(v.website)}" target="_blank" rel="noreferrer">${esc(domain(v.website))}</a>` : ""}
       </div>
       <section class="card" style="display:grid;gap:10px;max-width:640px">
