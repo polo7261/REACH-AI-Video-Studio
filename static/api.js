@@ -146,7 +146,7 @@
           <table class="map"><tr><th>模型</th><th>類型</th><th>狀態</th><th>對應步驟</th></tr>
             ${!p.models.length && p.kind === "comfyui" ? `<tr><td colspan="4" class="muted" style="font-size:12px">尚未匯入 workflow。ComfyUI 的模型要搭配 workflow 才能生成，請由下方匯入。</td></tr>` : ""}
             ${p.models.map((m) => `<tr><td class="mono">${esc(m.id)}</td><td class="kind">${kindIcon(m.kind)} ${esc(KIND[m.kind] || m.kind)}</td>
-              <td>${badge(m.status)}${m.note && m.note !== (STATUS[m.status] || [])[1] ? `<div class="muted" style="font-size:11px;margin-top:2px">${esc(m.note)}</div>` : ""}</td>
+              <td><span style="display:inline-flex;align-items:baseline;gap:6px;flex-wrap:wrap">${badge(m.status)}${m.note && m.note !== (STATUS[m.status] || [])[1] ? `<span class="muted" style="font-size:11px">${esc(m.note)}</span>` : ""}</span></td>
               <td>${stepChips(p.id, m)}</td></tr>`).join("")}
           </table>
           ${p.kind === "comfyui" ? `
