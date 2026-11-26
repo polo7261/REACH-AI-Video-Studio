@@ -1,5 +1,14 @@
 (() => {
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  // Ultra Lab Motion Icons（MIT；static/ul-icons.css 供動畫；精簡 SVG 走 class）
+  const ULICON = {
+    verify: "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"ul-i ul-verify\" role=\"img\" aria-label=\"Verified\"><path d=\"M12 3.5l7.4 4.25v8.5L12 20.5l-7.4-4.25v-8.5Z\" opacity=\".18\"/><g class=\"g\"><path class=\"h\" d=\"M12 3.5l7.4 4.25v8.5L12 20.5l-7.4-4.25v-8.5Z\" pathLength=\"1\" stroke-dasharray=\"1 1.2\"/><path class=\"k\" d=\"M8.6 12.3l2.3 2.3 4.5-4.8\" pathLength=\"1\" stroke-dasharray=\"1 1.2\"/></g></svg>",
+    retry: "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"ul-i ul-retry\" role=\"img\" aria-label=\"Error, retrying\"><circle cx=\"12\" cy=\"12\" r=\"9\"/><g class=\"x\"><path d=\"M12 7.5v5\"/><circle cx=\"12\" cy=\"16\" r=\"1\" fill=\"currentColor\" stroke=\"none\"/></g><g class=\"r\" opacity=\"0\"><path d=\"M15.9 9.75A4.5 4.5 0 1 0 16.08 13.9M16.4 6.3v3.6h-3.6\"/></g></svg>",
+    key: "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"ul-i ul-key\" role=\"img\" aria-label=\"Authorising\"><g class=\"m\"><circle cx=\"7\" cy=\"12\" r=\"3.5\"/><path d=\"M10.5 12h10\"/><path class=\"k\" d=\"M18 12v3M15 12v2\"/></g></svg>",
+    connecting: "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"ul-i ul-connecting\" role=\"img\" aria-label=\"Connecting\"><circle cx=\"12\" cy=\"12\" r=\"8\" opacity=\".18\"/><circle cx=\"12\" cy=\"12\" r=\"4.5\" opacity=\".18\"/><circle cx=\"12\" cy=\"12\" r=\"1.25\" fill=\"currentColor\" stroke=\"none\"/><g class=\"o1\"><circle cx=\"12\" cy=\"4\" r=\"1.6\" fill=\"currentColor\" stroke=\"none\"/></g><g class=\"o2\"><circle cx=\"12\" cy=\"16.5\" r=\"1.25\" fill=\"currentColor\" stroke=\"none\"/></g></svg>",
+    loading_orbit: "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"ul-i ul-loading-orbit\" role=\"img\" aria-label=\"Loading\"><circle cx=\"12\" cy=\"12\" r=\"8\" opacity=\".18\"/><g class=\"g\"><path class=\"a\" d=\"M12 4a8 8 0 1 1 0 16a8 8 0 1 1 0-16\" pathLength=\"100\" stroke-dasharray=\"85 95\" stroke-dashoffset=\"55\"/></g></svg>"
+  };
+  const ul = (k, size = 14) => ULICON[k].replace('<svg ', `<svg width="${size}" height="${size}" `);
   const STATUS = { ok: ["ok", "已實測"], quota: ["warn", "額度上限"], untested: ["", "未實測"], builtin: ["use", "內建"], license: ["err", "條款限制"] };
   const KIND = { text: "文字", image: "圖片", video: "影片", tts: "語音", music: "音樂" };
   const SCOPE = { cloud: "雲端", local: "地端" };
@@ -119,7 +128,7 @@
             <b style="font-size:14px">${esc(p.name)}</b>
             ${p.note ? `<div class="muted" style="font-size:11.5px">${esc(p.note)}</div>` : ""}
           </div>
-          <span class="chip ${st[0]}">${st[1]}</span>
+          <span class="chip ${st[0]}" style="gap:6px">${ul({ "已連線": "verify", "額度上限": "retry", "未設金鑰": "key" }[st[1]] ?? "connecting")}${st[1]}</span>
           <span class="muted" style="flex:none;transform:rotate(${open ? 0 : -90}deg);transition:transform .15s">${svg(CHEV, 16)}</span>
         </div>
         ${!open ? "" : `
