@@ -231,8 +231,11 @@
 
   // ---- 新增供應商（CC Switch 式：挑選頁 → 詳細表單頁）----
   const addBtn = document.createElement("button");
-  addBtn.className = "ghost small"; addBtn.type = "button";
-  addBtn.textContent = "＋ 新增供應商";
+  addBtn.type = "button";
+  addBtn.style.cssText = "border:none;background:transparent;cursor:pointer;font-size:13.5px;color:var(--muted);display:inline-flex;align-items:center;gap:6px;padding:8px 6px";
+  addBtn.innerHTML = `${svg('<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>', 15)} 新增供應商`;
+  addBtn.addEventListener("mouseenter", () => { addBtn.style.color = "var(--accent)"; });
+  addBtn.addEventListener("mouseleave", () => { addBtn.style.color = "var(--muted)"; });
   document.getElementById("tabs").appendChild(addBtn);
 
   const addView = document.getElementById("add-view");
