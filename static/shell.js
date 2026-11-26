@@ -6,9 +6,14 @@
       "nav.workbench": "Skill 工作台", "nav.director": "AI 導演", "nav.canvas": "無限畫布", "nav.timeline": "時間軸剪輯", "tag.soon": "即將推出",
       "nav.settings": "設定", "nav.api": "API 與網址", "nav.docs": "技術文件",
       "nav.plugins": "插件", "nav.pluginBlender": "Blender 插件", "nav.pluginLibtv": "LibTV Plugin", "tag.external": "外部", "tag.download": "下載",
+      "tag.paid": "付費", "tag.soon": "待推出",
+      "libtv.title": "LibTV Plugin", "libtv.sub": "透過 Blender 插件將白模影片一鍵送出 AI 成片（此功能尚未開放）。",
+      "libtv.paidTitle": "⚠️ LibTV 為付費網站", "libtv.paidBody": "使用成片服務需自費：須以實名認證完成註冊，並購買付費會員方案，影片生成依方案額度計費。請先評估成本再使用。",
+      "libtv.soonTitle": "插件功能待推出", "libtv.soonBody": "LibTV Plugin 連結將於服務正式推出後開放，屆時會在此頁更新。Blender 插件下載請見「Blender 插件」頁。",
       "plugins.title": "Blender 插件下載", "plugins.sub": "在 Blender 內完成白模影片，一鍵上傳到 LibTV 生成成片。選擇你的作業系統版本（目前 0.1.26）。",
       "plugins.mac": "macOS 版", "plugins.win": "Windows 版（x64）",
       "plugins.nolinux": "官方目前未提供 Linux 版。安裝方式請參考安裝指南。",
+      "plugins.paidTitle": "⚠️ LibTV 為付費服務", "plugins.paidBody": "Blender 插件與本頁下載皆免費；但將影片送出 AI 成片，需自備 LibTV 付費會員方案（額度依方案而定）。請先評估再安裝。",
       "plugins.auto": "下載即自動安裝（一鍵腳本）", "plugins.autoHint": "下載腳本後執行：它會自己找 zip 與 Blender，安裝、啟用並驗證。",
       "theme.toLight": "切換為亮色", "theme.toDark": "切換為暗色",
       "home.heroTitle": "一句話，開始一部片", "home.heroPh": "例：一名少女在雨夜的霓虹街道上追逐一枚飄走的紙鶴",
@@ -26,9 +31,14 @@
       "nav.workbench": "Skill 工作台", "nav.director": "AI 导演", "nav.canvas": "无限画布", "nav.timeline": "时间轴剪辑", "tag.soon": "即将推出",
       "nav.settings": "设置", "nav.api": "API 与网址", "nav.docs": "技术文档",
       "nav.plugins": "插件", "nav.pluginBlender": "Blender 插件", "nav.pluginLibtv": "LibTV Plugin", "tag.external": "外部", "tag.download": "下载",
+      "tag.paid": "付费", "tag.soon": "待推出",
+      "libtv.title": "LibTV Plugin", "libtv.sub": "通过 Blender 插件将白模视频一键送出 AI 成片（此功能尚未开放）。",
+      "libtv.paidTitle": "⚠️ LibTV 为付费网站", "libtv.paidBody": "使用成片服务需自费：须以实名认证完成注册，并购买付费会员方案，视频生成依方案额度计费。请先评估成本再使用。",
+      "libtv.soonTitle": "插件功能待推出", "libtv.soonBody": "LibTV Plugin 链接将于服务正式推出后开放，届时会在此页更新。Blender 插件下载请见「Blender 插件」页。",
       "plugins.title": "Blender 插件下载", "plugins.sub": "在 Blender 内完成白模视频，一键上传到 LibTV 生成成片。选择你的操作系统版本（目前 0.1.26）。",
       "plugins.mac": "macOS 版", "plugins.win": "Windows 版（x64）",
       "plugins.nolinux": "官方目前未提供 Linux 版。安装方式请参考安装指南。",
+      "plugins.paidTitle": "⚠️ LibTV 为付费服务", "plugins.paidBody": "Blender 插件与本页下载皆免费；但将视频送出 AI 成片，需自备 LibTV 付费会员方案（额度依方案而定）。请先评估再安装。",
       "plugins.auto": "下载即自动安装（一键脚本）", "plugins.autoHint": "下载脚本后执行：它会自己找 zip 与 Blender，安装、启用并验证。",
       "theme.toLight": "切换为亮色", "theme.toDark": "切换为暗色",
       "home.heroTitle": "一句话，开始一部片", "home.heroPh": "例：一名少女在雨夜的霓虹街道上追逐一枚飘走的纸鹤",
@@ -46,9 +56,14 @@
       "nav.workbench": "Skill Workbench", "nav.director": "AI Director", "nav.canvas": "Canvas", "nav.timeline": "Timeline", "tag.soon": "Soon",
       "nav.settings": "Settings", "nav.api": "APIs & Endpoints", "nav.docs": "Docs",
       "nav.plugins": "Plugins", "nav.pluginBlender": "Blender Plugin", "nav.pluginLibtv": "LibTV Plugin", "tag.external": "External", "tag.download": "Download",
+      "tag.paid": "Paid", "tag.soon": "Coming soon",
+      "libtv.title": "LibTV Plugin", "libtv.sub": "Send white-model videos out for AI finishing via the Blender plugin (not yet available).",
+      "libtv.paidTitle": "⚠️ LibTV is a paid website", "libtv.paidBody": "The finishing service is at your own cost: real-name verified registration and a paid membership plan are required; video generation is billed against your plan's quota. Evaluate costs before using it.",
+      "libtv.soonTitle": "Plugin feature coming soon", "libtv.soonBody": "The LibTV Plugin link will open once the service officially launches; this page will be updated then. For the Blender plugin download, see the Blender Plugin page.",
       "plugins.title": "Blender Plugin Download", "plugins.sub": "Finish white-model videos in Blender, then send them to LibTV in one click. Pick your OS build (currently 0.1.26).",
       "plugins.mac": "macOS", "plugins.win": "Windows (x64)",
       "plugins.nolinux": "No official Linux build yet. See the install guide for setup.",
+      "plugins.paidTitle": "⚠️ LibTV is a paid service", "plugins.paidBody": "The Blender plugin and downloads on this page are free; sending videos out for AI finishing requires your own LibTV paid membership plan (quota varies by plan). Evaluate before installing.",
       "plugins.auto": "Auto-install after download (one-click script)", "plugins.autoHint": "Run the script after downloading: it locates the zip and Blender itself, installs, enables and verifies.",
       "theme.toLight": "Switch to light", "theme.toDark": "Switch to dark",
       "home.heroTitle": "One sentence. One film.", "home.heroPh": "e.g. A girl chases a drifting paper crane down a neon street on a rainy night",
@@ -120,8 +135,8 @@
   // ★ 在此兩行貼上你的 Google Drive 連結即生效；未貼（仍是 PASTE_GD_LINK）時
   //   自動退回包內本機 zip /static/downloads/。
   const PLUGIN_DOWNLOADS = {
-    macos: "PASTE_GD_LINK_HERE",   // ← blender-macos.zip 的 Google Drive 連結
-    windows: "PASTE_GD_LINK_HERE", // ← blender-windows-x64.zip 的 Google Drive 連結
+    macos: "https://drive.usercontent.google.com/download?id=1qNsVSVBTvRM9SlTsY6bitWOb-1wIQqS2&export=download&confirm=t",   // blender-macos.zip
+    windows: "https://drive.usercontent.google.com/download?id=1dkXuUodPfHkNSmsvPeQOJf9lX2lS14Sk&export=download&confirm=t", // blender-windows-x64.zip
   };
   const isSet = (u) => u && !u.includes("PASTE_GD_LINK");
   const pluginDl = document.querySelector("[data-plugin-dl]");

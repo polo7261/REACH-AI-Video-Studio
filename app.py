@@ -85,6 +85,11 @@ def page_plugins():
     return render_template("plugins.html")
 
 
+@app.get("/libtv")
+def page_libtv():
+    return render_template("libtv.html")
+
+
 @app.get("/api-page")
 def page_api():
     return render_template("api.html")
