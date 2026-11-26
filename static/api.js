@@ -203,7 +203,6 @@
   }
 
   function render() {
-    document.getElementById("raw").textContent = JSON.stringify(cfg, null, 2);
     renderFlow();
     renderProviders();
   }
@@ -212,6 +211,5 @@
     tab = b.dataset.tab; history.replaceState(null, "", `#${tab}`); renderProviders();
   }));
 
-  fetch("/api/config").then((r) => r.json()).then((data) => { cfg = data; render(); })
-    .catch((err) => { document.getElementById("raw").textContent = String(err); });
+  fetch("/api/config").then((r) => r.json()).then((data) => { cfg = data; render(); });
 })();
